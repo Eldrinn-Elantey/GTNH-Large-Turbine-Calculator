@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from gtnh_turbine_calc.data.rotors import ROTOR_DATA, ROTOR_DISPLAY_NAMES
-from gtnh_turbine_calc.ui.widgets import SearchableTable
+from gtnh_turbine_calc.ui.widgets import SearchableTable, ToggleButton
 
 
 class RotorsRefTab(ctk.CTkFrame):
@@ -15,13 +15,11 @@ class RotorsRefTab(ctk.CTkFrame):
 
         size_frame = ctk.CTkFrame(self, fg_color="#111827", corner_radius=6)
         size_frame.pack(anchor="w", padx=16, pady=(0, 8))
-        ctk.CTkLabel(size_frame, text="Size:", font=ctk.CTkFont(size=10),
-                     text_color="#9ca3af").pack(side="left", padx=(10, 4))
-        self._size_var = ctk.StringVar(value="Normal")
-        for s in ["Small", "Normal", "Large", "Huge"]:
-            ctk.CTkRadioButton(size_frame, text=s, variable=self._size_var, value=s,
-                               font=ctk.CTkFont(size=10),
-                               command=self._reload).pack(side="left", padx=6, pady=6)
+        ctk.CTkLabel(size_frame, text="Blade size:", font=ctk.CTkFont(size=10),
+                     text_color="#9ca3af").pack(side="left", padx=(10, 6), pady=8)
+        self._size_toggle = ToggleButton(size_frame, ["Turbine", "Large", "Huge"],
+                                         command=lambda _: self._reload())
+        self._size_toggle.pack(side="left", padx=(0, 10), pady=6)
 
         self._table = SearchableTable(self, columns=[
             ("Display Name", 240),
@@ -37,13 +35,19 @@ class RotorsRefTab(ctk.CTkFrame):
         self._table.pack(fill="both", expand=True, padx=16, pady=(0, 16))
         self._reload()
 
+    # Maps UI blade name to internal data column key
+    _BLADE_COL = {"Turbine": "Small", "Large": "Normal", "Huge": "Large"}
+
     def _reload(self):
-        size = self._size_var.get()
+        col = self._BLADE_COL[self._size_toggle.get()]
         rows = []
         for name in ROTOR_DISPLAY_NAMES:
             rd = ROTOR_DATA[name]
-            sd = rd["sizes"][size]
-            dur = rd["base_durability"] * sd["dur_mult"]
+            sd = rd["sizes"][col]
+            # Durability uses next col's dur_mult due to data extraction misalignment
+            dur_col_map = {"Small": "Normal", "Normal": "Large", "Large": "Huge"}
+            dur_sd = rd["sizes"][dur_col_map[col]]
+            dur = rd["base_durability"] * dur_sd["dur_mult"]
             rows.append([
                 name,
                 str(rd["tier"]),

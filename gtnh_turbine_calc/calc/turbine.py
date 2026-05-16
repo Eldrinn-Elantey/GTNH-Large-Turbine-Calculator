@@ -6,14 +6,25 @@ from gtnh_turbine_calc.calc.common import find_dynamo_tier, dynamo_amps
 
 TurbineType = Literal["steam", "gas", "plasma"]
 
-# Maps the turbine casing size (passed by callers) to the rotor size key in ROTOR_DATA.
-# In GTNH a "Normal" casing uses Small rotor blades, "Large" uses Normal, etc.
+# Maps the UI blade size name to the data column key used for EFFICIENCY stats.
+# Our data columns "Small"/"Normal"/"Large" correspond to game blades:
+#   "Turbine" (2x speed) / "Large Turbine" (3x) / "Huge Turbine" (4x).
+# The game's "Small Turbine" (1x) blade is not in our data.
 TURBINE_TO_ROTOR_SIZE: dict[str, str] = {
-    "Small": "Small",
-    "Normal": "Small",
-    "Large": "Normal",
-    "Huge": "Large",
-    "XL": "Normal",
+    "Turbine": "Small",   # game "Turbine" blade, speedMult=2
+    "Large":   "Normal",  # game "Large Turbine" blade, speedMult=3
+    "Huge":    "Large",   # game "Huge Turbine" blade, speedMult=4
+    "XL":      "Normal",  # XL uses Large Turbine blade efficiency
+}
+
+# Maps the UI blade size name to the data column key used for DURABILITY.
+# Due to an extraction misalignment, the correct dur_mult for each blade
+# is in the NEXT column: e.g. game "Large Turbine" (durMult=3) → our "Large" col (dur_mult=3).
+_TURBINE_TO_DUR_SIZE: dict[str, str] = {
+    "Turbine": "Normal",  # durMult=2 in game, found in our "Normal" col
+    "Large":   "Large",   # durMult=3 in game, found in our "Large" col ✓ confirmed
+    "Huge":    "Huge",    # durMult=4 in game, found in our "Huge" col
+    "XL":      "Large",   # XL: same dur as Large Turbine blade
 }
 
 
@@ -41,7 +52,7 @@ def _rotor_size(rotor: dict, size: str) -> dict:
 
 
 def _durability(rotor: dict, size: str) -> int:
-    rotor_key = TURBINE_TO_ROTOR_SIZE.get(size, size)
+    rotor_key = _TURBINE_TO_DUR_SIZE.get(size, size)
     return rotor["base_durability"] * rotor["sizes"][rotor_key]["dur_mult"]
 
 

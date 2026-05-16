@@ -2,7 +2,7 @@ import customtkinter as ctk
 from gtnh_turbine_calc.data.rotors import ROTOR_DATA, ROTOR_DISPLAY_NAMES
 from gtnh_turbine_calc.data.fuels import EHE_FUEL_NAMES
 from gtnh_turbine_calc.calc.ehe import calc_plasma_ehe, calc_nonxl_ehe
-from gtnh_turbine_calc.ui.widgets import ResultRow, YELLOW, GREEN, PURPLE, ORANGE
+from gtnh_turbine_calc.ui.widgets import ResultRow, ToggleButton, YELLOW, GREEN, PURPLE, ORANGE
 
 CARD_BG = "#111827"
 NON_XL_HOT_FLUIDS = ["Lava", "IC2 Hot Coolant", "Solar Salt (Hot)"]
@@ -29,10 +29,9 @@ class EHEPlannerTab(ctk.CTkScrollableFrame):
         self._rotor_combo.pack(side="left", padx=(0, 12))
         self._rotor_combo.set(ROTOR_DISPLAY_NAMES[0])
 
-        self._size_var = ctk.StringVar(value="Normal")
-        for s in ["Small", "Normal", "Large", "Huge"]:
-            ctk.CTkRadioButton(rotor_row, text=s, variable=self._size_var, value=s,
-                               font=ctk.CTkFont(size=10), command=self._recalc_all).pack(side="left", padx=4)
+        self._size_toggle = ToggleButton(rotor_row, ["Turbine", "Large", "Huge"],
+                                          command=lambda _: self._recalc_all())
+        self._size_toggle.pack(side="left")
 
         two_cols = ctk.CTkFrame(self, fg_color="transparent")
         two_cols.pack(fill="x", padx=16, pady=4)
@@ -138,7 +137,7 @@ class EHEPlannerTab(ctk.CTkScrollableFrame):
 
     def _get_rotor(self):
         name = self._rotor_combo.get()
-        size = self._size_var.get()
+        size = self._size_toggle.get()
         rotor = ROTOR_DATA.get(name, {})
         return rotor, size
 

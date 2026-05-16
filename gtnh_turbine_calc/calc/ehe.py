@@ -2,13 +2,12 @@ import math
 from gtnh_turbine_calc.calc.common import find_dynamo_tier
 from gtnh_turbine_calc.data.fuels import EHE_FUELS, STEAM_FUELS
 
-# Map turbine casing size to rotor blade size (same mapping as turbine.py)
+# Maps UI blade size name to data column key (same as turbine.py)
 TURBINE_TO_ROTOR_SIZE = {
-    "Small": "Small",
-    "Normal": "Small",
-    "Large": "Normal",
-    "Huge": "Large",
-    "XL": "Normal",
+    "Turbine": "Small",
+    "Large":   "Normal",
+    "Huge":    "Large",
+    "XL":      "Normal",
 }
 
 
