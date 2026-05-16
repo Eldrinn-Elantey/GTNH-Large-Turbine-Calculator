@@ -45,7 +45,7 @@ function makeResultRow(label, colorClass = "green") {
  */
 function buildTurbineCard(fuelMap, calcFn, sharedState) {
   const card = document.createElement("div");
-  card.className = "card";
+  card.className = "card card-narrow";
 
   // --- Tab bar ---
   const tabBar = document.createElement("div");
@@ -186,7 +186,7 @@ function buildSharedSettings(rotors, onChange) {
   let filteredRotors = rotors;
 
   const div = document.createElement("div");
-  div.className = "card";
+  div.className = "card card-narrow";
   div.style.cssText = "margin-bottom:16px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;";
 
   // Tier filter

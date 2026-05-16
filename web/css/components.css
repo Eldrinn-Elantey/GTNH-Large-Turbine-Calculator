@@ -52,6 +52,11 @@
   padding: 16px;
 }
 
+/* Narrow card for calculator/planner — prevents result rows from stretching full width */
+.card-narrow {
+  max-width: 480px;
+}
+
 /* Settings row (label + control) */
 .setting-row {
   display: flex;
