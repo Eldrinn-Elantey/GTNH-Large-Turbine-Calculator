@@ -1,3 +1,5 @@
+import tkinter as tk
+import tkinter.ttk as ttk
 import customtkinter as ctk
 
 CARD_BG = "#111827"
@@ -113,12 +115,17 @@ class TurbineCard(ctk.CTkFrame):
 
 
 class SearchableTable(ctk.CTkFrame):
-    """Scrollable table with a search bar at the top."""
+    """Searchable table backed by ttk.Treeview for fast rendering."""
+
+    _STYLE_INIT = False
+
     def __init__(self, master, columns: list[tuple[str, int]], **kwargs):
         super().__init__(master, fg_color="#0d1117", **kwargs)
         self._columns = columns
         self._all_rows: list[list[str]] = []
+        self._init_style()
 
+        # Search bar
         search_bar = ctk.CTkFrame(self, fg_color="#111827")
         search_bar.pack(fill="x", padx=0, pady=(0, 1))
         ctk.CTkLabel(search_bar, text="🔍", font=ctk.CTkFont(size=12)).pack(side="left", padx=(10, 4))
@@ -130,39 +137,48 @@ class SearchableTable(ctk.CTkFrame):
                              font=ctk.CTkFont(size=11))
         entry.pack(side="left", fill="x", expand=True, padx=8, pady=6)
 
-        header = ctk.CTkFrame(self, fg_color="#1f2937", height=30)
-        header.pack(fill="x")
-        for col_name, col_width in columns:
-            ctk.CTkLabel(header, text=col_name, width=col_width,
-                         font=ctk.CTkFont(size=10, weight="bold"),
-                         text_color="#9ca3af", anchor="w").pack(side="left", padx=4)
+        # Treeview
+        col_ids = [str(i) for i in range(len(columns))]
+        self._tree = ttk.Treeview(self, columns=col_ids, show="headings",
+                                  style="Dark.Treeview", selectmode="none")
+        for i, (col_name, col_width) in enumerate(columns):
+            self._tree.heading(str(i), text=col_name, anchor="w")
+            self._tree.column(str(i), width=col_width, minwidth=40, stretch=False, anchor="w")
 
-        self._scroll = ctk.CTkScrollableFrame(self, fg_color="#0d1117")
-        self._scroll.pack(fill="both", expand=True)
-        # Each entry: (frame, list_of_searchable_text)
-        self._row_frames: list[tuple[ctk.CTkFrame, list[str]]] = []
+        vsb = ttk.Scrollbar(self, orient="vertical", command=self._tree.yview,
+                            style="Dark.Vertical.TScrollbar")
+        self._tree.configure(yscrollcommand=vsb.set)
+        vsb.pack(side="right", fill="y")
+        self._tree.pack(fill="both", expand=True)
+
+    @classmethod
+    def _init_style(cls):
+        if cls._STYLE_INIT:
+            return
+        cls._STYLE_INIT = True
+        style = ttk.Style()
+        style.theme_use("clam")
+        style.configure("Dark.Treeview",
+                        background="#0d1117", foreground="#d1d5db",
+                        fieldbackground="#0d1117", rowheight=24,
+                        font=("", 10), borderwidth=0)
+        style.configure("Dark.Treeview.Heading",
+                        background="#1f2937", foreground="#9ca3af",
+                        font=("", 10, "bold"), relief="flat")
+        style.map("Dark.Treeview",
+                  background=[("selected", "#1e40af")],
+                  foreground=[("selected", "#93c5fd")])
+        style.configure("Dark.Vertical.TScrollbar",
+                        background="#1f2937", troughcolor="#0d1117",
+                        arrowcolor="#6b7280", borderwidth=0)
 
     def load(self, rows: list[list[str]]):
-        # Build all row widgets once, then show/hide via filter
-        for frame, _ in self._row_frames:
-            frame.destroy()
-        self._row_frames.clear()
-
-        for row_data in rows:
-            row_frame = ctk.CTkFrame(self._scroll, fg_color="transparent", height=26)
-            for i, (_, width) in enumerate(self._columns):
-                val = row_data[i] if i < len(row_data) else ""
-                ctk.CTkLabel(row_frame, text=str(val), width=width,
-                             font=ctk.CTkFont(size=10),
-                             text_color="#d1d5db", anchor="w").pack(side="left", padx=4)
-            self._row_frames.append((row_frame, [str(v).lower() for v in row_data]))
-
+        self._all_rows = rows
         self._filter()
 
     def _filter(self):
         query = self._search_var.get().lower()
-        for frame, tokens in self._row_frames:
-            if query and not any(query in t for t in tokens):
-                frame.pack_forget()
-            else:
-                frame.pack(fill="x", pady=1)
+        self._tree.delete(*self._tree.get_children())
+        for row in self._all_rows:
+            if not query or any(query in str(v).lower() for v in row):
+                self._tree.insert("", "end", values=row)
