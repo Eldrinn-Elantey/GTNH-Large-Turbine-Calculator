@@ -39,100 +39,124 @@ function makeResultRow(label, colorClass = "green") {
   return row;
 }
 
-function makeDivider() {
-  const hr = document.createElement("hr");
-  hr.className = "divider";
-  return hr;
-}
+/**
+ * One card with Steam / Gas / Plasma tabs inside.
+ * Each tab remembers its own mode/fuel/flow state.
+ */
+function buildTurbineCard(fuelMap, calcFn, sharedState) {
+  const card = document.createElement("div");
+  card.className = "card";
 
-// Build a single turbine card (steam / gas / plasma)
-function buildTurbineCard(type, fuelList, calcFn, sharedState) {
-  const wrap = document.createElement("div");
-
-  // Fuel type tabs (Steam / Gas / Plasma)
+  // --- Tab bar ---
   const tabBar = document.createElement("div");
   tabBar.className = "fuel-tabs";
-  [["steam","💧 Steam"],["gas","🔥 Gas"],["plasma","⚡ Plasma"]].forEach(([t, label]) => {
+  const TYPES = [
+    { key: "steam",  label: "💧 Steam"  },
+    { key: "gas",    label: "🔥 Gas"    },
+    { key: "plasma", label: "⚡ Plasma" },
+  ];
+
+  // Per-tab state (mode, fuel, flow)
+  const tabState = {};
+  TYPES.forEach(({ key }, i) => {
+    tabState[key] = { mode: "Tight", fuel: fuelMap[key][0]?.name ?? "", flow: "Optimal", manualFlow: 1000 };
+  });
+
+  // Build content panels (one per type, show/hide on tab switch)
+  const panels = {};
+  TYPES.forEach(({ key }) => {
+    const panel = document.createElement("div");
+    panel.dataset.panel = key;
+    if (key !== "steam") panel.classList.add("hidden");
+
+    // Mode
+    const modeRow = document.createElement("div");
+    modeRow.className = "setting-row";
+    modeRow.innerHTML = `<span class="setting-label">Mode:</span>`;
+    const modeToggle = makeToggle(["Tight", "Loose"], val => {
+      tabState[key].mode = val;
+      recalc(key);
+    });
+    modeRow.appendChild(modeToggle);
+    panel.appendChild(modeRow);
+
+    // Fuel
+    const fuelRow = document.createElement("div");
+    fuelRow.className = "setting-row";
+    fuelRow.innerHTML = `<span class="setting-label">Fuel:</span>`;
+    const fuelSel = document.createElement("select");
+    populateSelect(fuelSel, fuelMap[key].map(f => f.name), fuelMap[key][0]?.name);
+    fuelSel.addEventListener("change", () => { tabState[key].fuel = fuelSel.value; recalc(key); });
+    fuelRow.appendChild(fuelSel);
+    panel.appendChild(fuelRow);
+
+    // Flow
+    const flowRow = document.createElement("div");
+    flowRow.className = "setting-row";
+    flowRow.innerHTML = `<span class="setting-label">Flow:</span>`;
+    const flowToggle = makeToggle(["Optimal", "Manual"], val => {
+      tabState[key].flow = val;
+      manualInput.style.display = val === "Manual" ? "inline" : "none";
+      recalc(key);
+    });
+    const manualInput = document.createElement("input");
+    manualInput.type = "number";
+    manualInput.min = 1;
+    manualInput.value = tabState[key].manualFlow;
+    manualInput.style.display = "none";
+    manualInput.style.marginLeft = "8px";
+    manualInput.addEventListener("input", () => { tabState[key].manualFlow = parseFloat(manualInput.value) || 1000; recalc(key); });
+    flowRow.appendChild(flowToggle);
+    flowRow.appendChild(manualInput);
+    panel.appendChild(flowRow);
+
+    const hr = document.createElement("hr");
+    hr.className = "divider";
+    panel.appendChild(hr);
+
+    // Results
+    const rows = {
+      optFlow:   makeResultRow("Optimal flow:", "cyan"),
+      optOutput: makeResultRow("Output EU/t:", "green"),
+      dynamo:    makeResultRow("Dynamo tier:", "muted"),
+      effFlow:   makeResultRow("Eff. flow:", "cyan"),
+      effOutput: makeResultRow("Eff. output:", "green"),
+      rotorEff:  makeResultRow("Rotor eff.:", "muted"),
+      lifetime:  makeResultRow("Lifetime (s):", "yellow"),
+    };
+    Object.values(rows).forEach(r => panel.appendChild(r));
+
+    panels[key] = { el: panel, fuelSel, rows };
+    card.appendChild(panel);
+  });
+
+  // --- Tab click handlers ---
+  TYPES.forEach(({ key, label }) => {
     const tab = document.createElement("div");
-    tab.className = `fuel-tab ${t}` + (t === type ? " active" : "");
+    tab.className = `fuel-tab ${key}` + (key === "steam" ? " active" : "");
     tab.textContent = label;
-    tab.dataset.type = t;
-    // Clicking another tab fires an event handled by the parent
     tab.addEventListener("click", () => {
-      wrap.dispatchEvent(new CustomEvent("switchtype", { detail: t, bubbles: true }));
+      tabBar.querySelectorAll(".fuel-tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      Object.entries(panels).forEach(([k, p]) => p.el.classList.toggle("hidden", k !== key));
+      recalc(key);
     });
     tabBar.appendChild(tab);
   });
-  wrap.appendChild(tabBar);
 
-  // Mode toggle
-  const modeRow = document.createElement("div");
-  modeRow.className = "setting-row";
-  modeRow.innerHTML = `<span class="setting-label">Mode:</span>`;
-  const modeToggle = makeToggle(["Tight", "Loose"], () => recalc());
-  modeRow.appendChild(modeToggle);
-  wrap.appendChild(modeRow);
+  card.insertBefore(tabBar, card.firstChild);
 
-  // Fuel select
-  const fuelRow = document.createElement("div");
-  fuelRow.className = "setting-row";
-  fuelRow.innerHTML = `<span class="setting-label">Fuel:</span>`;
-  const fuelSel = document.createElement("select");
-  populateSelect(fuelSel, fuelList.map(f => f.name), fuelList[0]?.name);
-  fuelSel.addEventListener("change", () => recalc());
-  fuelRow.appendChild(fuelSel);
-  wrap.appendChild(fuelRow);
-
-  // Flow toggle + manual input
-  const flowRow = document.createElement("div");
-  flowRow.className = "setting-row";
-  flowRow.innerHTML = `<span class="setting-label">Flow:</span>`;
-  const flowToggle = makeToggle(["Optimal", "Manual"], val => {
-    manualInput.style.display = val === "Manual" ? "inline" : "none";
-    recalc();
-  });
-  const manualInput = document.createElement("input");
-  manualInput.type = "number";
-  manualInput.min = 1;
-  manualInput.value = 1000;
-  manualInput.style.display = "none";
-  manualInput.style.marginLeft = "8px";
-  manualInput.addEventListener("input", () => recalc());
-  flowRow.appendChild(flowToggle);
-  flowRow.appendChild(manualInput);
-  wrap.appendChild(flowRow);
-
-  wrap.appendChild(makeDivider());
-
-  // Results
-  const resultsDiv = document.createElement("div");
-  const rows = {
-    optFlow:   makeResultRow("Optimal flow:", "cyan"),
-    optOutput: makeResultRow("Output EU/t:", "green"),
-    dynamo:    makeResultRow("Dynamo tier:", "muted"),
-    effFlow:   makeResultRow("Eff. flow:", "cyan"),
-    effOutput: makeResultRow("Eff. output:", "green"),
-    rotorEff:  makeResultRow("Rotor eff.:", "muted"),
-    lifetime:  makeResultRow("Lifetime (s):", "yellow"),
-  };
-  Object.values(rows).forEach(r => resultsDiv.appendChild(r));
-  wrap.appendChild(resultsDiv);
-
-  function getFuelValue() {
-    const f = fuelList.find(x => x.name === fuelSel.value);
-    return f ? f.eu_l : 1;
-  }
-
-  function recalc() {
+  function recalc(type) {
     if (!sharedState.rotor) return;
-    const mode       = modeToggle.getValue();
-    const fuelType   = fuelSel.value;
-    const fuelValue  = getFuelValue();
-    const isManual   = flowToggle.getValue() === "Manual";
-    const manualFlow = isManual ? (parseFloat(manualInput.value) || null) : null;
+    const st = tabState[type];
+    const fuelList = fuelMap[type];
+    const f = fuelList.find(x => x.name === st.fuel) ?? fuelList[0];
+    if (!f) return;
+    const isManual = st.flow === "Manual";
+    const manualFlow = isManual ? st.manualFlow : null;
 
-    const r = calcFn(type, sharedState.rotor, sharedState.size, mode, fuelType, fuelValue, manualFlow);
-
+    const r = calcFn(type, sharedState.rotor, sharedState.size, st.mode, f.name, f.eu_l, manualFlow);
+    const { rows } = panels[type];
     const unit = type === "plasma" ? "L/s" : "L/t";
     rows.optFlow.setValue(`${formatNumber(r.optFlow)} ${unit}`);
     rows.optOutput.setValue(`${formatNumber(r.optOutput)} EU/t`);
@@ -143,16 +167,36 @@ function buildTurbineCard(type, fuelList, calcFn, sharedState) {
     rows.lifetime.setValue(`${formatNumber(Math.round(r.lifetime))} s`);
   }
 
-  wrap.recalc = recalc;
-  return wrap;
+  // Recalc currently visible tab
+  card.recalc = () => {
+    const activeTab = tabBar.querySelector(".fuel-tab.active");
+    const activeType = activeTab ? [...tabBar.querySelectorAll(".fuel-tab")].find(t => t.classList.contains("active"))?.classList[1] : "steam";
+    recalc(activeType ?? "steam");
+  };
+
+  return card;
 }
 
-// Shared settings: rotor selector + size toggle
+/** Shared settings: tier filter + rotor select + blade size. */
 function buildSharedSettings(rotors, onChange) {
-  const state = { rotor: rotors[0] ?? null, size: "Normal" };
+  const state = { rotor: null, size: "Normal" };
+
+  // Unique tiers sorted
+  const tiers = ["All", ...new Set(rotors.map(r => r.tier).sort((a, b) => a - b))];
+  let filteredRotors = rotors;
+
   const div = document.createElement("div");
   div.className = "card";
   div.style.cssText = "margin-bottom:16px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;";
+
+  // Tier filter
+  const tierRow = document.createElement("div");
+  tierRow.className = "setting-row";
+  tierRow.innerHTML = `<span class="setting-label">Rotor Tier:</span>`;
+  const tierSel = document.createElement("select");
+  populateSelect(tierSel, tiers.map(String), "All");
+  tierRow.appendChild(tierSel);
+  div.appendChild(tierRow);
 
   // Rotor select
   const rotorRow = document.createElement("div");
@@ -160,29 +204,40 @@ function buildSharedSettings(rotors, onChange) {
   rotorRow.innerHTML = `<span class="setting-label">Rotor:</span>`;
   const rotorSel = document.createElement("select");
   rotorSel.style.maxWidth = "220px";
-  populateSelect(rotorSel, rotors.map(r => r.name), rotors[0]?.name);
-  rotorSel.addEventListener("change", () => {
-    state.rotor = rotors.find(r => r.name === rotorSel.value) ?? null;
-    onChange(state);
-  });
   rotorRow.appendChild(rotorSel);
   div.appendChild(rotorRow);
 
-  // Size toggle — default Normal (index 1)
+  function refreshRotors() {
+    const tier = tierSel.value;
+    filteredRotors = tier === "All" ? rotors : rotors.filter(r => String(r.tier) === tier);
+    populateSelect(rotorSel, filteredRotors.map(r => r.name), filteredRotors[0]?.name);
+    state.rotor = filteredRotors[0] ?? null;
+    onChange(state);
+  }
+
+  tierSel.addEventListener("change", refreshRotors);
+  rotorSel.addEventListener("change", () => {
+    state.rotor = filteredRotors.find(r => r.name === rotorSel.value) ?? null;
+    onChange(state);
+  });
+
+  // Size toggle — default Normal
   const sizeRow = document.createElement("div");
   sizeRow.className = "setting-row";
   sizeRow.innerHTML = `<span class="setting-label">Blade Size:</span>`;
-  const sizeToggle = makeToggle(["Small","Normal","Large","Huge"], val => {
+  const sizeToggle = makeToggle(["Small", "Normal", "Large", "Huge"], val => {
     state.size = val;
     onChange(state);
   });
-  // Activate "Normal" by default (index 1), makeToggle activates index 0 by default
   const sizeBtns = sizeToggle.querySelectorAll(".toggle-btn");
   sizeBtns[0].classList.remove("active");
   sizeBtns[1].classList.add("active");
   state.size = "Normal";
   sizeRow.appendChild(sizeToggle);
   div.appendChild(sizeRow);
+
+  // Initial populate
+  refreshRotors();
 
   return { el: div, state };
 }
@@ -194,37 +249,13 @@ async function buildTurbineTab(el, data, calcFn) {
     plasma: data.fuels.plasma,
   };
 
-  const { el: settingsEl, state } = buildSharedSettings(data.rotors, () => {
-    cards.forEach(c => c.recalc());
-  });
+  const { el: settingsEl, state } = buildSharedSettings(data.rotors, () => turbineCard.recalc());
 
-  const cardsWrap = document.createElement("div");
-  cardsWrap.style.cssText = "display:flex;gap:12px;flex-wrap:wrap;";
+  const turbineCard = buildTurbineCard(fuelMap, calcFn, state);
 
-  const cards = ["steam", "gas", "plasma"].map(type => {
-    const box = document.createElement("div");
-    box.className = "card";
-    box.style.cssText = "flex:1;min-width:240px;";
-
-    const card = buildTurbineCard(type, fuelMap[type], calcFn, state);
-
-    // Handle fuel-tab switching between sibling cards
-    card.addEventListener("switchtype", e => {
-      const newType = e.detail;
-      cardsWrap.querySelectorAll(".fuel-tab").forEach(tab => {
-        tab.classList.toggle("active", tab.dataset.type === newType);
-      });
-    });
-
-    box.appendChild(card);
-    box.recalc = card.recalc;
-    return box;
-  });
-
-  cards.forEach(c => cardsWrap.appendChild(c));
   el.appendChild(settingsEl);
-  el.appendChild(cardsWrap);
-  cards.forEach(c => c.recalc());
+  el.appendChild(turbineCard);
+  turbineCard.recalc();
 }
 
 export async function initCalculator(el) {
@@ -242,7 +273,6 @@ export async function initCalculator(el) {
   const largeEl = el.querySelector("#calc-large");
   const xlEl    = el.querySelector("#calc-xl");
 
-  // Regular turbine calc wrapper
   const regularCalc = (type, rotor, size, mode, fuelType, fuelValue, manualFlow) =>
     calcRegularTurbine(type, rotor, size, mode, fuelType, fuelValue, manualFlow);
 
@@ -263,10 +293,7 @@ export async function initCalculator(el) {
       } else {
         largeEl.classList.add("hidden");
         xlEl.classList.remove("hidden");
-        if (!xlBuilt) {
-          await buildTurbineTab(xlEl, data, xlCalc);
-          xlBuilt = true;
-        }
+        if (!xlBuilt) { await buildTurbineTab(xlEl, data, xlCalc); xlBuilt = true; }
       }
     });
   });
