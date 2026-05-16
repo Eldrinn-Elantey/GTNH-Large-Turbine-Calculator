@@ -207,12 +207,12 @@ function buildSharedSettings(rotors, onChange) {
   rotorRow.appendChild(rotorSel);
   div.appendChild(rotorRow);
 
-  function refreshRotors() {
+  function refreshRotors(notify = true) {
     const tier = tierSel.value;
     filteredRotors = tier === "All" ? rotors : rotors.filter(r => String(r.tier) === tier);
     populateSelect(rotorSel, filteredRotors.map(r => r.name), filteredRotors[0]?.name);
     state.rotor = filteredRotors[0] ?? null;
-    onChange(state);
+    if (notify) onChange(state);
   }
 
   tierSel.addEventListener("change", refreshRotors);
@@ -236,8 +236,8 @@ function buildSharedSettings(rotors, onChange) {
   sizeRow.appendChild(sizeToggle);
   div.appendChild(sizeRow);
 
-  // Initial populate
-  refreshRotors();
+  // Initial populate — skip onChange, buildTurbineTab calls recalc explicitly after card is created
+  refreshRotors(false);
 
   return { el: div, state };
 }
