@@ -10,7 +10,9 @@ from gtnh_turbine_calc.data.rotors import ROTOR_DATA, ROTOR_DISPLAY_NAMES
 from gtnh_turbine_calc.data.fuels import (
     STEAM_FUELS, GAS_FUELS, GAS_FUEL_NAMES, PLASMA_FUELS, PLASMA_FUEL_NAMES,
 )
-from gtnh_turbine_calc.calc.turbine import calc_regular_turbine, calc_xl_turbine, TURBINE_TO_ROTOR_SIZE
+from gtnh_turbine_calc.calc.turbine import (
+    calc_regular_turbine, calc_xl_turbine, TURBINE_TO_ROTOR_SIZE, _TURBINE_TO_DUR_SIZE,
+)
 from gtnh_turbine_calc.calc.common import DYNAMO_TIERS
 from gtnh_turbine_calc.ui.widgets import ResultRow, ToggleButton, YELLOW, GREEN, PURPLE, ORANGE
 
@@ -314,9 +316,9 @@ class XLTurbineCard(QFrame):
         inner_lay.addSpacing(8)
         lay.addWidget(inner)
 
-    def set_rotor(self, rotor: dict):
-        """XL always uses Normal rotor size internally."""
+    def set_rotor(self, rotor: dict, size: str):
         self._rotor = rotor
+        self._size = size
         self._recalc()
 
     def set_dynamo_tier(self, tier: str):
@@ -338,9 +340,8 @@ class XLTurbineCard(QFrame):
         else:
             fuel_val = PLASMA_FUELS.get(fuel_type, 81920)
 
-        # XL uses "Normal" turbine size (maps to "Normal" rotor, "Large" dur per TURBINE_TO_ROTOR_SIZE["XL"])
         try:
-            r = calc_xl_turbine(self._type, self._rotor, "XL", mode, fuel_type, fuel_val, is_dense)
+            r = calc_xl_turbine(self._type, self._rotor, self._size, mode, fuel_type, fuel_val, is_dense)
         except Exception:
             return
 
@@ -511,7 +512,7 @@ class LargeTurbinesTab(QWidget):
 
 
 class XLTurbinesTab(QWidget):
-    """Tab for XL Turbo turbines. Size selector not shown — XL always uses Normal rotor size."""
+    """Tab for XL Turbo turbines — all 4 rotor sizes supported."""
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -523,26 +524,20 @@ class XLTurbinesTab(QWidget):
         outer.setContentsMargins(0, 0, 0, 0)
         outer.addWidget(scroll)
 
-        # Note about size
-        note = _label(
-            "ℹ  XL turbines always use Normal rotor size internally — size selector not applicable.",
-            color="#4b5563", size=11,
-        )
-        lay.addWidget(note)
-
-        # Shared settings — no size toggle
+        # Shared settings — with size toggle
         _tier_combo, _rotor_combo, _dynamo_combo = [], [], []
-        _lbl_eff, _lbl_dur = [], []
+        _lbl_eff, _lbl_dur, _size_toggle = [], [], []
         shared = _shared_settings_frame(
             _tier_combo, _rotor_combo, _dynamo_combo,
             _lbl_eff, _lbl_dur,
-            show_size=False,
+            show_size=True, size_toggle_out=_size_toggle,
         )
         self._tier_combo   = _tier_combo[0]
         self._rotor_combo  = _rotor_combo[0]
         self._dynamo_combo = _dynamo_combo[0]
         self._lbl_eff      = _lbl_eff[0]
         self._lbl_dur      = _lbl_dur[0]
+        self._size_toggle  = _size_toggle[0]
         lay.addWidget(shared)
 
         # 3 XL cards
@@ -563,6 +558,7 @@ class XLTurbinesTab(QWidget):
         # Wire signals
         self._tier_combo.currentTextChanged.connect(self._on_tier_change)
         self._rotor_combo.currentTextChanged.connect(lambda _: self._on_rotor_change())
+        self._size_toggle._command = lambda _: self._on_rotor_change()
         self._dynamo_combo.currentTextChanged.connect(self._on_dynamo_change)
 
         self._on_rotor_change()
@@ -581,18 +577,19 @@ class XLTurbinesTab(QWidget):
 
     def _on_rotor_change(self, *_):
         name = self._rotor_combo.currentText()
+        size = self._size_toggle.get()
         rotor = ROTOR_DATA.get(name, {})
         if not rotor:
             return
-        # XL uses "Normal" blade size for efficiency/durability display
-        sd = rotor["sizes"]["Normal"]
-        dur = rotor["base_durability"] * rotor["sizes"]["Large"]["dur_mult"]
+        blade_size = TURBINE_TO_ROTOR_SIZE.get(size, size)
+        sd = rotor["sizes"][blade_size]
+        dur = rotor["base_durability"] * rotor["sizes"][_TURBINE_TO_DUR_SIZE.get(size, size)]["dur_mult"]
         self._lbl_eff.setText(f"Eff(tight): {sd['steam_tight_eff']*100:.1f}%")
         self._lbl_dur.setText(f"Dur: {dur:,}")
         dynamo_tier = self._dynamo_combo.currentText()
         for card in [self._xl_steam, self._xl_gas, self._xl_plasma]:
             card.set_dynamo_tier(dynamo_tier)
-            card.set_rotor(rotor)
+            card.set_rotor(rotor, size)
 
 
 class CalculatorTab(QWidget):
