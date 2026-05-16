@@ -28,7 +28,7 @@ class ToggleButton(ctk.CTkFrame):
     """Two-option toggle (e.g. Tight/Loose, Optimal/Manual)."""
     def __init__(self, master, options: list[str], command=None, **kwargs):
         super().__init__(master, fg_color="#1f2937", corner_radius=6, **kwargs)
-        self._options = options
+        self._choices = options
         self._command = command
         self._selected = options[0]
         self._buttons: dict[str, ctk.CTkButton] = {}
@@ -139,25 +139,30 @@ class SearchableTable(ctk.CTkFrame):
 
         self._scroll = ctk.CTkScrollableFrame(self, fg_color="#0d1117")
         self._scroll.pack(fill="both", expand=True)
-        self._row_frames: list[ctk.CTkFrame] = []
+        # Each entry: (frame, list_of_searchable_text)
+        self._row_frames: list[tuple[ctk.CTkFrame, list[str]]] = []
 
     def load(self, rows: list[list[str]]):
-        self._all_rows = rows
-        self._filter()
-
-    def _filter(self):
-        query = self._search_var.get().lower()
-        for f in self._row_frames:
-            f.destroy()
+        # Build all row widgets once, then show/hide via filter
+        for frame, _ in self._row_frames:
+            frame.destroy()
         self._row_frames.clear()
-        for row_data in self._all_rows:
-            if query and not any(query in str(v).lower() for v in row_data):
-                continue
+
+        for row_data in rows:
             row_frame = ctk.CTkFrame(self._scroll, fg_color="transparent", height=26)
-            row_frame.pack(fill="x", pady=1)
             for i, (_, width) in enumerate(self._columns):
                 val = row_data[i] if i < len(row_data) else ""
                 ctk.CTkLabel(row_frame, text=str(val), width=width,
                              font=ctk.CTkFont(size=10),
                              text_color="#d1d5db", anchor="w").pack(side="left", padx=4)
-            self._row_frames.append(row_frame)
+            self._row_frames.append((row_frame, [str(v).lower() for v in row_data]))
+
+        self._filter()
+
+    def _filter(self):
+        query = self._search_var.get().lower()
+        for frame, tokens in self._row_frames:
+            if query and not any(query in t for t in tokens):
+                frame.pack_forget()
+            else:
+                frame.pack(fill="x", pady=1)

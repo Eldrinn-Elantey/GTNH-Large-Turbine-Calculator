@@ -2,6 +2,8 @@ import customtkinter as ctk
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
+ctk.set_widget_scaling(1.3)
+ctk.set_window_scaling(1.3)
 
 SIDEBAR_BG = "#111827"
 MAIN_BG = "#0d1117"
@@ -67,17 +69,21 @@ class TurbineCalcApp(ctk.CTk):
         from gtnh_turbine_calc.ui.fuels_ref import FuelsRefTab
         from gtnh_turbine_calc.ui.rotors_ref import RotorsRefTab
 
-        tab_classes = {
+        self._tab_classes = {
             "calculator": CalculatorTab,
             "ehe":        EHEPlannerTab,
             "steam_gen":  SteamGenTab,
             "fuels":      FuelsRefTab,
             "rotors":     RotorsRefTab,
         }
-        for key, cls in tab_classes.items():
+
+    def _get_or_create_frame(self, key: str) -> ctk.CTkFrame:
+        if key not in self._frames:
+            cls = self._tab_classes[key]
             frame = cls(self._content)
             frame.place(relx=0, rely=0, relwidth=1, relheight=1)
             self._frames[key] = frame
+        return self._frames[key]
 
     def _switch_tab(self, key: str):
         for k, btn in self._nav_buttons.items():
@@ -85,5 +91,5 @@ class TurbineCalcApp(ctk.CTk):
                 btn.configure(fg_color=ACCENT, text_color="white")
             else:
                 btn.configure(fg_color="transparent", text_color="#9ca3af")
-        self._frames[key].lift()
+        self._get_or_create_frame(key).lift()
         self._current_tab = key
