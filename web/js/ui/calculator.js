@@ -43,6 +43,20 @@ function makeResultRow(label, colorClass = "green") {
  * One card with Steam / Gas / Plasma tabs inside.
  * Each tab remembers its own mode/fuel/flow state.
  */
+const LIFETIME_UNITS = [
+  { label: "s",    factor: 1 },
+  { label: "min",  factor: 1 / 60 },
+  { label: "h",    factor: 1 / 3600 },
+  { label: "days", factor: 1 / 86400 },
+];
+
+function formatLifetime(seconds, unit) {
+  const val = seconds * unit.factor;
+  // Show more decimals for small values
+  const formatted = val >= 100 ? formatNumber(Math.round(val)) : val.toFixed(2);
+  return `${formatted} ${unit.label}`;
+}
+
 function buildTurbineCard(fuelMap, calcFn, sharedState) {
   const card = document.createElement("div");
   card.className = "card card-narrow";
@@ -122,11 +136,33 @@ function buildTurbineCard(fuelMap, calcFn, sharedState) {
       effFlow:   makeResultRow("Eff. flow:", "cyan"),
       effOutput: makeResultRow("Eff. output:", "green"),
       rotorEff:  makeResultRow("Rotor eff.:", "muted"),
-      lifetime:  makeResultRow("Lifetime (s):", "yellow"),
+      lifetime:  makeResultRow("Lifetime:", "yellow"),
     };
+
+    // Lifetime unit toggle — default days
+    let lifetimeUnit = LIFETIME_UNITS[3]; // days
+    const lifetimeRow = rows.lifetime;
+    const unitToggle = document.createElement("div");
+    unitToggle.className = "toggle-group";
+    unitToggle.style.cssText = "margin-left:8px;transform:scale(0.85);transform-origin:right center;";
+    LIFETIME_UNITS.forEach(u => {
+      const btn = document.createElement("button");
+      btn.className = "toggle-btn" + (u === lifetimeUnit ? " active" : "");
+      btn.textContent = u.label;
+      btn.addEventListener("click", () => {
+        lifetimeUnit = u;
+        unitToggle.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        recalc(key);
+      });
+      unitToggle.appendChild(btn);
+    });
+    // Insert unit toggle into the lifetime row label area
+    lifetimeRow.querySelector(".result-label").appendChild(unitToggle);
+
     Object.values(rows).forEach(r => panel.appendChild(r));
 
-    panels[key] = { el: panel, fuelSel, rows };
+    panels[key] = { el: panel, fuelSel, rows, getLifetimeUnit: () => lifetimeUnit };
     card.appendChild(panel);
   });
 
@@ -156,15 +192,15 @@ function buildTurbineCard(fuelMap, calcFn, sharedState) {
     const manualFlow = isManual ? st.manualFlow : null;
 
     const r = calcFn(type, sharedState.rotor, sharedState.size, st.mode, f.name, f.eu_l, manualFlow);
-    const { rows } = panels[type];
-    const unit = type === "plasma" ? "L/s" : "L/t";
-    rows.optFlow.setValue(`${formatNumber(r.optFlow)} ${unit}`);
+    const { rows, getLifetimeUnit } = panels[type];
+    const flowUnit = type === "plasma" ? "L/s" : "L/t";
+    rows.optFlow.setValue(`${formatNumber(r.optFlow)} ${flowUnit}`);
     rows.optOutput.setValue(`${formatNumber(r.optOutput)} EU/t`);
     rows.dynamo.setValue(r.minDynamoTierOpt);
-    rows.effFlow.setValue(isManual ? `${formatNumber(r.effFlow)} ${unit}` : "—");
+    rows.effFlow.setValue(isManual ? `${formatNumber(r.effFlow)} ${flowUnit}` : "—");
     rows.effOutput.setValue(isManual ? `${formatNumber(r.effOutput)} EU/t` : "—");
     rows.rotorEff.setValue(`${(r.rotorEff * 100).toFixed(1)}%`);
-    rows.lifetime.setValue(`${formatNumber(Math.round(r.lifetime))} s`);
+    rows.lifetime.setValue(formatLifetime(r.lifetime, getLifetimeUnit()));
   }
 
   // Recalc currently visible tab

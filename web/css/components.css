@@ -115,7 +115,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
   font-size: 13px;
 }
 
-.result-label { color: var(--muted); }
+.result-label { color: var(--muted); display: flex; align-items: center; gap: 6px; }
 .result-value { font-weight: bold; }
 .result-value.green  { color: var(--green); }
 .result-value.yellow { color: var(--yellow); }
