@@ -175,6 +175,20 @@ class _TableModel(QAbstractTableModel):
             return None
         if role == Qt.ItemDataRole.DisplayRole:
             return self._rows[index.row()][index.column()]
+        if role == Qt.ItemDataRole.UserRole:
+            # Return numeric value for correct sorting of number columns
+            val = self._rows[index.row()][index.column()]
+            try:
+                return float(val.replace(" ", "").replace(",", ""))
+            except (ValueError, AttributeError):
+                return val
+        if role == Qt.ItemDataRole.TextAlignmentRole:
+            val = self._rows[index.row()][index.column()]
+            try:
+                float(val.replace(" ", "").replace(",", ""))
+                return int(Qt.AlignmentFlag.AlignCenter)
+            except (ValueError, AttributeError):
+                return int(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
         if role == Qt.ItemDataRole.ForegroundRole:
             return QColor("#d1d5db")
         if role == Qt.ItemDataRole.BackgroundRole:
@@ -228,13 +242,15 @@ class SearchableTable(QWidget):
         self._proxy.setSourceModel(self._model)
         self._proxy.setFilterCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
         self._proxy.setFilterKeyColumn(-1)  # search all columns
+        self._proxy.setSortRole(Qt.ItemDataRole.UserRole)  # numeric-aware sort
 
         # Table view
         self._view = QTableView()
         self._view.setModel(self._proxy)
         self._view.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
         self._view.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
-        self._view.horizontalHeader().setStretchLastSection(True)
+        self._view.horizontalHeader().setStretchLastSection(False)
+        self._view.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
         self._view.verticalHeader().setVisible(False)
         self._view.setSortingEnabled(True)
         self._view.setShowGrid(False)
