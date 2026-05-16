@@ -223,13 +223,14 @@ function buildSharedSettings(rotors, onChange) {
 
   const div = document.createElement("div");
   div.className = "card card-narrow";
-  div.style.cssText = "margin-bottom:16px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;";
+  div.style.cssText = "margin-bottom:16px;";
 
   // Tier filter
   const tierRow = document.createElement("div");
   tierRow.className = "setting-row";
   tierRow.innerHTML = `<span class="setting-label">Rotor Tier:</span>`;
   const tierSel = document.createElement("select");
+  tierSel.style.width = "60px";
   populateSelect(tierSel, tiers.map(String), "All");
   tierRow.appendChild(tierSel);
   div.appendChild(tierRow);
@@ -239,7 +240,7 @@ function buildSharedSettings(rotors, onChange) {
   rotorRow.className = "setting-row";
   rotorRow.innerHTML = `<span class="setting-label">Rotor:</span>`;
   const rotorSel = document.createElement("select");
-  rotorSel.style.maxWidth = "220px";
+  rotorSel.style.width = "220px";
   rotorRow.appendChild(rotorSel);
   div.appendChild(rotorRow);
 

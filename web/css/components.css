@@ -54,7 +54,7 @@
 
 /* Narrow card for calculator/planner — prevents result rows from stretching full width */
 .card-narrow {
-  max-width: 480px;
+  max-width: 520px;
 }
 
 /* Settings row (label + control) */
