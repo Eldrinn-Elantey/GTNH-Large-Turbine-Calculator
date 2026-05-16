@@ -23,7 +23,7 @@ QPushButton#toggle_btn {
     border: none;
     border-radius: 4px;
     padding: 3px 8px;
-    font-size: 10px;
+    font-size: 12px;
 }
 QPushButton#toggle_btn:hover { background: #374151; }
 QPushButton#toggle_btn[selected="true"] {
@@ -36,7 +36,7 @@ QComboBox {
     border: 1px solid #374151;
     border-radius: 4px;
     padding: 3px 6px;
-    font-size: 10px;
+    font-size: 12px;
 }
 QComboBox::drop-down { border: none; width: 18px; }
 QComboBox QAbstractItemView {
@@ -51,14 +51,14 @@ QLineEdit {
     border: 1px solid #374151;
     border-radius: 4px;
     padding: 3px 6px;
-    font-size: 10px;
+    font-size: 12px;
 }
 QTableView {
     background: #0d1117;
     color: #d1d5db;
     border: none;
     gridline-color: #1f2937;
-    font-size: 10px;
+    font-size: 12px;
     selection-background-color: #1e40af;
     selection-color: #93c5fd;
 }
@@ -67,7 +67,7 @@ QHeaderView::section {
     color: #9ca3af;
     border: none;
     padding: 4px 6px;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: bold;
 }
 QScrollBar:vertical {
@@ -145,12 +145,12 @@ class ResultRow(QWidget):
         lay.setSpacing(4)
 
         lbl = QLabel(label)
-        lbl.setStyleSheet(f"color: {RESULT_LABEL_COLOR}; font-size: 11px;")
+        lbl.setStyleSheet(f"color: {RESULT_LABEL_COLOR}; font-size: 12px;")
         lay.addWidget(lbl)
         lay.addStretch()
 
         self._value = QLabel("—")
-        self._value.setStyleSheet(f"color: {value_color}; font-size: 11px; font-weight: bold;")
+        self._value.setStyleSheet(f"color: {value_color}; font-size: 12px; font-weight: bold;")
         self._value.setAlignment(Qt.AlignmentFlag.AlignRight)
         lay.addWidget(self._value)
 

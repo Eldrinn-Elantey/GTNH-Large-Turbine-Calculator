@@ -2,7 +2,7 @@ import math
 from PySide6.QtWidgets import (
     QWidget, QScrollArea, QVBoxLayout, QHBoxLayout, QGridLayout,
     QLabel, QPushButton, QComboBox, QLineEdit, QFrame, QCheckBox,
-    QSizePolicy,
+    QTabWidget, QSizePolicy,
 )
 from PySide6.QtCore import Qt
 
@@ -22,32 +22,25 @@ TIER_OPTIONS = ["All"] + [str(t) for t in _ALL_TIERS]
 
 _CALC_QSS = """
 QWidget { background: #0d1117; }
-QFrame#card {
-    background: #111827;
-    border-radius: 8px;
-}
-QFrame#card_strip { border-radius: 0; }
-QFrame#shared {
-    background: #111827;
-    border-radius: 8px;
-}
-QPushButton#collapse_btn {
+QFrame#card { background: #111827; border-radius: 8px; }
+QFrame#shared { background: #111827; border-radius: 8px; }
+QTabWidget::pane { background: #0d1117; border: none; }
+QTabBar::tab {
     background: #111827;
     color: #9ca3af;
+    padding: 8px 20px;
     border: none;
-    border-radius: 6px;
-    padding: 6px 12px;
-    text-align: left;
-    font-size: 11px;
+    font-size: 13px;
 }
-QPushButton#collapse_btn:hover { background: #1f2937; }
+QTabBar::tab:selected { background: #1e40af; color: #93c5fd; }
+QTabBar::tab:hover { background: #1f2937; }
 QComboBox {
     background: #1f2937;
     color: #00d4ff;
     border: 1px solid #374151;
     border-radius: 4px;
-    padding: 2px 6px;
-    font-size: 10px;
+    padding: 3px 6px;
+    font-size: 12px;
 }
 QComboBox::drop-down { border: none; width: 18px; }
 QComboBox QAbstractItemView {
@@ -55,16 +48,17 @@ QComboBox QAbstractItemView {
     color: #d1d5db;
     border: 1px solid #374151;
     selection-background-color: #1e40af;
+    font-size: 12px;
 }
 QLineEdit {
     background: #1f2937;
     color: #d1d5db;
     border: 1px solid #374151;
     border-radius: 4px;
-    padding: 2px 6px;
-    font-size: 10px;
+    padding: 3px 6px;
+    font-size: 12px;
 }
-QCheckBox { color: #9ca3af; font-size: 9px; background: transparent; }
+QCheckBox { color: #9ca3af; font-size: 12px; background: transparent; }
 QScrollArea { background: #0d1117; border: none; }
 """
 
@@ -97,7 +91,7 @@ def _sep(parent=None) -> QFrame:
     return line
 
 
-def _label(text: str, color: str = "#6b7280", size: int = 9, bold: bool = False, parent=None) -> QLabel:
+def _label(text: str, color: str = "#6b7280", size: int = 11, bold: bool = False, parent=None) -> QLabel:
     lbl = QLabel(text, parent)
     weight = "bold" if bold else "normal"
     lbl.setStyleSheet(f"color: {color}; font-size: {size}px; font-weight: {weight}; background: transparent;")
@@ -128,18 +122,18 @@ class RegularTurbineCard(QFrame):
         icons = {"steam": "💨", "gas": "🔥", "plasma": "⚛"}
         titles = {"steam": "Large Steam Turbine", "gas": "Large Gas Turbine", "plasma": "Large Plasma Gen"}
         title_lbl = _label(f"{icons[self._type]}  {titles[self._type]}",
-                           color=self._accent, size=11, bold=True)
+                           color=self._accent, size=13, bold=True)
         title_lbl.setContentsMargins(10, 8, 10, 4)
         lay.addWidget(title_lbl)
 
         inner = QWidget()
         inner_lay = QVBoxLayout(inner)
-        inner_lay.setContentsMargins(10, 0, 10, 0)
-        inner_lay.setSpacing(2)
+        inner_lay.setContentsMargins(10, 2, 10, 0)
+        inner_lay.setSpacing(4)
 
         # Mode toggle
         mode_row = QHBoxLayout()
-        mode_row.addWidget(_label("Mode", size=9))
+        mode_row.addWidget(_label("Mode"))
         self._mode_toggle = ToggleButton(["Tight", "Loose"], command=self._recalc)
         mode_row.addWidget(self._mode_toggle)
         mode_row.addStretch()
@@ -147,11 +141,11 @@ class RegularTurbineCard(QFrame):
 
         # Fuel combo
         fuel_row = QHBoxLayout()
-        fuel_row.addWidget(_label("Fuel", size=9))
+        fuel_row.addWidget(_label("Fuel"))
         fuel_names = {"steam": list(STEAM_FUELS), "gas": GAS_FUEL_NAMES, "plasma": PLASMA_FUEL_NAMES}
         self._fuel_combo = QComboBox()
         self._fuel_combo.addItems(fuel_names[self._type])
-        self._fuel_combo.setFixedWidth(170)
+        self._fuel_combo.setFixedWidth(180)
         self._fuel_combo.currentTextChanged.connect(self._recalc)
         fuel_row.addWidget(self._fuel_combo)
         fuel_row.addStretch()
@@ -159,7 +153,7 @@ class RegularTurbineCard(QFrame):
 
         # Flow toggle
         flow_row = QHBoxLayout()
-        flow_row.addWidget(_label("Flow", size=9))
+        flow_row.addWidget(_label("Flow"))
         self._flow_toggle = ToggleButton(["Optimal", "Manual"], command=self._on_flow_mode)
         flow_row.addWidget(self._flow_toggle)
         flow_row.addStretch()
@@ -168,8 +162,8 @@ class RegularTurbineCard(QFrame):
         # Manual entry (hidden initially)
         self._manual_entry = QLineEdit()
         self._manual_entry.setPlaceholderText("L/t or L/s")
-        self._manual_entry.setFixedWidth(100)
-        self._manual_entry.setFixedHeight(24)
+        self._manual_entry.setFixedWidth(110)
+        self._manual_entry.setFixedHeight(28)
         self._manual_entry.textChanged.connect(self._recalc)
         self._manual_entry.hide()
         inner_lay.addWidget(self._manual_entry)
@@ -189,7 +183,7 @@ class RegularTurbineCard(QFrame):
                     self._row_eff_flow, self._row_eff_out, self._row_eff_dyn, self._row_lifetime]:
             inner_lay.addWidget(row)
 
-        inner_lay.addSpacing(6)
+        inner_lay.addSpacing(8)
         lay.addWidget(inner)
 
     def _on_flow_mode(self, mode: str):
@@ -249,7 +243,7 @@ class XLTurbineCard(QFrame):
         self._type = turbine_type
         self._accent = accent
         self._rotor: dict = {}
-        self._size = "Normal"
+        # XL always uses "Normal" rotor size internally (TURBINE_TO_ROTOR_SIZE["XL"] = "Normal")
         self._dynamo_tier = "EV"
         self._build()
 
@@ -269,24 +263,24 @@ class XLTurbineCard(QFrame):
             "gas":   "XL Turbo Gas Turbine",
             "plasma": "XL Turbo Plasma Turbine",
         }
-        title_lbl = _label(titles[self._type], color=self._accent, size=10, bold=True)
+        title_lbl = _label(titles[self._type], color=self._accent, size=12, bold=True)
         title_lbl.setContentsMargins(10, 8, 10, 4)
         lay.addWidget(title_lbl)
 
         inner = QWidget()
         inner_lay = QVBoxLayout(inner)
-        inner_lay.setContentsMargins(10, 0, 10, 0)
-        inner_lay.setSpacing(2)
+        inner_lay.setContentsMargins(10, 2, 10, 0)
+        inner_lay.setSpacing(4)
 
         mode_row = QHBoxLayout()
-        mode_row.addWidget(_label("Mode", size=9))
+        mode_row.addWidget(_label("Mode"))
         self._mode_toggle = ToggleButton(["Tight", "Loose"], command=self._recalc)
         mode_row.addWidget(self._mode_toggle)
         mode_row.addStretch()
         inner_lay.addLayout(mode_row)
 
         fuel_row = QHBoxLayout()
-        fuel_row.addWidget(_label("Fuel", size=9))
+        fuel_row.addWidget(_label("Fuel"))
         if self._type == "steam":
             fuel_names = ["SC Steam"]
             self._dense_check = QCheckBox("Dense")
@@ -300,7 +294,7 @@ class XLTurbineCard(QFrame):
 
         self._fuel_combo = QComboBox()
         self._fuel_combo.addItems(fuel_names)
-        self._fuel_combo.setFixedWidth(140)
+        self._fuel_combo.setFixedWidth(160)
         self._fuel_combo.currentTextChanged.connect(self._recalc)
         fuel_row.insertWidget(1, self._fuel_combo)
         fuel_row.addStretch()
@@ -317,12 +311,12 @@ class XLTurbineCard(QFrame):
         for row in [self._row_flow, self._row_output, self._row_dynamo, self._row_life]:
             inner_lay.addWidget(row)
 
-        inner_lay.addSpacing(6)
+        inner_lay.addSpacing(8)
         lay.addWidget(inner)
 
-    def set_rotor(self, rotor: dict, size: str):
+    def set_rotor(self, rotor: dict):
+        """XL always uses Normal rotor size internally."""
         self._rotor = rotor
-        self._size = size
         self._recalc()
 
     def set_dynamo_tier(self, tier: str):
@@ -344,8 +338,9 @@ class XLTurbineCard(QFrame):
         else:
             fuel_val = PLASMA_FUELS.get(fuel_type, 81920)
 
+        # XL uses "Normal" turbine size (maps to "Normal" rotor, "Large" dur per TURBINE_TO_ROTOR_SIZE["XL"])
         try:
-            r = calc_xl_turbine(self._type, self._rotor, self._size, mode, fuel_type, fuel_val, is_dense)
+            r = calc_xl_turbine(self._type, self._rotor, "XL", mode, fuel_type, fuel_val, is_dense)
         except Exception:
             return
 
@@ -356,90 +351,115 @@ class XLTurbineCard(QFrame):
         self._row_life.set(_fmt_lifetime(r.lifetime_s))
 
 
-class CalculatorTab(QWidget):
+def _make_scroll_page() -> tuple[QScrollArea, QVBoxLayout]:
+    """Returns (scroll_area, content_layout) — wrap content_layout with widgets."""
+    scroll = QScrollArea()
+    scroll.setWidgetResizable(True)
+    scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+    content = QWidget()
+    scroll.setWidget(content)
+    lay = QVBoxLayout(content)
+    lay.setContentsMargins(16, 16, 16, 16)
+    lay.setSpacing(8)
+    return scroll, lay
+
+
+def _shared_settings_frame(
+    tier_combo_out: list,
+    rotor_combo_out: list,
+    dynamo_combo_out: list,
+    lbl_eff_out: list,
+    lbl_dur_out: list,
+    show_size: bool = True,
+    size_toggle_out: list = None,
+) -> QFrame:
+    """Build the shared settings card. Outputs widget refs via single-element lists."""
+    shared = QFrame()
+    shared.setObjectName("shared")
+    shared_lay = QVBoxLayout(shared)
+    shared_lay.setContentsMargins(12, 10, 12, 10)
+    shared_lay.setSpacing(8)
+    shared_lay.addWidget(_label("SHARED SETTINGS", size=10))
+
+    rotor_row = QHBoxLayout()
+    rotor_row.setSpacing(10)
+
+    rotor_row.addWidget(_label("Tier"))
+    tier_combo = QComboBox()
+    tier_combo.addItems(TIER_OPTIONS)
+    tier_combo.setFixedWidth(80)
+    rotor_row.addWidget(tier_combo)
+    tier_combo_out.append(tier_combo)
+
+    rotor_row.addWidget(_label("Material"))
+    rotor_combo = QComboBox()
+    rotor_combo.addItems(ROTOR_DISPLAY_NAMES)
+    rotor_combo.setFixedWidth(260)
+    rotor_row.addWidget(rotor_combo)
+    rotor_combo_out.append(rotor_combo)
+
+    if show_size and size_toggle_out is not None:
+        size_toggle = ToggleButton(["Small", "Normal", "Large", "Huge"])
+        size_toggle.set("Normal")
+        rotor_row.addWidget(size_toggle)
+        size_toggle_out.append(size_toggle)
+
+    lbl_eff = _label("Eff: —", color="#4ade80", size=12)
+    lbl_dur = _label("Dur: —", color=YELLOW, size=12)
+    rotor_row.addWidget(lbl_eff)
+    rotor_row.addWidget(lbl_dur)
+    rotor_row.addStretch()
+    shared_lay.addLayout(rotor_row)
+    lbl_eff_out.append(lbl_eff)
+    lbl_dur_out.append(lbl_dur)
+
+    dynamo_row = QHBoxLayout()
+    dynamo_row.setSpacing(10)
+    dynamo_row.addWidget(_label("Dynamo Hatch Tier"))
+    dynamo_combo = QComboBox()
+    dynamo_combo.addItems(DYNAMO_TIER_NAMES)
+    dynamo_combo.setCurrentText("EV")
+    dynamo_combo.setFixedWidth(110)
+    dynamo_row.addWidget(dynamo_combo)
+    dynamo_row.addWidget(_label("— how many dynamo hatches needed", color="#4b5563", size=11))
+    dynamo_row.addStretch()
+    shared_lay.addLayout(dynamo_row)
+    dynamo_combo_out.append(dynamo_combo)
+
+    return shared
+
+
+class LargeTurbinesTab(QWidget):
+    """Tab for Large (non-XL) turbines: Steam, Gas, Plasma."""
+
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setStyleSheet(_CALC_QSS)
-        self._large_visible = True
-        self._xl_visible = False
         self._build()
 
     def _build(self):
-        # Wrap in scroll area
-        scroll = QScrollArea(self)
-        scroll.setWidgetResizable(True)
-        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        scroll, lay = _make_scroll_page()
         outer = QVBoxLayout(self)
         outer.setContentsMargins(0, 0, 0, 0)
         outer.addWidget(scroll)
 
-        content = QWidget()
-        scroll.setWidget(content)
-        lay = QVBoxLayout(content)
-        lay.setContentsMargins(16, 16, 16, 16)
-        lay.setSpacing(4)
-
-        # Shared settings card
-        shared = QFrame()
-        shared.setObjectName("shared")
-        shared_lay = QVBoxLayout(shared)
-        shared_lay.setContentsMargins(12, 10, 12, 10)
-        shared_lay.setSpacing(6)
-        shared_lay.addWidget(_label("SHARED SETTINGS", size=9))
-
-        rotor_row = QHBoxLayout()
-        rotor_row.setSpacing(8)
-
-        rotor_row.addWidget(_label("Tier", size=9))
-        self._tier_combo = QComboBox()
-        self._tier_combo.addItems(TIER_OPTIONS)
-        self._tier_combo.setFixedWidth(70)
-        self._tier_combo.currentTextChanged.connect(self._on_tier_change)
-        rotor_row.addWidget(self._tier_combo)
-
-        rotor_row.addWidget(_label("Material", size=9))
-        self._rotor_combo = QComboBox()
-        self._rotor_combo.addItems(ROTOR_DISPLAY_NAMES)
-        self._rotor_combo.setFixedWidth(240)
-        self._rotor_combo.currentTextChanged.connect(lambda _: self._on_rotor_change())
-        rotor_row.addWidget(self._rotor_combo)
-
-        self._size_toggle = ToggleButton(["Small", "Normal", "Large", "Huge"],
-                                          command=lambda _: self._on_rotor_change())
-        self._size_toggle.set("Normal")
-        rotor_row.addWidget(self._size_toggle)
-
-        self._lbl_eff = _label("Eff: —", color="#4ade80", size=10)
-        self._lbl_dur = _label("Dur: —", color=YELLOW, size=10)
-        rotor_row.addWidget(self._lbl_eff)
-        rotor_row.addWidget(self._lbl_dur)
-        rotor_row.addStretch()
-        shared_lay.addLayout(rotor_row)
-
-        dynamo_row = QHBoxLayout()
-        dynamo_row.setSpacing(8)
-        dynamo_row.addWidget(_label("Dynamo Hatch Tier", size=9))
-        self._dynamo_combo = QComboBox()
-        self._dynamo_combo.addItems(DYNAMO_TIER_NAMES)
-        self._dynamo_combo.setCurrentText("EV")
-        self._dynamo_combo.setFixedWidth(100)
-        self._dynamo_combo.currentTextChanged.connect(self._on_dynamo_tier_change)
-        dynamo_row.addWidget(self._dynamo_combo)
-        dynamo_row.addWidget(_label("— choose tier to see how many dynamo hatches needed",
-                                    color="#4b5563", size=9))
-        dynamo_row.addStretch()
-        shared_lay.addLayout(dynamo_row)
-
+        # Shared settings
+        _tier_combo, _rotor_combo, _dynamo_combo = [], [], []
+        _lbl_eff, _lbl_dur, _size_toggle = [], [], []
+        shared = _shared_settings_frame(
+            _tier_combo, _rotor_combo, _dynamo_combo,
+            _lbl_eff, _lbl_dur,
+            show_size=True, size_toggle_out=_size_toggle,
+        )
+        self._tier_combo   = _tier_combo[0]
+        self._rotor_combo  = _rotor_combo[0]
+        self._dynamo_combo = _dynamo_combo[0]
+        self._lbl_eff      = _lbl_eff[0]
+        self._lbl_dur      = _lbl_dur[0]
+        self._size_toggle  = _size_toggle[0]
         lay.addWidget(shared)
 
-        # Large turbines collapsible
-        self._large_btn = QPushButton("▼  Large Turbines")
-        self._large_btn.setObjectName("collapse_btn")
-        self._large_btn.clicked.connect(self._toggle_large)
-        lay.addWidget(self._large_btn)
-
-        self._large_widget = QWidget()
-        grid = QGridLayout(self._large_widget)
+        # 3 turbine cards
+        grid = QGridLayout()
         grid.setSpacing(8)
         self._steam_card  = RegularTurbineCard("steam",  "#3b82f6")
         self._gas_card    = RegularTurbineCard("gas",    "#f59e0b")
@@ -450,51 +470,16 @@ class CalculatorTab(QWidget):
         grid.setColumnStretch(0, 1)
         grid.setColumnStretch(1, 1)
         grid.setColumnStretch(2, 1)
-        lay.addWidget(self._large_widget)
-
-        # XL turbines collapsible
-        self._xl_btn = QPushButton("▶  XL Turbo Turbines  (click to expand)")
-        self._xl_btn.setObjectName("collapse_btn")
-        self._xl_btn.clicked.connect(self._toggle_xl)
-        lay.addWidget(self._xl_btn)
-
-        self._xl_widget = QWidget()
-        xl_grid = QGridLayout(self._xl_widget)
-        xl_grid.setSpacing(8)
-        self._xl_steam  = XLTurbineCard("steam",  "#93c5fd")
-        self._xl_gas    = XLTurbineCard("gas",    "#fcd34d")
-        self._xl_plasma = XLTurbineCard("plasma", "#c084fc")
-        xl_grid.addWidget(self._xl_steam,  0, 0)
-        xl_grid.addWidget(self._xl_gas,    0, 1)
-        xl_grid.addWidget(self._xl_plasma, 0, 2)
-        xl_grid.setColumnStretch(0, 1)
-        xl_grid.setColumnStretch(1, 1)
-        xl_grid.setColumnStretch(2, 1)
-        self._xl_widget.hide()
-        lay.addWidget(self._xl_widget)
-
+        lay.addLayout(grid)
         lay.addStretch()
+
+        # Wire signals
+        self._tier_combo.currentTextChanged.connect(self._on_tier_change)
+        self._rotor_combo.currentTextChanged.connect(lambda _: self._on_rotor_change())
+        self._size_toggle._command = lambda _: self._on_rotor_change()
+        self._dynamo_combo.currentTextChanged.connect(self._on_dynamo_change)
+
         self._on_rotor_change()
-
-    def _toggle_large(self):
-        if self._large_visible:
-            self._large_widget.hide()
-            self._large_btn.setText("▶  Large Turbines  (click to expand)")
-            self._large_visible = False
-        else:
-            self._large_widget.show()
-            self._large_btn.setText("▼  Large Turbines")
-            self._large_visible = True
-
-    def _toggle_xl(self):
-        if self._xl_visible:
-            self._xl_widget.hide()
-            self._xl_btn.setText("▶  XL Turbo Turbines  (click to expand)")
-            self._xl_visible = False
-        else:
-            self._xl_widget.show()
-            self._xl_btn.setText("▼  XL Turbo Turbines")
-            self._xl_visible = True
 
     def _on_tier_change(self, tier_str: str):
         names = _rotor_names_for_tier(tier_str)
@@ -504,9 +489,8 @@ class CalculatorTab(QWidget):
         self._rotor_combo.blockSignals(False)
         self._on_rotor_change()
 
-    def _on_dynamo_tier_change(self, tier: str):
-        for card in [self._steam_card, self._gas_card, self._plasma_card,
-                     self._xl_steam, self._xl_gas, self._xl_plasma]:
+    def _on_dynamo_change(self, tier: str):
+        for card in [self._steam_card, self._gas_card, self._plasma_card]:
             card.set_dynamo_tier(tier)
 
     def _on_rotor_change(self, *_):
@@ -521,7 +505,110 @@ class CalculatorTab(QWidget):
         self._lbl_eff.setText(f"Eff(tight): {sd['steam_tight_eff']*100:.1f}%")
         self._lbl_dur.setText(f"Dur: {dur:,}")
         dynamo_tier = self._dynamo_combo.currentText()
-        for card in [self._steam_card, self._gas_card, self._plasma_card,
-                     self._xl_steam, self._xl_gas, self._xl_plasma]:
+        for card in [self._steam_card, self._gas_card, self._plasma_card]:
             card.set_dynamo_tier(dynamo_tier)
             card.set_rotor(rotor, size)
+
+
+class XLTurbinesTab(QWidget):
+    """Tab for XL Turbo turbines. Size selector not shown — XL always uses Normal rotor size."""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._build()
+
+    def _build(self):
+        scroll, lay = _make_scroll_page()
+        outer = QVBoxLayout(self)
+        outer.setContentsMargins(0, 0, 0, 0)
+        outer.addWidget(scroll)
+
+        # Note about size
+        note = _label(
+            "ℹ  XL turbines always use Normal rotor size internally — size selector not applicable.",
+            color="#4b5563", size=11,
+        )
+        lay.addWidget(note)
+
+        # Shared settings — no size toggle
+        _tier_combo, _rotor_combo, _dynamo_combo = [], [], []
+        _lbl_eff, _lbl_dur = [], []
+        shared = _shared_settings_frame(
+            _tier_combo, _rotor_combo, _dynamo_combo,
+            _lbl_eff, _lbl_dur,
+            show_size=False,
+        )
+        self._tier_combo   = _tier_combo[0]
+        self._rotor_combo  = _rotor_combo[0]
+        self._dynamo_combo = _dynamo_combo[0]
+        self._lbl_eff      = _lbl_eff[0]
+        self._lbl_dur      = _lbl_dur[0]
+        lay.addWidget(shared)
+
+        # 3 XL cards
+        grid = QGridLayout()
+        grid.setSpacing(8)
+        self._xl_steam  = XLTurbineCard("steam",  "#93c5fd")
+        self._xl_gas    = XLTurbineCard("gas",    "#fcd34d")
+        self._xl_plasma = XLTurbineCard("plasma", "#c084fc")
+        grid.addWidget(self._xl_steam,  0, 0)
+        grid.addWidget(self._xl_gas,    0, 1)
+        grid.addWidget(self._xl_plasma, 0, 2)
+        grid.setColumnStretch(0, 1)
+        grid.setColumnStretch(1, 1)
+        grid.setColumnStretch(2, 1)
+        lay.addLayout(grid)
+        lay.addStretch()
+
+        # Wire signals
+        self._tier_combo.currentTextChanged.connect(self._on_tier_change)
+        self._rotor_combo.currentTextChanged.connect(lambda _: self._on_rotor_change())
+        self._dynamo_combo.currentTextChanged.connect(self._on_dynamo_change)
+
+        self._on_rotor_change()
+
+    def _on_tier_change(self, tier_str: str):
+        names = _rotor_names_for_tier(tier_str)
+        self._rotor_combo.blockSignals(True)
+        self._rotor_combo.clear()
+        self._rotor_combo.addItems(names)
+        self._rotor_combo.blockSignals(False)
+        self._on_rotor_change()
+
+    def _on_dynamo_change(self, tier: str):
+        for card in [self._xl_steam, self._xl_gas, self._xl_plasma]:
+            card.set_dynamo_tier(tier)
+
+    def _on_rotor_change(self, *_):
+        name = self._rotor_combo.currentText()
+        rotor = ROTOR_DATA.get(name, {})
+        if not rotor:
+            return
+        # XL uses "Normal" blade size for efficiency/durability display
+        sd = rotor["sizes"]["Normal"]
+        dur = rotor["base_durability"] * rotor["sizes"]["Large"]["dur_mult"]
+        self._lbl_eff.setText(f"Eff(tight): {sd['steam_tight_eff']*100:.1f}%")
+        self._lbl_dur.setText(f"Dur: {dur:,}")
+        dynamo_tier = self._dynamo_combo.currentText()
+        for card in [self._xl_steam, self._xl_gas, self._xl_plasma]:
+            card.set_dynamo_tier(dynamo_tier)
+            card.set_rotor(rotor)
+
+
+class CalculatorTab(QWidget):
+    """Top-level Calculator tab — sub-tabs for Large and XL turbines."""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setStyleSheet(_CALC_QSS)
+        self._build()
+
+    def _build(self):
+        lay = QVBoxLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setSpacing(0)
+
+        tabs = QTabWidget()
+        tabs.addTab(LargeTurbinesTab(), "⚡  Large Turbines")
+        tabs.addTab(XLTurbinesTab(),   "⚡  XL Turbo Turbines")
+        lay.addWidget(tabs)
