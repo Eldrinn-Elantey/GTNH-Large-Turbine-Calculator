@@ -17,7 +17,7 @@ class RotorsRefTab(ctk.CTkFrame):
         size_frame.pack(anchor="w", padx=16, pady=(0, 8))
         ctk.CTkLabel(size_frame, text="Blade size:", font=ctk.CTkFont(size=10),
                      text_color="#9ca3af").pack(side="left", padx=(10, 6), pady=8)
-        self._size_toggle = ToggleButton(size_frame, ["Turbine", "Large", "Huge"],
+        self._size_toggle = ToggleButton(size_frame, ["Small", "Normal", "Large", "Huge"],
                                          command=lambda _: self._reload())
         self._size_toggle.pack(side="left", padx=(0, 10), pady=6)
 
@@ -35,19 +35,15 @@ class RotorsRefTab(ctk.CTkFrame):
         self._table.pack(fill="both", expand=True, padx=16, pady=(0, 16))
         self._reload()
 
-    # Maps UI blade name to internal data column key
-    _BLADE_COL = {"Turbine": "Small", "Large": "Normal", "Huge": "Large"}
-
     def _reload(self):
-        col = self._BLADE_COL[self._size_toggle.get()]
+        size = self._size_toggle.get()
         rows = []
+        # Durability uses next col's dur_mult due to data extraction misalignment
+        _dur_col = {"Small": "Normal", "Normal": "Large", "Large": "Huge", "Huge": "Huge"}
         for name in ROTOR_DISPLAY_NAMES:
             rd = ROTOR_DATA[name]
-            sd = rd["sizes"][col]
-            # Durability uses next col's dur_mult due to data extraction misalignment
-            dur_col_map = {"Small": "Normal", "Normal": "Large", "Large": "Huge"}
-            dur_sd = rd["sizes"][dur_col_map[col]]
-            dur = rd["base_durability"] * dur_sd["dur_mult"]
+            sd = rd["sizes"][size]
+            dur = rd["base_durability"] * rd["sizes"][_dur_col[size]]["dur_mult"]
             rows.append([
                 name,
                 str(rd["tier"]),

@@ -29,7 +29,7 @@ class EHEPlannerTab(ctk.CTkScrollableFrame):
         self._rotor_combo.pack(side="left", padx=(0, 12))
         self._rotor_combo.set(ROTOR_DISPLAY_NAMES[0])
 
-        self._size_toggle = ToggleButton(rotor_row, ["Turbine", "Large", "Huge"],
+        self._size_toggle = ToggleButton(rotor_row, ["Small", "Normal", "Large", "Huge"],
                                           command=lambda _: self._recalc_all())
         self._size_toggle.pack(side="left")
 

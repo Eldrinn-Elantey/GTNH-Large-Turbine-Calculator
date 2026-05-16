@@ -313,10 +313,10 @@ class CalculatorTab(ctk.CTkScrollableFrame):
         self._rotor_combo.pack(side="left", padx=(0, 12))
 
         # Size toggle
-        self._size_toggle = ToggleButton(rotor_row, ["Turbine", "Large", "Huge"],
+        self._size_toggle = ToggleButton(rotor_row, ["Small", "Normal", "Large", "Huge"],
                                           command=lambda _: self._on_rotor_change())
         self._size_toggle.pack(side="left", padx=(0, 12))
-        self._size_toggle.set("Large")
+        self._size_toggle.set("Normal")
 
         self._lbl_eff = ctk.CTkLabel(rotor_row, text="Eff: —", font=ctk.CTkFont(size=10),
                                       text_color=GREEN)
