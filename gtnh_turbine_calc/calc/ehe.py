@@ -5,9 +5,9 @@ from gtnh_turbine_calc.data.fuels import EHE_FUELS, STEAM_FUELS
 # Maps UI blade size name to data column key (same as turbine.py)
 TURBINE_TO_ROTOR_SIZE = {
     "Small":  "Small",
-    "Normal": "Normal",
-    "Large":  "Large",
-    "Huge":   "Huge",
+    "Normal": "Small",
+    "Large":  "Normal",
+    "Huge":   "Large",
     "XL":     "Normal",
 }
 

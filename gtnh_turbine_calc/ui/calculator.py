@@ -427,7 +427,7 @@ class CalculatorTab(ctk.CTkScrollableFrame):
         blade_size = TURBINE_TO_ROTOR_SIZE.get(size, size)
         sd = rotor["sizes"][blade_size]
         dur = rotor["base_durability"] * sd["dur_mult"]
-        self._lbl_eff.configure(text=f"Eff(tight): {sd['steam_tight_eff']:.3f}")
+        self._lbl_eff.configure(text=f"Eff(tight): {sd['steam_tight_eff']*100:.1f}%")
         self._lbl_dur.configure(text=f"Dur: {dur:,}")
 
         dynamo_tier = self._dynamo_combo.get()

@@ -11,22 +11,22 @@ TurbineType = Literal["steam", "gas", "plasma"]
 #   "Turbine" (2x speed) / "Large Turbine" (3x) / "Huge Turbine" (4x).
 # The game's "Small Turbine" (1x) blade is not in our data.
 TURBINE_TO_ROTOR_SIZE: dict[str, str] = {
-    "Small":  "Small",   # speedMult=2 data
-    "Normal": "Normal",  # speedMult=3 data  ← most common (Large Turbine blade in game)
-    "Large":  "Large",   # speedMult=4 data
-    "Huge":   "Huge",    # speedMult=5+ data
-    "XL":     "Normal",  # XL uses same efficiency as Normal
+    "Small":  "Small",   # efficiency from "Small" data col
+    "Normal": "Small",   # efficiency from "Small" data col
+    "Large":  "Normal",  # efficiency from "Normal" data col ← confirmed vs Excel
+    "Huge":   "Large",   # efficiency from "Large" data col
+    "XL":     "Normal",  # XL uses same efficiency col as Large
 }
 
 # Due to an extraction misalignment, the correct durability multiplier for each
 # blade size is stored in the NEXT data column.
 # Confirmed: Normal size → 6,144,000 for Orichalcum (= base × 3 = "Large" col dur_mult).
 _TURBINE_TO_DUR_SIZE: dict[str, str] = {
-    "Small":  "Normal",  # actual durMult in "Normal" col
-    "Normal": "Large",   # actual durMult in "Large" col ✓ confirmed
-    "Large":  "Huge",    # actual durMult in "Huge" col
-    "Huge":   "Huge",    # fallback same col (Huge col dur_mult=4)
-    "XL":     "Large",   # XL same dur as Normal blade
+    "Small":  "Normal",  # durMult from "Normal" col
+    "Normal": "Large",   # durMult from "Large" col
+    "Large":  "Large",   # durMult from "Large" col → 6,144,000 for Orichalcum ✓ confirmed
+    "Huge":   "Huge",    # durMult from "Huge" col
+    "XL":     "Large",   # XL same dur as Large
 }
 
 
