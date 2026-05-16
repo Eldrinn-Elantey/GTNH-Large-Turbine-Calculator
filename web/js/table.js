@@ -122,6 +122,14 @@ export class SortableTable {
     });
   }
 
+  /** Replace rows and re-render the body (keeps search/sort state). */
+  update(rows) {
+    this._rows = rows;
+    this._applyFilter();
+    if (this._sortCol) this._doSort();
+    this._renderBody();
+  }
+
   _renderBody() {
     this._tbody.innerHTML = "";
     for (const row of this._filtered) {

@@ -1,5 +1,6 @@
 import { calcRegularTurbine, calcXlTurbine } from "../calc.js";
 import { formatNumber, formatDynamo, populateSelect, DYNAMO_TIERS } from "../utils.js";
+import { SortableTable } from "../table.js";
 
 let _data = null;
 
@@ -306,20 +307,167 @@ async function buildTurbineTab(el, data, calcFn) {
   turbineCard.recalc();
 }
 
+function buildCompareTab(el, data) {
+  const FUEL_TYPES = ["steam", "gas", "plasma"];
+  const fuelMap = { steam: data.fuels.steam, gas: data.fuels.gas, plasma: data.fuels.plasma };
+
+  const state = {
+    turbine: "large",
+    fuelType: "gas",
+    fuel: fuelMap.gas[0],
+    mode: "Tight",
+    size: "Normal",
+    dynamoTier: "EV",
+    tierFilter: "All",
+  };
+
+  // Settings card
+  const settings = document.createElement("div");
+  settings.className = "card";
+  settings.style.cssText = "margin-bottom:16px;max-width:700px;";
+
+  function row(labelText) {
+    const r = document.createElement("div");
+    r.className = "setting-row";
+    r.innerHTML = `<span class="setting-label">${labelText}</span>`;
+    return r;
+  }
+
+  // Turbine type
+  const turbineRow = row("Turbine:");
+  const turbineToggle = makeToggle(["Large", "XL"], val => { state.turbine = val.toLowerCase(); rebuild(); });
+  turbineRow.appendChild(turbineToggle);
+  settings.appendChild(turbineRow);
+
+  // Fuel type tabs → simple toggle
+  const ftRow = row("Fuel Type:");
+  const ftToggle = makeToggle(["Steam", "Gas", "Plasma"], val => {
+    state.fuelType = val.toLowerCase();
+    state.fuel = fuelMap[state.fuelType][0];
+    populateSelect(fuelSel, fuelMap[state.fuelType].map(f => f.name), state.fuel.name);
+    rebuild();
+  });
+  // default Gas active
+  ftToggle.querySelectorAll(".toggle-btn")[0].classList.remove("active");
+  ftToggle.querySelectorAll(".toggle-btn")[1].classList.add("active");
+  ftRow.appendChild(ftToggle);
+  settings.appendChild(ftRow);
+
+  // Fuel select
+  const fuelRow = row("Fuel:");
+  const fuelSel = document.createElement("select");
+  fuelSel.style.width = "200px";
+  populateSelect(fuelSel, fuelMap.gas.map(f => f.name), fuelMap.gas[0].name);
+  fuelSel.addEventListener("change", () => {
+    state.fuel = fuelMap[state.fuelType].find(f => f.name === fuelSel.value) ?? fuelMap[state.fuelType][0];
+    rebuild();
+  });
+  fuelRow.appendChild(fuelSel);
+  settings.appendChild(fuelRow);
+
+  // Mode
+  const modeRow = row("Mode:");
+  const modeToggle = makeToggle(["Tight", "Loose"], val => { state.mode = val; rebuild(); });
+  modeRow.appendChild(modeToggle);
+  settings.appendChild(modeRow);
+
+  // Blade size
+  const sizeRow = row("Blade Size:");
+  const sizeToggle = makeToggle(["Small", "Normal", "Large", "Huge"], val => { state.size = val; rebuild(); });
+  // default Normal
+  sizeToggle.querySelectorAll(".toggle-btn")[0].classList.remove("active");
+  sizeToggle.querySelectorAll(".toggle-btn")[1].classList.add("active");
+  sizeRow.appendChild(sizeToggle);
+  settings.appendChild(sizeRow);
+
+  // Dynamo tier
+  const dynRow = row("Dynamo Tier:");
+  const dynSel = document.createElement("select");
+  dynSel.style.width = "90px";
+  populateSelect(dynSel, DYNAMO_TIERS.map(([n]) => n), "EV");
+  dynSel.addEventListener("change", () => { state.dynamoTier = dynSel.value; rebuild(); });
+  dynRow.appendChild(dynSel);
+  settings.appendChild(dynRow);
+
+  // Rotor tier filter
+  const tiers = ["All", ...new Set(data.rotors.map(r => r.tier).sort((a, b) => a - b))];
+  const tierRow = row("Rotor Tier:");
+  const tierSel = document.createElement("select");
+  tierSel.style.width = "60px";
+  populateSelect(tierSel, tiers.map(String), "All");
+  tierSel.addEventListener("change", () => { state.tierFilter = tierSel.value; rebuild(); });
+  tierRow.appendChild(tierSel);
+  settings.appendChild(tierRow);
+
+  el.appendChild(settings);
+
+  // Table container
+  const tableWrap = document.createElement("div");
+  el.appendChild(tableWrap);
+
+  const columns = [
+    { key: "name",     label: "Rotor",           numeric: false, width: 200 },
+    { key: "tier",     label: "Tier",             numeric: true,  width: 50  },
+    { key: "flow",     label: "Opt. Flow",        numeric: true,  width: 100 },
+    { key: "output",   label: "Output EU/t",      numeric: true,  width: 120 },
+    { key: "dynamo",   label: "Dynamo hatches",   numeric: false, width: 160 },
+    { key: "eff",      label: "Rotor eff.",       numeric: true,  width: 90  },
+    { key: "lifetime", label: "Lifetime (days)",  numeric: true,  width: 110 },
+  ];
+
+  let table = null;
+
+  function rebuild() {
+    const calcFn = state.turbine === "xl"
+      ? (type, rotor, size, mode, fuelName, euL) => calcXlTurbine(type, rotor, size, mode, fuelName, euL, false, null)
+      : (type, rotor, size, mode, fuelName, euL) => calcRegularTurbine(type, rotor, size, mode, fuelName, euL, null);
+
+    const rotors = state.tierFilter === "All"
+      ? data.rotors
+      : data.rotors.filter(r => String(r.tier) === state.tierFilter);
+
+    const flowUnit = state.fuelType === "plasma" ? "L/s" : "L/t";
+
+    const rows = rotors.map(rotor => {
+      const r = calcFn(state.fuelType, rotor, state.size, state.mode, state.fuel.name, state.fuel.eu_l);
+      return {
+        name:     rotor.name,
+        tier:     String(rotor.tier),
+        flow:     `${formatNumber(r.optFlow)} ${flowUnit}`,
+        output:   `${formatNumber(r.optOutput)} EU/t`,
+        dynamo:   formatDynamo(r.optOutput, state.dynamoTier),
+        eff:      `${(r.rotorEff * 100).toFixed(1)}%`,
+        lifetime: (r.lifetime / 86400).toFixed(2),
+      };
+    });
+
+    if (!table) {
+      table = new SortableTable(tableWrap, columns, rows);
+    } else {
+      table.update(rows);
+    }
+  }
+
+  rebuild();
+}
+
 export async function initCalculator(el) {
   el.innerHTML = `
     <h2 class="section-title">⚡ Calculator</h2>
     <div class="sub-tabs">
       <div class="sub-tab active" data-tab="large">Large Turbines</div>
       <div class="sub-tab" data-tab="xl">XL Turbo Turbines</div>
+      <div class="sub-tab" data-tab="compare">⚖️ Compare Rotors</div>
     </div>
     <div id="calc-large"></div>
     <div id="calc-xl" class="hidden"></div>
+    <div id="calc-compare" class="hidden"></div>
   `;
 
   const data = await loadData();
-  const largeEl = el.querySelector("#calc-large");
-  const xlEl    = el.querySelector("#calc-xl");
+  const largeEl   = el.querySelector("#calc-large");
+  const xlEl      = el.querySelector("#calc-xl");
+  const compareEl = el.querySelector("#calc-compare");
 
   const regularCalc = (type, rotor, size, mode, fuelType, fuelValue, manualFlow) =>
     calcRegularTurbine(type, rotor, size, mode, fuelType, fuelValue, manualFlow);
@@ -330,18 +478,24 @@ export async function initCalculator(el) {
   await buildTurbineTab(largeEl, data, regularCalc);
 
   let xlBuilt = false;
+  let compareBuilt = false;
 
   el.querySelectorAll(".sub-tab").forEach(tab => {
     tab.addEventListener("click", async () => {
       el.querySelectorAll(".sub-tab").forEach(t => t.classList.remove("active"));
       tab.classList.add("active");
+      largeEl.classList.add("hidden");
+      xlEl.classList.add("hidden");
+      compareEl.classList.add("hidden");
+
       if (tab.dataset.tab === "large") {
         largeEl.classList.remove("hidden");
-        xlEl.classList.add("hidden");
-      } else {
-        largeEl.classList.add("hidden");
+      } else if (tab.dataset.tab === "xl") {
         xlEl.classList.remove("hidden");
         if (!xlBuilt) { await buildTurbineTab(xlEl, data, xlCalc); xlBuilt = true; }
+      } else {
+        compareEl.classList.remove("hidden");
+        if (!compareBuilt) { buildCompareTab(compareEl, data); compareBuilt = true; }
       }
     });
   });
