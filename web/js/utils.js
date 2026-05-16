@@ -32,6 +32,21 @@ export function findDynamoTier(euPerT) {
 }
 
 /**
+ * Format dynamo hatch count: "3x EV  (1.500 A)"
+ * @param {number} euPerT
+ * @param {string} tierName
+ * @returns {string}
+ */
+export function formatDynamo(euPerT, tierName) {
+  const entry = DYNAMO_TIERS.find(([name]) => name === tierName);
+  const voltage = entry ? entry[1] : 1;
+  if (euPerT <= 0) return "0x " + tierName;
+  const count = Math.ceil(euPerT / voltage);
+  const amps = (euPerT / voltage).toFixed(3);
+  return `${count}x ${tierName}  (${amps} A)`;
+}
+
+/**
  * Format a number with thousands separators: 1234567 -> "1,234,567".
  * Floats are rounded to 2 decimal places if fractional.
  * @param {number} n

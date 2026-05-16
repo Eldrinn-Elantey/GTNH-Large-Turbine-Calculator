@@ -1,5 +1,5 @@
 import { calcRegularTurbine, calcXlTurbine } from "../calc.js";
-import { formatNumber, populateSelect } from "../utils.js";
+import { formatNumber, formatDynamo, populateSelect, DYNAMO_TIERS } from "../utils.js";
 
 let _data = null;
 
@@ -132,7 +132,7 @@ function buildTurbineCard(fuelMap, calcFn, sharedState) {
     const rows = {
       optFlow:   makeResultRow("Optimal flow:", "cyan"),
       optOutput: makeResultRow("Output EU/t:", "green"),
-      dynamo:    makeResultRow("Dynamo tier:", "muted"),
+      dynamo:    makeResultRow("Dynamo hatches:", "purple"),
       effFlow:   makeResultRow("Eff. flow:", "cyan"),
       effOutput: makeResultRow("Eff. output:", "green"),
       rotorEff:  makeResultRow("Rotor eff.:", "muted"),
@@ -196,7 +196,7 @@ function buildTurbineCard(fuelMap, calcFn, sharedState) {
     const flowUnit = type === "plasma" ? "L/s" : "L/t";
     rows.optFlow.setValue(`${formatNumber(r.optFlow)} ${flowUnit}`);
     rows.optOutput.setValue(`${formatNumber(r.optOutput)} EU/t`);
-    rows.dynamo.setValue(r.minDynamoTierOpt);
+    rows.dynamo.setValue(formatDynamo(r.optOutput, sharedState.dynamoTier));
     rows.effFlow.setValue(isManual ? `${formatNumber(r.effFlow)} ${flowUnit}` : "—");
     rows.effOutput.setValue(isManual ? `${formatNumber(r.effOutput)} EU/t` : "—");
     rows.rotorEff.setValue(`${(r.rotorEff * 100).toFixed(1)}%`);
@@ -213,9 +213,9 @@ function buildTurbineCard(fuelMap, calcFn, sharedState) {
   return card;
 }
 
-/** Shared settings: tier filter + rotor select + blade size. */
+/** Shared settings: tier filter + rotor select + blade size + dynamo tier. */
 function buildSharedSettings(rotors, onChange) {
-  const state = { rotor: null, size: "Normal" };
+  const state = { rotor: null, size: "Normal", dynamoTier: "EV" };
 
   // Unique tiers sorted
   const tiers = ["All", ...new Set(rotors.map(r => r.tier).sort((a, b) => a - b))];
@@ -272,6 +272,17 @@ function buildSharedSettings(rotors, onChange) {
   state.size = "Normal";
   sizeRow.appendChild(sizeToggle);
   div.appendChild(sizeRow);
+
+  // Dynamo tier
+  const dynamoRow = document.createElement("div");
+  dynamoRow.className = "setting-row";
+  dynamoRow.innerHTML = `<span class="setting-label">Dynamo Tier:</span>`;
+  const dynamoSel = document.createElement("select");
+  dynamoSel.style.width = "90px";
+  populateSelect(dynamoSel, DYNAMO_TIERS.map(([name]) => name), "EV");
+  dynamoSel.addEventListener("change", () => { state.dynamoTier = dynamoSel.value; onChange(state); });
+  dynamoRow.appendChild(dynamoSel);
+  div.appendChild(dynamoRow);
 
   // Initial populate — skip onChange, buildTurbineTab calls recalc explicitly after card is created
   refreshRotors(false);

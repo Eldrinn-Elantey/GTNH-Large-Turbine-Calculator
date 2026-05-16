@@ -120,7 +120,8 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 .result-value.green  { color: var(--green); }
 .result-value.yellow { color: var(--yellow); }
 .result-value.cyan   { color: var(--cyan); }
-.result-value.muted  { color: var(--muted); }
+.result-value.muted   { color: var(--muted); }
+.result-value.purple  { color: var(--purple); }
 
 /* Divider */
 .divider {
