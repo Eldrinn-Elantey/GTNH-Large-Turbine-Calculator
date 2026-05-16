@@ -443,6 +443,7 @@ function buildCompareTab(el, data) {
 
     if (!table) {
       table = new SortableTable(tableWrap, columns, rows);
+      table.render();
     } else {
       table.update(rows);
     }
