@@ -1,5 +1,4 @@
-from gtnh_turbine_calc.app import TurbineCalcApp
+from gtnh_turbine_calc.app import run
 
 if __name__ == "__main__":
-    app = TurbineCalcApp()
-    app.mainloop()
+    run()
