@@ -1,0 +1,36 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install PySide6 pyinstaller
+
+      - name: Build exe
+        run: python build_slim.py
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/GTNH-Turbine-Calc.exe
+          name: "GTNH Turbine Calculator ${{ github.ref_name }}"
+          body: |
+            ## ${{ github.ref_name }}
+
+            **Download:** `GTNH-Turbine-Calc.exe` — no Python required, Windows only.
