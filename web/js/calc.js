@@ -4,19 +4,17 @@
  */
 import { findDynamoTier } from "./utils.js";
 
-// Maps UI blade size name to the data column key used for EFFICIENCY stats.
 export const TURBINE_TO_ROTOR_SIZE = {
   Small:  "Small",
-  Normal: "Small",
-  Large:  "Normal",
-  Huge:   "Large",
-  XL:     "Normal",
+  Normal: "Normal",
+  Large:  "Large",
+  Huge:   "Huge",
+  XL:     "Large",
 };
 
-// Due to data extraction misalignment, durability multiplier is in the NEXT column.
 export const TURBINE_TO_DUR_SIZE = {
-  Small:  "Normal",
-  Normal: "Large",
+  Small:  "Small",
+  Normal: "Normal",
   Large:  "Large",
   Huge:   "Huge",
   XL:     "Large",
