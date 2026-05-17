@@ -2,6 +2,7 @@
 
 Usage:
     python scripts/update_web_data.py --tag 5.09.44.08 --gtnh 2.9
+    python scripts/update_web_data.py --source excel --file data.xlsx --gtnh 2.7
 """
 import argparse
 import io
@@ -12,9 +13,12 @@ import tempfile
 import urllib.request
 import zipfile
 
+import openpyxl
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from scripts.extract_from_java import build_rotor_data, build_fuel_data
+from scripts.excel_parser import extract_rotors, extract_fuels, extract_steam_gen
 
 _GT5_ZIP_URL = "https://github.com/GTNewHorizons/GT5-Unofficial/archive/refs/tags/{tag}.zip"
 _WEB_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "web", "data")
@@ -133,12 +137,36 @@ def _diff_fuels(new_fuels: dict, old_fuels: dict | None) -> None:
             print(f"  [{section}] no changes")
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Update web/data from GT5-Unofficial source")
-    parser.add_argument("--tag",  required=True, help="GT5-Unofficial git tag, e.g. 5.09.44.08")
-    parser.add_argument("--gtnh", required=True, help="GTNH version string, e.g. 2.9")
-    args = parser.parse_args()
+def _diff_steam_gen(new_sg: dict, old_sg: dict | None) -> None:
+    if old_sg is None:
+        print("  New file")
+        return
 
+    for section in ("lhe", "wwxl", "thermal_boiler"):
+        old_map = {e["name"]: e for e in (old_sg.get(section) or [])}
+        new_map = {e["name"]: e for e in (new_sg.get(section) or [])}
+        added   = sorted(set(new_map) - set(old_map))
+        removed = sorted(set(old_map) - set(new_map))
+        changed = []
+        for name in sorted(set(new_map) & set(old_map)):
+            diffs = [
+                f"{k}: {old_map[name][k]} -> {new_map[name][k]}"
+                for k in new_map[name]
+                if k != "name" and k in old_map[name]
+                and str(old_map[name][k]) != str(new_map[name][k])
+            ]
+            if diffs:
+                changed.append(f"  ~ {name}: {', '.join(diffs)}")
+        if added or removed or changed:
+            print(f"  [{section}]")
+            if added:   print(f"    + {', '.join(added)}")
+            if removed: print(f"    - {', '.join(removed)}")
+            for line in changed: print(f"   {line}")
+        else:
+            print(f"  [{section}] no changes")
+
+
+def _run_java(args) -> None:
     out_dir = os.path.join(_WEB_DATA_DIR, args.gtnh)
     rotors_path = os.path.join(out_dir, "rotors.json")
     fuels_path  = os.path.join(out_dir, "fuels.json")
@@ -176,6 +204,82 @@ def main():
         json.dump(new_fuels, fh, ensure_ascii=False, indent=2)
     print(f"Written {rotors_path}")
     print(f"Written {fuels_path}")
+
+
+def _run_excel(args) -> None:
+    out_dir        = os.path.join(_WEB_DATA_DIR, args.gtnh)
+    rotors_path    = os.path.join(out_dir, "rotors.json")
+    fuels_path     = os.path.join(out_dir, "fuels.json")
+    steam_gen_path = os.path.join(out_dir, "steam_gen.json")
+
+    existing_rotors    = json.load(open(rotors_path))     if os.path.exists(rotors_path)     else None
+    existing_fuels     = json.load(open(fuels_path))      if os.path.exists(fuels_path)      else None
+    existing_steam_gen = json.load(open(steam_gen_path))  if os.path.exists(steam_gen_path)  else None
+
+    print(f"Loading {args.file} ...")
+    wb = openpyxl.load_workbook(args.file, data_only=True)
+
+    new_rotors    = extract_rotors(wb)
+    new_fuels     = extract_fuels(wb)
+    new_steam_gen = extract_steam_gen(wb)
+
+    print(f"\n=== Rotors: {len(new_rotors)} total ===")
+    _diff_rotors(new_rotors, existing_rotors)
+
+    print(f"\n=== Fuels ===")
+    _diff_fuels(new_fuels, existing_fuels)
+
+    print(f"\n=== Steam Gen ===")
+    _diff_steam_gen(new_steam_gen, existing_steam_gen)
+
+    print()
+    answer = input(f"Write to web/data/{args.gtnh}/? [y/N] ").strip().lower()
+    if answer != "y":
+        print("Aborted.")
+        return
+
+    os.makedirs(out_dir, exist_ok=True)
+    with open(rotors_path, "w", encoding="utf-8") as fh:
+        json.dump(new_rotors, fh, ensure_ascii=False, indent=2)
+    with open(fuels_path, "w", encoding="utf-8") as fh:
+        json.dump(new_fuels, fh, ensure_ascii=False, indent=2)
+    with open(steam_gen_path, "w", encoding="utf-8") as fh:
+        json.dump(new_steam_gen, fh, ensure_ascii=False, indent=2)
+
+    versions_path = os.path.join(_WEB_DATA_DIR, "versions.json")
+    versions = json.load(open(versions_path)) if os.path.exists(versions_path) else []
+    if not any(v["id"] == args.gtnh for v in versions):
+        versions.append({"id": args.gtnh, "label": args.gtnh})
+        with open(versions_path, "w", encoding="utf-8") as fh:
+            json.dump(versions, fh, ensure_ascii=False, indent=2)
+        print(f"Added {args.gtnh} to versions.json")
+
+    print(f"Written {rotors_path}")
+    print(f"Written {fuels_path}")
+    print(f"Written {steam_gen_path}")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Update web/data from GT5-Unofficial source or Excel file")
+    parser.add_argument("--source", choices=["java", "excel"], default="java",
+                        help="Data source: 'java' (default) downloads GT5 source, 'excel' reads .xlsx file")
+    parser.add_argument("--tag",  help="GT5-Unofficial git tag (required for --source java), e.g. 5.09.44.08")
+    parser.add_argument("--file", help="Path to Excel .xlsx file (required for --source excel)")
+    parser.add_argument("--gtnh", required=True, help="GTNH version string, e.g. 2.9")
+    args = parser.parse_args()
+
+    if args.source == "java":
+        if not args.tag:
+            parser.error("--tag is required when --source java")
+        if args.file:
+            parser.error("--file is not used with --source java")
+        _run_java(args)
+    else:
+        if not args.file:
+            parser.error("--file is required when --source excel")
+        if args.tag:
+            parser.error("--tag is not used with --source excel")
+        _run_excel(args)
 
 
 if __name__ == "__main__":
