@@ -5,8 +5,14 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-05-17
+
 ### Added
 - Mobile layout: hamburger menu, slide-in sidebar with overlay, proper scrolling on small screens
+- Rotor durability row in calculator card (between rotor efficiency and lifetime)
+- Sidebar footer: version badge (links to CHANGELOG) and Issues link to GitHub tracker
+- Java extractor scripts: parse rotor stats and fuel values from GT5-Unofficial source (`scripts/update_web_data.py --tag <tag> --gtnh <version>`)
+- Excel import mode for `update_web_data.py` (`--source excel --file <path> --gtnh <version>`) with `scripts/excel_parser.py`
 
 ### Fixed
 - Font size setting now actually scales the UI (was overridden by hardcoded px values)
@@ -14,6 +20,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 - In Optimal mode show Opt. flow / Output rows; in Manual mode show Eff. flow / Eff. output rows instead
+- Desktop app moved into `desktop/` subfolder; build CI updated accordingly
 
 ## [0.3.0] - 2026-05-17
 
