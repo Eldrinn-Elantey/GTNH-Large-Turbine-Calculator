@@ -100,7 +100,8 @@ def compare_fuels(java_gas: dict, java_plasma: dict,
     for name in all_plasma:
         j_val = java_plasma.get(name)
         j = j_val.get("eu_per_l") if isinstance(j_val, dict) else j_val
-        c = current_plasma.get(name)
+        c_val = current_plasma.get(name)
+        c = c_val.get("eu_per_l") if isinstance(c_val, dict) else c_val
         if j != c:
             print(f"  {name}: current={c}  java={j}")
 
