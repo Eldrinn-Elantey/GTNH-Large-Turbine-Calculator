@@ -91,8 +91,28 @@ async function initVersionSelect() {
   });
 }
 
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("sidebar-overlay");
+const hamburger = document.getElementById("hamburger");
+
+function openSidebar() {
+  sidebar.classList.add("open");
+  overlay.classList.add("active");
+}
+
+function closeSidebar() {
+  sidebar.classList.remove("open");
+  overlay.classList.remove("active");
+}
+
+hamburger.addEventListener("click", openSidebar);
+overlay.addEventListener("click", closeSidebar);
+
 document.querySelectorAll(".nav-item").forEach(item => {
-  item.addEventListener("click", () => showSection(item.dataset.section));
+  item.addEventListener("click", () => {
+    showSection(item.dataset.section);
+    closeSidebar();
+  });
 });
 
 document.addEventListener("gtnh:lang-change", () => {
