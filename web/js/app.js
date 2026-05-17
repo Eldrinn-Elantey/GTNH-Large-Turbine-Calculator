@@ -91,6 +91,28 @@ async function initVersionSelect() {
   });
 }
 
+<<<<<<< Updated upstream
+=======
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("sidebar-overlay");
+const hamburger = document.getElementById("hamburger");
+
+function openSidebar() {
+  sidebar.classList.add("open");
+  overlay.classList.add("active");
+  hamburger.style.display = "none";
+}
+
+function closeSidebar() {
+  sidebar.classList.remove("open");
+  overlay.classList.remove("active");
+  hamburger.style.display = "";
+}
+
+hamburger.addEventListener("click", openSidebar);
+overlay.addEventListener("click", closeSidebar);
+
+>>>>>>> Stashed changes
 document.querySelectorAll(".nav-item").forEach(item => {
   item.addEventListener("click", () => showSection(item.dataset.section));
 });
