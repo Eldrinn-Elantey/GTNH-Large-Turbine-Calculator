@@ -140,7 +140,7 @@ export function calcRegularTurbine(turbineType, rotor, size, mode, fuelType, fue
   return {
     turbineType, mode, fuelType, fuelValue,
     optFlow, optOutput, effFlow, effOutput,
-    rotorEff: rotor_eff, maxFlow, overflowTier, lifetime,
+    rotorEff: rotor_eff, maxFlow, overflowTier, lifetime, durability,
     minDynamoTierOpt: findDynamoTier(optOutput),
     minDynamoTierEff: findDynamoTier(effOutput),
   };
@@ -206,7 +206,7 @@ export function calcXlTurbine(turbineType, rotor, size, mode, fuelType, fuelValu
   return {
     turbineType, mode, fuelType, fuelValue,
     optFlow, optOutput, effFlow, effOutput,
-    rotorEff: rotor_eff, maxFlow, overflowTier, lifetime,
+    rotorEff: rotor_eff, maxFlow, overflowTier, lifetime, durability,
     minDynamoTierOpt: findDynamoTier(optOutput),
     minDynamoTierEff: findDynamoTier(effOutput),
   };
