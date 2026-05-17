@@ -29,7 +29,7 @@ def compute_rotor_sizes(
         combat    = base_damage + tool_quality
         base_eff  = 0.5 + (0.5 + combat) * 0.1
 
-        loose_eff        = -0.2 + round(base_eff * 85.0) * 0.01
+        loose_eff        = -0.2 + math.floor(base_eff * 85.0 + 0.5) * 0.01
         loose_steam_eff  = loose_eff * 0.9
         loose_gas_eff    = loose_eff * 0.95
         loose_plasma_eff = loose_eff

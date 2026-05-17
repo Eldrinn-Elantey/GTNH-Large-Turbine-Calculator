@@ -47,3 +47,29 @@ def test_overflow_tier():
     assert compute_overflow_tier(3) == 2
     # quality=1: 1 + min(2, 0) = 1
     assert compute_overflow_tier(1) == 1
+
+def test_loose_steam_efficiency_small():
+    # quality=26, speed=1.0, steam_mult=1.0
+    # Small: combat=26, base_eff=3.15
+    # loose_eff = -0.2 + floor(3.15*85 + 0.5) * 0.01
+    #           = -0.2 + floor(267.75 + 0.5) * 0.01
+    #           = -0.2 + 268 * 0.01 = -0.2 + 2.68 = 2.48
+    # loose_steam_eff = 2.48 * 0.9 = 2.232
+    sizes = compute_rotor_sizes(
+        tool_quality=26, tool_speed=1.0,
+        steam_mult=1.0, gas_mult=1.0, plasma_mult=1.0
+    )
+    s = sizes["Small"]
+    assert abs(s["steam_loose_eff"] - 2.232) < 1e-4
+
+def test_loose_gas_efficiency_normal():
+    # quality=26, Normal: base_damage=2.5, combat=28.5, base_eff=3.4
+    # loose_eff = -0.2 + floor(3.4*85 + 0.5)*0.01 = -0.2 + floor(289.5)*0.01
+    #           = -0.2 + 289*0.01 = 2.69  (floor of 289.5 = 289)
+    # loose_gas_eff = 2.69 * 0.95 = 2.5555
+    sizes = compute_rotor_sizes(
+        tool_quality=26, tool_speed=1.0,
+        steam_mult=1.0, gas_mult=1.0, plasma_mult=1.0
+    )
+    s = sizes["Normal"]
+    assert abs(s["gas_loose_eff"] - 2.5555) < 1e-4
