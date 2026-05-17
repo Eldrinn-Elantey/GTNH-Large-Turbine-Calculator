@@ -1,6 +1,7 @@
 import { calcPlasmaEhe, calcNonxlEhe } from "../ehe.js";
 import { formatNumber, populateSelect } from "../utils.js";
 import { getVersion } from "../version.js";
+import { t } from "../i18n.js";
 
 let _data = null;
 
@@ -48,7 +49,7 @@ function row(label, id, colorClass = "green") {
 }
 
 export async function initEhePlanner(el) {
-  el.innerHTML = `<h2 class="section-title">🔥 EHE Planner</h2>
+  el.innerHTML = `<h2 class="section-title">${t("title_ehe")}</h2>
     <div class="row">
       <div class="col" id="plasma-ehe-col"></div>
       <div class="col" id="nonxl-ehe-col"></div>
@@ -67,27 +68,27 @@ export async function initEhePlanner(el) {
   plasmaCol.innerHTML = `
     <div class="card">
       <h3 style="color:#c084fc;font-size:14px;margin-bottom:14px;">Plasma EHE</h3>
-      <div class="setting-row"><span class="setting-label">Plasma type:</span>
+      <div class="setting-row"><span class="setting-label">${t("label_plasma_type")}</span>
         <select id="p-plasma-type" style="max-width:200px;"></select></div>
-      <div class="setting-row"><span class="setting-label">Recipe output (L):</span>
+      <div class="setting-row"><span class="setting-label">${t("label_recipe_out")}</span>
         <input type="number" id="p-recipe-out" value="1000" min="1"></div>
-      <div class="setting-row"><span class="setting-label">Recipe time (s):</span>
+      <div class="setting-row"><span class="setting-label">${t("label_recipe_time")}</span>
         <input type="number" id="p-recipe-time" value="20" min="1"></div>
-      <div class="setting-row"><span class="setting-label">Parallels:</span>
+      <div class="setting-row"><span class="setting-label">${t("label_parallels")}</span>
         <input type="number" id="p-parallels" value="1" min="1"></div>
-      <div class="setting-row"><span class="setting-label">Rotor:</span>
+      <div class="setting-row"><span class="setting-label">${t("label_rotor")}</span>
         <select id="p-rotor" style="max-width:200px;"></select></div>
-      <div class="setting-row"><span class="setting-label">Blade Size:</span>
+      <div class="setting-row"><span class="setting-label">${t("label_blade_size")}</span>
         <div id="p-size-toggle"></div></div>
-      <div class="setting-row"><span class="setting-label">Mode:</span>
+      <div class="setting-row"><span class="setting-label">${t("label_mode")}</span>
         <div id="p-mode-toggle"></div></div>
       <hr class="divider">
-      ${row("Plasma output L/s:", "p-plasma-ls", "purple")}
-      ${row("EHE count:", "p-ehe-count", "muted")}
-      ${row("Dense SC steam L/t:", "p-sc-steam", "cyan")}
-      ${row("XL turbine count:", "p-turb-count", "muted")}
-      ${row("Power/turbine EU/t:", "p-power", "green")}
-      ${row("Dynamo tier:", "p-dynamo", "muted")}
+      ${row(t("result_plasma_ls"), "p-plasma-ls", "purple")}
+      ${row(t("result_ehe_count"), "p-ehe-count", "muted")}
+      ${row(t("result_dense_sc_steam"), "p-sc-steam", "cyan")}
+      ${row(t("result_xl_turb"), "p-turb-count", "muted")}
+      ${row(t("result_power_turb"), "p-power", "green")}
+      ${row(t("result_dynamo_tier"), "p-dynamo", "muted")}
     </div>`;
 
   populateSelect(plasmaCol.querySelector("#p-plasma-type"), plasmaTypes, plasmaTypes[0]);
@@ -128,26 +129,26 @@ export async function initEhePlanner(el) {
   nonxlCol.innerHTML = `
     <div class="card">
       <h3 style="color:#60a5fa;font-size:14px;margin-bottom:14px;">Non-XL EHE</h3>
-      <div class="setting-row"><span class="setting-label">Hot fluid:</span>
+      <div class="setting-row"><span class="setting-label">${t("label_hot_fluid")}</span>
         <select id="n-fluid"></select></div>
-      <div class="setting-row"><span class="setting-label">Flow (L/s):</span>
+      <div class="setting-row"><span class="setting-label">${t("label_flow")}</span>
         <input type="number" id="n-flow" value="10000" min="1"></div>
-      <div class="setting-row"><span class="setting-label">Rotor:</span>
+      <div class="setting-row"><span class="setting-label">${t("label_rotor")}</span>
         <select id="n-rotor" style="max-width:200px;"></select></div>
-      <div class="setting-row"><span class="setting-label">Blade Size:</span>
+      <div class="setting-row"><span class="setting-label">${t("label_blade_size")}</span>
         <div id="n-size-toggle"></div></div>
-      <div class="setting-row"><span class="setting-label">Mode:</span>
+      <div class="setting-row"><span class="setting-label">${t("label_mode")}</span>
         <div id="n-mode-toggle"></div></div>
       <hr class="divider">
-      ${row("EHE count:", "n-ehe-count", "muted")}
-      ${row("SC steam L/t:", "n-sc-steam", "cyan")}
-      ${row("SH steam L/t:", "n-sh-steam", "cyan")}
-      ${row("SC turbines:", "n-sc-turb", "muted")}
-      ${row("SH turbines:", "n-sh-turb", "muted")}
-      ${row("Power/SC turb EU/t:", "n-power-sc", "green")}
-      ${row("Power/reg turb EU/t:", "n-power-reg", "green")}
-      ${row("Dynamo (SC):", "n-dynamo-sc", "muted")}
-      ${row("Dynamo (reg):", "n-dynamo-reg", "muted")}
+      ${row(t("result_ehe_count"), "n-ehe-count", "muted")}
+      ${row(t("result_sc_steam"), "n-sc-steam", "cyan")}
+      ${row(t("result_sh_steam"), "n-sh-steam", "cyan")}
+      ${row(t("result_sc_turb"), "n-sc-turb", "muted")}
+      ${row(t("result_sh_turb"), "n-sh-turb", "muted")}
+      ${row(t("result_power_sc"), "n-power-sc", "green")}
+      ${row(t("result_power_reg"), "n-power-reg", "green")}
+      ${row(t("result_dynamo_sc"), "n-dynamo-sc", "muted")}
+      ${row(t("result_dynamo_reg"), "n-dynamo-reg", "muted")}
     </div>`;
 
   populateSelect(nonxlCol.querySelector("#n-fluid"), hotFluids, hotFluids[0]);

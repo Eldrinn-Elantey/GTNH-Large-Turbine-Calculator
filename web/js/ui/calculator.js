@@ -2,6 +2,7 @@ import { calcRegularTurbine, calcXlTurbine } from "../calc.js";
 import { formatNumber, formatDynamo, populateSelect, makeCombobox, DYNAMO_TIERS } from "../utils.js";
 import { SortableTable } from "../table.js";
 import { getVersion } from "../version.js";
+import { t } from "../i18n.js";
 
 let _data = null;
 
@@ -91,7 +92,7 @@ function buildTurbineCard(fuelMap, calcFn, sharedState) {
     // Mode
     const modeRow = document.createElement("div");
     modeRow.className = "setting-row";
-    modeRow.innerHTML = `<span class="setting-label">Mode:</span>`;
+    modeRow.innerHTML = `<span class="setting-label">${t("label_mode")}</span>`;
     const modeToggle = makeToggle(["Tight", "Loose"], val => {
       tabState[key].mode = val;
       recalc(key);
@@ -102,7 +103,7 @@ function buildTurbineCard(fuelMap, calcFn, sharedState) {
     // Fuel
     const fuelRow = document.createElement("div");
     fuelRow.className = "setting-row";
-    fuelRow.innerHTML = `<span class="setting-label">Fuel:</span>`;
+    fuelRow.innerHTML = `<span class="setting-label">${t("label_fuel")}</span>`;
     const fuelSel = document.createElement("select");
     populateSelect(fuelSel, fuelMap[key].map(f => f.name), fuelMap[key][0]?.name);
     fuelSel.addEventListener("change", () => { tabState[key].fuel = fuelSel.value; recalc(key); });
@@ -112,7 +113,7 @@ function buildTurbineCard(fuelMap, calcFn, sharedState) {
     // Flow
     const flowRow = document.createElement("div");
     flowRow.className = "setting-row";
-    flowRow.innerHTML = `<span class="setting-label">Flow:</span>`;
+    flowRow.innerHTML = `<span class="setting-label">${t("label_flow")}</span>`;
     const flowToggle = makeToggle(["Optimal", "Manual"], val => {
       tabState[key].flow = val;
       manualInput.style.display = val === "Manual" ? "inline" : "none";
@@ -135,13 +136,13 @@ function buildTurbineCard(fuelMap, calcFn, sharedState) {
 
     // Results
     const rows = {
-      optFlow:   makeResultRow("Optimal flow:", "cyan"),
-      optOutput: makeResultRow("Output EU/t:", "green"),
-      dynamo:    makeResultRow("Dynamo hatches:", "purple"),
-      effFlow:   makeResultRow("Eff. flow:", "cyan"),
-      effOutput: makeResultRow("Eff. output:", "green"),
-      rotorEff:  makeResultRow("Rotor eff.:", "muted"),
-      lifetime:  makeResultRow("Lifetime:", "yellow"),
+      optFlow:   makeResultRow(t("result_opt_flow"), "cyan"),
+      optOutput: makeResultRow(t("result_output"), "green"),
+      dynamo:    makeResultRow(t("result_dynamo_hatches"), "purple"),
+      effFlow:   makeResultRow(t("result_eff_flow"), "cyan"),
+      effOutput: makeResultRow(t("result_eff_output"), "green"),
+      rotorEff:  makeResultRow(t("result_rotor_eff"), "muted"),
+      lifetime:  makeResultRow(t("result_lifetime"), "yellow"),
     };
 
     // Lifetime unit toggle — default days
@@ -233,7 +234,7 @@ function buildSharedSettings(rotors, onChange) {
   // Tier filter
   const tierRow = document.createElement("div");
   tierRow.className = "setting-row";
-  tierRow.innerHTML = `<span class="setting-label">Rotor Tier:</span>`;
+  tierRow.innerHTML = `<span class="setting-label">${t("label_rotor_tier")}</span>`;
   const tierSel = document.createElement("select");
   tierSel.style.width = "60px";
   populateSelect(tierSel, tiers.map(String), "All");
@@ -243,7 +244,7 @@ function buildSharedSettings(rotors, onChange) {
   // Rotor select (searchable combobox)
   const rotorRow = document.createElement("div");
   rotorRow.className = "setting-row";
-  rotorRow.innerHTML = `<span class="setting-label">Rotor:</span>`;
+  rotorRow.innerHTML = `<span class="setting-label">${t("label_rotor")}</span>`;
   const rotorCombo = makeCombobox(rotors.map(r => r.name), value => {
     state.rotor = filteredRotors.find(r => r.name === value) ?? rotors.find(r => r.name === value) ?? null;
     onChange(state);
@@ -264,7 +265,7 @@ function buildSharedSettings(rotors, onChange) {
   // Size toggle — default Normal
   const sizeRow = document.createElement("div");
   sizeRow.className = "setting-row";
-  sizeRow.innerHTML = `<span class="setting-label">Blade Size:</span>`;
+  sizeRow.innerHTML = `<span class="setting-label">${t("label_blade_size")}</span>`;
   const sizeToggle = makeToggle(["Small", "Normal", "Large", "Huge"], val => {
     state.size = val;
     onChange(state);
@@ -279,7 +280,7 @@ function buildSharedSettings(rotors, onChange) {
   // Dynamo tier
   const dynamoRow = document.createElement("div");
   dynamoRow.className = "setting-row";
-  dynamoRow.innerHTML = `<span class="setting-label">Dynamo Tier:</span>`;
+  dynamoRow.innerHTML = `<span class="setting-label">${t("label_dynamos")}</span>`;
   const dynamoSel = document.createElement("select");
   dynamoSel.style.width = "90px";
   populateSelect(dynamoSel, DYNAMO_TIERS.map(([name]) => name), "EV");
@@ -359,13 +360,13 @@ function buildCompareTab(el, data) {
   }
 
   // Turbine type
-  const turbineRow = row("Turbine:");
+  const turbineRow = row(t("label_turbine"));
   const turbineToggle = makeToggle(["Large", "XL"], val => { state.turbine = val.toLowerCase(); rebuild(); });
   turbineRow.appendChild(turbineToggle);
   settings.appendChild(turbineRow);
 
   // Fuel type tabs → simple toggle
-  const ftRow = row("Fuel Type:");
+  const ftRow = row(t("label_fuel_type"));
   const ftToggle = makeToggle(["Steam", "Gas", "Plasma"], val => {
     state.fuelType = val.toLowerCase();
     state.fuel = fuelMap[state.fuelType][0];
@@ -379,7 +380,7 @@ function buildCompareTab(el, data) {
   settings.appendChild(ftRow);
 
   // Fuel select
-  const fuelRow = row("Fuel:");
+  const fuelRow = row(t("label_fuel"));
   const fuelSel = document.createElement("select");
   fuelSel.style.width = "200px";
   populateSelect(fuelSel, fuelMap.gas.map(f => f.name), fuelMap.gas[0].name);
@@ -391,13 +392,13 @@ function buildCompareTab(el, data) {
   settings.appendChild(fuelRow);
 
   // Mode
-  const modeRow = row("Mode:");
+  const modeRow = row(t("label_mode"));
   const modeToggle = makeToggle(["Tight", "Loose"], val => { state.mode = val; rebuild(); });
   modeRow.appendChild(modeToggle);
   settings.appendChild(modeRow);
 
   // Blade size
-  const sizeRow = row("Blade Size:");
+  const sizeRow = row(t("label_blade_size"));
   const sizeToggle = makeToggle(["Small", "Normal", "Large", "Huge"], val => { state.size = val; rebuild(); });
   // default Normal
   sizeToggle.querySelectorAll(".toggle-btn")[0].classList.remove("active");
@@ -406,7 +407,7 @@ function buildCompareTab(el, data) {
   settings.appendChild(sizeRow);
 
   // Dynamo tier
-  const dynRow = row("Dynamo Tier:");
+  const dynRow = row(t("label_dynamo_tier"));
   const dynSel = document.createElement("select");
   dynSel.style.width = "90px";
   populateSelect(dynSel, DYNAMO_TIERS.map(([n]) => n), "EV");
@@ -416,7 +417,7 @@ function buildCompareTab(el, data) {
 
   // Rotor tier filter
   const tiers = ["All", ...new Set(data.rotors.map(r => r.tier).sort((a, b) => a - b))];
-  const tierRow = row("Rotor Tier:");
+  const tierRow = row(t("label_rotor_tier"));
   const tierSel = document.createElement("select");
   tierSel.style.width = "60px";
   populateSelect(tierSel, tiers.map(String), "All");
@@ -431,13 +432,13 @@ function buildCompareTab(el, data) {
   el.appendChild(tableWrap);
 
   const columns = [
-    { key: "name",     label: "Rotor",           numeric: false, width: 200 },
-    { key: "tier",     label: "Tier",             numeric: true,  width: 50  },
-    { key: "flow",     label: "Opt. Flow",        numeric: true,  width: 100 },
-    { key: "output",   label: "Output EU/t",      numeric: true,  width: 120 },
-    { key: "dynamo",   label: "Dynamo hatches",   numeric: false, width: 160 },
-    { key: "eff",      label: "Rotor eff.",       numeric: true,  width: 90  },
-    { key: "lifetime", label: "Lifetime (days)",  numeric: true,  width: 110 },
+    { key: "name",     label: t("col_rotor"),              numeric: false, width: 200 },
+    { key: "tier",     label: t("col_tier"),               numeric: true,  width: 50  },
+    { key: "flow",     label: t("col_opt_flow"),           numeric: true,  width: 100 },
+    { key: "output",   label: t("col_output"),             numeric: true,  width: 120 },
+    { key: "dynamo",   label: t("result_dynamo_hatches"),  numeric: false, width: 160 },
+    { key: "eff",      label: t("result_rotor_eff"),       numeric: true,  width: 90  },
+    { key: "lifetime", label: t("col_lifetime_days"),      numeric: true,  width: 110 },
   ];
 
   let table = null;
@@ -479,11 +480,11 @@ function buildCompareTab(el, data) {
 
 export async function initCalculator(el) {
   el.innerHTML = `
-    <h2 class="section-title">⚡ Calculator</h2>
+    <h2 class="section-title">${t("title_calculator")}</h2>
     <div class="sub-tabs">
-      <div class="sub-tab active" data-tab="large">Large Turbines</div>
-      <div class="sub-tab" data-tab="xl">XL Turbo Turbines</div>
-      <div class="sub-tab" data-tab="compare">⚖️ Compare Rotors</div>
+      <div class="sub-tab active" data-tab="large">${t("tab_large_turbines")}</div>
+      <div class="sub-tab" data-tab="xl">${t("tab_xl_turbines")}</div>
+      <div class="sub-tab" data-tab="compare">${t("tab_compare_rotors")}</div>
     </div>
     <div id="calc-large"></div>
     <div id="calc-xl" class="hidden"></div>

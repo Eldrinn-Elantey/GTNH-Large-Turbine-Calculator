@@ -3,7 +3,10 @@ import { initEhePlanner, clearCache as clearEhe }        from "./ui/ehe_planner.
 import { initSteamGen, clearCache as clearSteamGen }     from "./ui/steam_gen.js";
 import { initFuels, clearCache as clearFuels }           from "./ui/fuels.js";
 import { initRotors, clearCache as clearRotors }         from "./ui/rotors.js";
-import { loadVersions, resolveVersion, setVersion }  from "./version.js";
+import { initSettings }                                  from "./ui/settings_section.js";
+import { loadVersions, resolveVersion, setVersion }      from "./version.js";
+import { t }                                             from "./i18n.js";
+import { applyFontSize }                                 from "./settings.js";
 
 const SECTIONS = {
   "calculator": initCalculator,
@@ -11,10 +14,17 @@ const SECTIONS = {
   "steam-gen":  initSteamGen,
   "fuels":      initFuels,
   "rotors":     initRotors,
+  "settings":   initSettings,
 };
 
 const initialised = new Set();
 let activeSection = "calculator";
+
+function applyNavTranslations() {
+  document.querySelectorAll(".nav-item[data-i18n]").forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+}
 
 function showSection(sectionId) {
   document.querySelectorAll(".section").forEach(el => el.classList.add("hidden"));
@@ -44,6 +54,19 @@ function reloadActiveSection() {
   initialised.add(activeSection);
 }
 
+function reloadAllSections() {
+  for (const id of [...initialised]) {
+    const sectionEl = document.getElementById(`section-${id}`);
+    if (!sectionEl || !SECTIONS[id]) continue;
+    initialised.delete(id);
+    sectionEl.innerHTML = "";
+    if (id === activeSection) {
+      SECTIONS[id](sectionEl);
+      initialised.add(id);
+    }
+  }
+}
+
 async function initVersionSelect() {
   const versions = await loadVersions();
   const current = await resolveVersion();
@@ -68,10 +91,24 @@ async function initVersionSelect() {
   });
 }
 
-// Wire up sidebar clicks
 document.querySelectorAll(".nav-item").forEach(item => {
   item.addEventListener("click", () => showSection(item.dataset.section));
 });
 
+document.addEventListener("gtnh:lang-change", () => {
+  applyNavTranslations();
+  reloadAllSections();
+  // Rerender Settings immediately (it's always initialised when this fires)
+  const settingsEl = document.getElementById("section-settings");
+  if (settingsEl && activeSection !== "settings") {
+    initialised.delete("settings");
+    settingsEl.innerHTML = "";
+    initSettings(settingsEl);
+    initialised.add("settings");
+  }
+});
+
+applyFontSize();
+applyNavTranslations();
 await initVersionSelect();
 showSection("calculator");
