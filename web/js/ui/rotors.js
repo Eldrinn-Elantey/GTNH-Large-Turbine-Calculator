@@ -1,6 +1,7 @@
 import { SortableTable } from "../table.js";
 import { formatNumber } from "../utils.js";
 import { getVersion } from "../version.js";
+import { t } from "../i18n.js";
 
 const TURBINE_TO_ROTOR_SIZE = { Small: "Small", Normal: "Small", Large: "Normal", Huge: "Large" };
 const TURBINE_TO_DUR_SIZE   = { Small: "Normal", Normal: "Large", Large: "Large", Huge: "Huge" };
@@ -35,22 +36,22 @@ function buildRows(rotors, uiSize) {
   });
 }
 
-const COLUMNS = [
-  { key: "name",            label: "Display Name",    numeric: false },
-  { key: "tier",            label: "Tier",             numeric: true,  width: "50px" },
-  { key: "base_dur",        label: "Base Dur",         numeric: true  },
-  { key: "overflow",        label: "Overflow",         numeric: true,  width: "70px" },
-  { key: "steam_tight_eff", label: "Eff Tight",        numeric: false, width: "80px" },
-  { key: "steam_loose_eff", label: "Eff Loose",        numeric: false, width: "80px" },
-  { key: "opt_flow_tight",  label: "Flow Tight (L/t)", numeric: true  },
-  { key: "opt_flow_loose",  label: "Flow Loose (L/t)", numeric: true  },
-];
-
 export async function initRotors(el) {
+  const COLUMNS = [
+    { key: "name",            label: t("col_name"),       numeric: false },
+    { key: "tier",            label: t("col_tier"),       numeric: true,  width: "50px" },
+    { key: "base_dur",        label: t("col_base_dur"),   numeric: true  },
+    { key: "overflow",        label: t("col_overflow"),   numeric: true,  width: "70px" },
+    { key: "steam_tight_eff", label: t("col_eff_tight"),  numeric: false, width: "80px" },
+    { key: "steam_loose_eff", label: t("col_eff_loose"),  numeric: false, width: "80px" },
+    { key: "opt_flow_tight",  label: t("col_flow_tight"), numeric: true  },
+    { key: "opt_flow_loose",  label: t("col_flow_loose"), numeric: true  },
+  ];
+
   el.innerHTML = `
-    <h2 class="section-title">🔩 Rotors</h2>
+    <h2 class="section-title">${t("title_rotors")}</h2>
     <div class="setting-row" style="margin-bottom:16px;">
-      <span class="setting-label">Blade Size:</span>
+      <span class="setting-label">${t("label_blade_size")}</span>
       <div class="toggle-group" id="rotors-size-toggle">
         <button class="toggle-btn active" data-size="Small">Small</button>
         <button class="toggle-btn" data-size="Normal">Normal</button>
