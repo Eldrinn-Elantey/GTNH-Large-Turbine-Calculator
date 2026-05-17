@@ -72,7 +72,7 @@
 }
 
 /* Select / dropdown */
-select, input[list] {
+select {
   background: #1f2937;
   color: var(--cyan);
   border: 1px solid #374151;
@@ -85,7 +85,58 @@ select, input[list] {
   max-width: 240px;
 }
 
-select:focus, input[list]:focus { border-color: #4b5563; }
+select:focus { border-color: #4b5563; }
+
+/* Custom combobox */
+.combobox {
+  position: relative;
+  display: inline-block;
+}
+
+.combobox-input {
+  width: 100%;
+  background: #1f2937;
+  color: var(--cyan);
+  border: 1px solid #374151;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-family: var(--font);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.combobox-input:focus { border-color: #4b5563; }
+
+.combobox-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.combobox-dropdown.open { display: block; }
+
+.combobox-option {
+  padding: 5px 8px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.combobox-option:hover,
+.combobox-option.active { background: #374151; color: var(--cyan); }
 
 /* Text input */
 input[type="number"], input[type="text"] {
