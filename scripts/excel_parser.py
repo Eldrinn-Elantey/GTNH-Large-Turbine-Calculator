@@ -103,3 +103,48 @@ def extract_fuels(wb) -> dict:
             })
 
     return {"steam": steam, "gas": gas, "plasma": plasma, "ehe": ehe}
+
+
+def extract_steam_gen(wb) -> dict:
+    ws = wb["Fuels"]
+    lhe, wwxl, thermal_boiler = [], [], []
+    current_section = None
+
+    for row in ws.iter_rows(min_row=1, max_row=50, values_only=True):
+        label = row[1] if len(row) > 1 else None
+        if label == "LHE Conversion":
+            current_section = "lhe"
+            continue
+        if label == "WWXL Conversion":
+            current_section = "wwxl"
+            continue
+        if label == "Thermal Boiler Conversion":
+            current_section = "thermal_boiler"
+            continue
+        if label in (None, "Fluid"):
+            continue
+
+        # label is a fluid name
+        if current_section in ("lhe", "wwxl"):
+            entry = {
+                "name": label,
+                "threshold_ls": row[2],
+                "max_ls": row[3],
+                "below": row[4],
+                "above": row[5],
+                "ratio_below": row[6],
+                "ratio_above": row[7],
+            }
+            if current_section == "lhe":
+                lhe.append(entry)
+            else:
+                wwxl.append(entry)
+        elif current_section == "thermal_boiler":
+            thermal_boiler.append({
+                "name": label,
+                "max_ls": row[2],
+                "steam": row[4],
+                "ratio": row[5],
+            })
+
+    return {"lhe": lhe, "wwxl": wwxl, "thermal_boiler": thermal_boiler}

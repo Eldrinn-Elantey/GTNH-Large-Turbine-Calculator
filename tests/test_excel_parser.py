@@ -1,7 +1,7 @@
 import sys, os, json
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import openpyxl
-from scripts.excel_parser import extract_rotors, extract_fuels
+from scripts.excel_parser import extract_rotors, extract_fuels, extract_steam_gen
 
 XLSX = os.path.join(os.path.dirname(__file__), "..", "Large Turbine Calculator (2.7.0-2.8.4).xlsx")
 EXISTING_ROTORS = os.path.join(os.path.dirname(__file__), "..", "web", "data", "2.7", "rotors.json")
@@ -98,3 +98,51 @@ def test_extract_fuels_matches_existing_json():
         name = entry["name"]
         if name in new_plasma:
             assert abs(new_plasma[name] - entry["eu_l"]) < 1e-3, f"plasma {name} eu_l mismatch"
+
+EXISTING_STEAM_GEN = os.path.join(os.path.dirname(__file__), "..", "web", "data", "2.7", "steam_gen.json")
+
+def test_extract_steam_gen_structure():
+    result = extract_steam_gen(_wb())
+    assert set(result.keys()) == {"lhe", "wwxl", "thermal_boiler"}
+    assert len(result["lhe"]) >= 2
+    assert len(result["wwxl"]) >= 1
+    assert len(result["thermal_boiler"]) >= 2
+
+def test_extract_steam_gen_lhe_lava():
+    result = extract_steam_gen(_wb())
+    lhe = {e["name"]: e for e in result["lhe"]}
+    assert "Lava" in lhe
+    lava = lhe["Lava"]
+    assert abs(lava["threshold_ls"] - 1000.0) < 1e-3
+    assert abs(lava["max_ls"] - 2000.0) < 1e-3
+    assert lava["below"] == "Steam"
+    assert lava["above"] == "SH Steam"
+    assert abs(lava["ratio_below"] - 160.0) < 1e-3
+    assert abs(lava["ratio_above"] - 80.0) < 1e-3
+
+def test_extract_steam_gen_thermal_boiler_lava():
+    result = extract_steam_gen(_wb())
+    tb = {e["name"]: e for e in result["thermal_boiler"]}
+    assert "Lava" in tb
+    lava = tb["Lava"]
+    assert abs(lava["max_ls"] - 1000.0) < 1e-3
+    assert lava["steam"] == "Steam"
+    assert lava["ratio"] == 16
+
+def test_extract_steam_gen_matches_existing_json():
+    result = extract_steam_gen(_wb())
+    existing = json.load(open(EXISTING_STEAM_GEN))
+    for section in ("lhe", "wwxl", "thermal_boiler"):
+        new_map = {e["name"]: e for e in result[section]}
+        for entry in existing[section]:
+            name = entry["name"]
+            if name in new_map:
+                for key in entry:
+                    if key == "name":
+                        continue
+                    ev, nv = entry[key], new_map[name][key]
+                    if isinstance(ev, str):
+                        assert nv == ev, f"{section}/{name}/{key} mismatch: {nv} vs {ev}"
+                    else:
+                        assert abs(float(nv) - float(ev)) < 1e-3, \
+                            f"{section}/{name}/{key} mismatch: {nv} vs {ev}"
