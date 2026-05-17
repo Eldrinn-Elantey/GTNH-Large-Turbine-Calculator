@@ -18,7 +18,7 @@ function renderTable(title, rows) {
   const keys = Object.keys(rows[0]);
   const div = document.createElement("div");
   div.style.marginBottom = "24px";
-  div.innerHTML = `<h3 style="color:#9ca3af;font-size:13px;margin-bottom:10px;">${title}</h3>`;
+  div.innerHTML = `<h3 style="color:#9ca3af;font-size:1rem;margin-bottom:10px;">${title}</h3>`;
   const wrap = document.createElement("div");
   wrap.className = "table-wrap";
   const table = document.createElement("table");

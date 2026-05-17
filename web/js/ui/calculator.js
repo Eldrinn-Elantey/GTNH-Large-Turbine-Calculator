@@ -138,9 +138,9 @@ function buildTurbineCard(fuelMap, calcFn, sharedState) {
     const rows = {
       optFlow:   makeResultRow(t("result_opt_flow"), "cyan"),
       optOutput: makeResultRow(t("result_output"), "green"),
-      dynamo:    makeResultRow(t("result_dynamo_hatches"), "purple"),
       effFlow:   makeResultRow(t("result_eff_flow"), "cyan"),
       effOutput: makeResultRow(t("result_eff_output"), "green"),
+      dynamo:    makeResultRow(t("result_dynamo_hatches"), "purple"),
       rotorEff:  makeResultRow(t("result_rotor_eff"), "muted"),
       lifetime:  makeResultRow(t("result_lifetime"), "yellow"),
     };
@@ -200,11 +200,16 @@ function buildTurbineCard(fuelMap, calcFn, sharedState) {
     const r = calcFn(type, sharedState.rotor, sharedState.size, st.mode, f.name, f.eu_l, manualFlow);
     const { rows, getLifetimeUnit } = panels[type];
     const flowUnit = type === "plasma" ? "L/s" : "L/t";
+    rows.optFlow.style.display  = isManual ? "none" : "";
+    rows.optOutput.style.display = isManual ? "none" : "";
+    rows.effFlow.style.display  = isManual ? "" : "none";
+    rows.effOutput.style.display = isManual ? "" : "none";
+
     rows.optFlow.setValue(`${formatNumber(r.optFlow)} ${flowUnit}`);
     rows.optOutput.setValue(`${formatNumber(r.optOutput)} EU/t`);
-    rows.dynamo.setValue(formatDynamo(r.optOutput, sharedState.dynamoTier));
-    rows.effFlow.setValue(isManual ? `${formatNumber(r.effFlow)} ${flowUnit}` : "—");
-    rows.effOutput.setValue(isManual ? `${formatNumber(r.effOutput)} EU/t` : "—");
+    rows.dynamo.setValue(formatDynamo(isManual ? r.effOutput : r.optOutput, sharedState.dynamoTier));
+    rows.effFlow.setValue(`${formatNumber(r.effFlow)} ${flowUnit}`);
+    rows.effOutput.setValue(`${formatNumber(r.effOutput)} EU/t`);
     rows.rotorEff.setValue(`${(r.rotorEff * 100).toFixed(1)}%`);
     rows.lifetime.setValue(formatLifetime(r.lifetime, getLifetimeUnit()));
   }
