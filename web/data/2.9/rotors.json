@@ -1,6 +1,6 @@
 [
   {
-    "name": "Carbon",
+    "name": "Carbon (1)",
     "tier": 2,
     "mining_speed": 1.0,
     "base_durability": 6400.0,
@@ -93,7 +93,7 @@
     }
   },
   {
-    "name": "Realgar",
+    "name": "Realgar (1)",
     "tier": 1,
     "mining_speed": 1.0,
     "base_durability": 3200.0,
@@ -186,7 +186,7 @@
     }
   },
   {
-    "name": "Clay Compound",
+    "name": "Clay Compound (1)",
     "tier": 2,
     "mining_speed": 2.0,
     "base_durability": 6400.0,
@@ -279,7 +279,7 @@
     }
   },
   {
-    "name": "Bronze",
+    "name": "Bronze (1)",
     "tier": 2,
     "mining_speed": 6.0,
     "base_durability": 19200.0,
@@ -372,7 +372,7 @@
     }
   },
   {
-    "name": "Iron",
+    "name": "Iron (1)",
     "tier": 2,
     "mining_speed": 6.0,
     "base_durability": 25600.0,
@@ -465,7 +465,7 @@
     }
   },
   {
-    "name": "Magnetic Iron",
+    "name": "Magnetic Iron (1)",
     "tier": 2,
     "mining_speed": 6.0,
     "base_durability": 25600.0,
@@ -558,7 +558,7 @@
     }
   },
   {
-    "name": "Magnetic Steel",
+    "name": "Magnetic Steel (2)",
     "tier": 3,
     "mining_speed": 6.0,
     "base_durability": 51200.0,
@@ -651,7 +651,7 @@
     }
   },
   {
-    "name": "Steel",
+    "name": "Steel (2)",
     "tier": 3,
     "mining_speed": 6.0,
     "base_durability": 51200.0,
@@ -744,7 +744,7 @@
     }
   },
   {
-    "name": "Wrought Iron",
+    "name": "Wrought Iron (1)",
     "tier": 2,
     "mining_speed": 6.0,
     "base_durability": 38400.0,
@@ -837,7 +837,7 @@
     }
   },
   {
-    "name": "Tin Alloy",
+    "name": "Tin Alloy (1)",
     "tier": 2,
     "mining_speed": 6.5,
     "base_durability": 9600.0,
@@ -930,7 +930,7 @@
     }
   },
   {
-    "name": "Brass",
+    "name": "Brass (1)",
     "tier": 1,
     "mining_speed": 7.0,
     "base_durability": 9600.0,
@@ -1023,7 +1023,7 @@
     }
   },
   {
-    "name": "Silver",
+    "name": "Silver (1)",
     "tier": 2,
     "mining_speed": 10.0,
     "base_durability": 6400.0,
@@ -1116,7 +1116,7 @@
     }
   },
   {
-    "name": "Electrum",
+    "name": "Electrum (1)",
     "tier": 2,
     "mining_speed": 12.0,
     "base_durability": 6400.0,
@@ -1209,7 +1209,7 @@
     }
   },
   {
-    "name": "Gold",
+    "name": "Gold (1)",
     "tier": 2,
     "mining_speed": 12.0,
     "base_durability": 6400.0,
@@ -1302,7 +1302,7 @@
     }
   },
   {
-    "name": "Beryllium",
+    "name": "Beryllium (1)",
     "tier": 2,
     "mining_speed": 14.0,
     "base_durability": 6400.0,
@@ -1395,7 +1395,7 @@
     }
   },
   {
-    "name": "Nickel-Zinc Ferrite",
+    "name": "Nickel-Zinc Ferrite (1)",
     "tier": 0,
     "mining_speed": 3.0,
     "base_durability": 3200.0,
@@ -1488,7 +1488,7 @@
     }
   },
   {
-    "name": "Polycaprolactam",
+    "name": "Polycaprolactam (1)",
     "tier": 1,
     "mining_speed": 3.0,
     "base_durability": 3200.0,
@@ -1581,7 +1581,7 @@
     }
   },
   {
-    "name": "Redstone Alloy",
+    "name": "Redstone Alloy (1)",
     "tier": 2,
     "mining_speed": 3.0,
     "base_durability": 12800.0,
@@ -1674,7 +1674,7 @@
     }
   },
   {
-    "name": "Vanadiumsteel",
+    "name": "Vanadiumsteel (2)",
     "tier": 3,
     "mining_speed": 3.0,
     "base_durability": 192000.0,
@@ -1767,7 +1767,7 @@
     }
   },
   {
-    "name": "Alumite",
+    "name": "Alumite (1)",
     "tier": 2,
     "mining_speed": 5.0,
     "base_durability": 76800.0,
@@ -1860,7 +1860,7 @@
     }
   },
   {
-    "name": "Obzinite",
+    "name": "Obzinite (1)",
     "tier": 2,
     "mining_speed": 5.0,
     "base_durability": 76800.0,
@@ -1953,7 +1953,7 @@
     }
   },
   {
-    "name": "Calcium",
+    "name": "Calcium (2)",
     "tier": 3,
     "mining_speed": 5.4900007,
     "base_durability": 44600.0,
@@ -2046,7 +2046,7 @@
     }
   },
   {
-    "name": "Bismuth",
+    "name": "Bismuth (1)",
     "tier": 1,
     "mining_speed": 6.0,
     "base_durability": 6400.0,
@@ -2139,7 +2139,7 @@
     }
   },
   {
-    "name": "Conductive Iron",
+    "name": "Conductive Iron (2)",
     "tier": 3,
     "mining_speed": 6.0,
     "base_durability": 25600.0,
@@ -2232,7 +2232,7 @@
     }
   },
   {
-    "name": "Cupronickel",
+    "name": "Cupronickel (1)",
     "tier": 1,
     "mining_speed": 6.0,
     "base_durability": 6400.0,
@@ -2325,7 +2325,7 @@
     }
   },
   {
-    "name": "Electrical Steel",
+    "name": "Electrical Steel (1)",
     "tier": 2,
     "mining_speed": 6.0,
     "base_durability": 51200.0,
@@ -2418,7 +2418,7 @@
     }
   },
   {
-    "name": "Invar",
+    "name": "Invar (1)",
     "tier": 2,
     "mining_speed": 6.0,
     "base_durability": 25600.0,
@@ -2511,7 +2511,7 @@
     }
   },
   {
-    "name": "Ironwood",
+    "name": "Ironwood (1)",
     "tier": 2,
     "mining_speed": 6.0,
     "base_durability": 38400.0,
@@ -2604,7 +2604,7 @@
     }
   },
   {
-    "name": "Magnalium",
+    "name": "Magnalium (1)",
     "tier": 2,
     "mining_speed": 6.0,
     "base_durability": 25600.0,
@@ -2697,7 +2697,7 @@
     }
   },
   {
-    "name": "Nickel",
+    "name": "Nickel (1)",
     "tier": 2,
     "mining_speed": 6.0,
     "base_durability": 6400.0,
@@ -2790,7 +2790,7 @@
     }
   },
   {
-    "name": "Pig Iron",
+    "name": "Pig Iron (1)",
     "tier": 2,
     "mining_speed": 6.0,
     "base_durability": 38400.0,
@@ -2883,7 +2883,7 @@
     }
   },
   {
-    "name": "Pulsating Iron",
+    "name": "Pulsating Iron (2)",
     "tier": 3,
     "mining_speed": 6.0,
     "base_durability": 25600.0,
@@ -2976,7 +2976,7 @@
     }
   },
   {
-    "name": "Thorium",
+    "name": "Thorium (1)",
     "tier": 2,
     "mining_speed": 6.0,
     "base_durability": 51200.0,
@@ -3069,7 +3069,7 @@
     }
   },
   {
-    "name": "Black Steel",
+    "name": "Black Steel (2)",
     "tier": 3,
     "mining_speed": 6.5,
     "base_durability": 76800.0,
@@ -3162,7 +3162,7 @@
     }
   },
   {
-    "name": "Manganese",
+    "name": "Manganese (1)",
     "tier": 2,
     "mining_speed": 7.0,
     "base_durability": 51200.0,
@@ -3255,7 +3255,7 @@
     }
   },
   {
-    "name": "Molybdenum",
+    "name": "Molybdenum (1)",
     "tier": 2,
     "mining_speed": 7.0,
     "base_durability": 51200.0,
@@ -3348,7 +3348,7 @@
     }
   },
   {
-    "name": "Red Steel",
+    "name": "Red Steel (2)",
     "tier": 4,
     "mining_speed": 7.0,
     "base_durability": 89600.0,
@@ -3441,7 +3441,7 @@
     }
   },
   {
-    "name": "Blue Steel",
+    "name": "Blue Steel (2)",
     "tier": 4,
     "mining_speed": 7.5,
     "base_durability": 102400.0,
@@ -3534,7 +3534,7 @@
     }
   },
   {
-    "name": "Bismuth Bronze",
+    "name": "Bismuth Bronze (1)",
     "tier": 2,
     "mining_speed": 8.0,
     "base_durability": 25600.0,
@@ -3627,7 +3627,7 @@
     }
   },
   {
-    "name": "Cobalt",
+    "name": "Cobalt (2)",
     "tier": 3,
     "mining_speed": 8.0,
     "base_durability": 51200.0,
@@ -3720,7 +3720,7 @@
     }
   },
   {
-    "name": "Cobalt Brass",
+    "name": "Cobalt Brass (1)",
     "tier": 2,
     "mining_speed": 8.0,
     "base_durability": 25600.0,
@@ -3813,7 +3813,7 @@
     }
   },
   {
-    "name": "Damascus Steel",
+    "name": "Damascus Steel (2)",
     "tier": 3,
     "mining_speed": 8.0,
     "base_durability": 128000.0,
@@ -3906,7 +3906,7 @@
     }
   },
   {
-    "name": "Dark Steel",
+    "name": "Dark Steel (2)",
     "tier": 3,
     "mining_speed": 8.0,
     "base_durability": 51200.0,
@@ -3999,7 +3999,7 @@
     }
   },
   {
-    "name": "Fiery Steel",
+    "name": "Fiery Steel (2)",
     "tier": 3,
     "mining_speed": 8.0,
     "base_durability": 25600.0,
@@ -4092,7 +4092,7 @@
     }
   },
   {
-    "name": "Knightmetal",
+    "name": "Knightmetal (2)",
     "tier": 3,
     "mining_speed": 8.0,
     "base_durability": 102400.0,
@@ -4185,7 +4185,7 @@
     }
   },
   {
-    "name": "Lead",
+    "name": "Lead (1)",
     "tier": 1,
     "mining_speed": 8.0,
     "base_durability": 6400.0,
@@ -4278,7 +4278,7 @@
     }
   },
   {
-    "name": "Manasteel",
+    "name": "Manasteel (2)",
     "tier": 4,
     "mining_speed": 8.0,
     "base_durability": 512000.0,
@@ -4371,7 +4371,7 @@
     }
   },
   {
-    "name": "Soularium",
+    "name": "Soularium (1)",
     "tier": 2,
     "mining_speed": 8.0,
     "base_durability": 25600.0,
@@ -4464,7 +4464,7 @@
     }
   },
   {
-    "name": "Steeleaf",
+    "name": "Steeleaf (2)",
     "tier": 3,
     "mining_speed": 8.0,
     "base_durability": 76800.0,
@@ -4557,7 +4557,7 @@
     }
   },
   {
-    "name": "Aluminium",
+    "name": "Aluminium (1)",
     "tier": 2,
     "mining_speed": 10.0,
     "base_durability": 12800.0,
@@ -4650,7 +4650,7 @@
     }
   },
   {
-    "name": "Blood Infused Iron",
+    "name": "Blood Infused Iron (1)",
     "tier": 2,
     "mining_speed": 10.0,
     "base_durability": 38400.0,
@@ -4743,7 +4743,7 @@
     }
   },
   {
-    "name": "Black Bronze",
+    "name": "Black Bronze (1)",
     "tier": 2,
     "mining_speed": 12.0,
     "base_durability": 25600.0,
@@ -4836,7 +4836,7 @@
     }
   },
   {
-    "name": "Thaumium",
+    "name": "Thaumium (2)",
     "tier": 3,
     "mining_speed": 12.0,
     "base_durability": 25600.0,
@@ -4929,7 +4929,7 @@
     }
   },
   {
-    "name": "Ardite",
+    "name": "Ardite (2)",
     "tier": 4,
     "mining_speed": 18.0,
     "base_durability": 102400.0,
@@ -5022,7 +5022,7 @@
     }
   },
   {
-    "name": "Manyullyn",
+    "name": "Manyullyn (2)",
     "tier": 5,
     "mining_speed": 25.0,
     "base_durability": 204800.0,
@@ -5115,7 +5115,7 @@
     }
   },
   {
-    "name": "Kanthal",
+    "name": "Kanthal (1)",
     "tier": 2,
     "mining_speed": 6.0,
     "base_durability": 6400.0,
@@ -5208,7 +5208,7 @@
     }
   },
   {
-    "name": "Stainless Steel",
+    "name": "Stainless Steel (2)",
     "tier": 4,
     "mining_speed": 7.0,
     "base_durability": 48000.0,
@@ -5301,7 +5301,7 @@
     }
   },
   {
-    "name": "Energetic Silver",
+    "name": "Energetic Silver (2)",
     "tier": 3,
     "mining_speed": 8.0,
     "base_durability": 51200.0,
@@ -5394,7 +5394,7 @@
     }
   },
   {
-    "name": "Chrome",
+    "name": "Chrome (2)",
     "tier": 3,
     "mining_speed": 11.0,
     "base_durability": 25600.0,
@@ -5487,7 +5487,7 @@
     }
   },
   {
-    "name": "Energetic Alloy",
+    "name": "Energetic Alloy (2)",
     "tier": 3,
     "mining_speed": 12.0,
     "base_durability": 102400.0,
@@ -5580,7 +5580,7 @@
     }
   },
   {
-    "name": "Sterling Silver",
+    "name": "Sterling Silver (1)",
     "tier": 2,
     "mining_speed": 13.0,
     "base_durability": 12800.0,
@@ -5673,7 +5673,7 @@
     }
   },
   {
-    "name": "Meteoric Iron",
+    "name": "Meteoric Iron (2)",
     "tier": 3,
     "mining_speed": 6.0,
     "base_durability": 38400.0,
@@ -5766,7 +5766,7 @@
     }
   },
   {
-    "name": "Meteoric Steel",
+    "name": "Meteoric Steel (2)",
     "tier": 4,
     "mining_speed": 6.0,
     "base_durability": 76800.0,
@@ -5859,7 +5859,7 @@
     }
   },
   {
-    "name": "Nichrome",
+    "name": "Nichrome (1)",
     "tier": 2,
     "mining_speed": 6.0,
     "base_durability": 6400.0,
@@ -5952,7 +5952,7 @@
     }
   },
   {
-    "name": "Magnetic Neodymium",
+    "name": "Magnetic Neodymium (1)",
     "tier": 2,
     "mining_speed": 7.0,
     "base_durability": 51200.0,
@@ -6045,7 +6045,7 @@
     }
   },
   {
-    "name": "Neodymium",
+    "name": "Neodymium (1)",
     "tier": 2,
     "mining_speed": 7.0,
     "base_durability": 51200.0,
@@ -6138,7 +6138,7 @@
     }
   },
   {
-    "name": "Reinforced",
+    "name": "Reinforced (2)",
     "tier": 4,
     "mining_speed": 7.0,
     "base_durability": 48000.0,
@@ -6231,7 +6231,7 @@
     }
   },
   {
-    "name": "Titanium",
+    "name": "Titanium (2)",
     "tier": 3,
     "mining_speed": 7.0,
     "base_durability": 160000.0,
@@ -6324,7 +6324,7 @@
     }
   },
   {
-    "name": "Ultimet",
+    "name": "Ultimet (2)",
     "tier": 4,
     "mining_speed": 9.0,
     "base_durability": 204800.0,
@@ -6417,7 +6417,7 @@
     }
   },
   {
-    "name": "Astral Silver",
+    "name": "Astral Silver (1)",
     "tier": 2,
     "mining_speed": 10.0,
     "base_durability": 6400.0,
@@ -6510,7 +6510,7 @@
     }
   },
   {
-    "name": "Ademic Steel",
+    "name": "Ademic Steel (2)",
     "tier": 4,
     "mining_speed": 12.0,
     "base_durability": 614400.0,
@@ -6603,7 +6603,7 @@
     }
   },
   {
-    "name": "Vivid Alloy",
+    "name": "Vivid Alloy (2)",
     "tier": 4,
     "mining_speed": 12.0,
     "base_durability": 76800.0,
@@ -6696,7 +6696,7 @@
     }
   },
   {
-    "name": "Endium",
+    "name": "Endium (2)",
     "tier": 4,
     "mining_speed": 16.0,
     "base_durability": 102400.0,
@@ -6789,7 +6789,7 @@
     }
   },
   {
-    "name": "Galgadorian",
+    "name": "Galgadorian (2)",
     "tier": 3,
     "mining_speed": 16.0,
     "base_durability": 360000.0,
@@ -6882,7 +6882,7 @@
     }
   },
   {
-    "name": "Vibrant Alloy",
+    "name": "Vibrant Alloy (2)",
     "tier": 4,
     "mining_speed": 18.0,
     "base_durability": 404800.0,
@@ -6975,7 +6975,7 @@
     }
   },
   {
-    "name": "Enhanced Galgadorian",
+    "name": "Enhanced Galgadorian (2)",
     "tier": 5,
     "mining_speed": 32.0,
     "base_durability": 720000.0,
@@ -7068,7 +7068,7 @@
     }
   },
   {
-    "name": "Shadow Metal",
+    "name": "Shadow Metal (2)",
     "tier": 4,
     "mining_speed": 32.0,
     "base_durability": 819200.0,
@@ -7161,7 +7161,7 @@
     }
   },
   {
-    "name": "Terrasteel",
+    "name": "Terrasteel (2)",
     "tier": 5,
     "mining_speed": 32.0,
     "base_durability": 1024000.0,
@@ -7254,7 +7254,7 @@
     }
   },
   {
-    "name": "Void Metal",
+    "name": "Void Metal (2)",
     "tier": 4,
     "mining_speed": 32.0,
     "base_durability": 51200.0,
@@ -7347,7 +7347,7 @@
     }
   },
   {
-    "name": "Epoxid",
+    "name": "Epoxid (1)",
     "tier": 1,
     "mining_speed": 3.0,
     "base_durability": 3200.0,
@@ -7440,7 +7440,7 @@
     }
   },
   {
-    "name": "Fiber-Reinforced Epoxy Resin",
+    "name": "Fiber-Reinforced Epoxy Resin (1)",
     "tier": 1,
     "mining_speed": 3.0,
     "base_durability": 6400.0,
@@ -7533,7 +7533,7 @@
     }
   },
   {
-    "name": "Crystalline Pink Slime",
+    "name": "Crystalline Pink Slime (2)",
     "tier": 3,
     "mining_speed": 6.0,
     "base_durability": 12800.0,
@@ -7626,7 +7626,7 @@
     }
   },
   {
-    "name": "Uranium-235",
+    "name": "Uranium-235 (2)",
     "tier": 3,
     "mining_speed": 6.0,
     "base_durability": 51200.0,
@@ -7719,7 +7719,7 @@
     }
   },
   {
-    "name": "Uranium-238",
+    "name": "Uranium-238 (2)",
     "tier": 3,
     "mining_speed": 6.0,
     "base_durability": 51200.0,
@@ -7812,7 +7812,7 @@
     }
   },
   {
-    "name": "Tungsten",
+    "name": "Tungsten (2)",
     "tier": 3,
     "mining_speed": 7.0,
     "base_durability": 256000.0,
@@ -7905,7 +7905,7 @@
     }
   },
   {
-    "name": "Enderium",
+    "name": "Enderium (2)",
     "tier": 3,
     "mining_speed": 8.0,
     "base_durability": 150000.0,
@@ -7998,7 +7998,7 @@
     }
   },
   {
-    "name": "Tungstensteel",
+    "name": "Tungstensteel (2)",
     "tier": 4,
     "mining_speed": 8.0,
     "base_durability": 256000.0,
@@ -8091,7 +8091,7 @@
     }
   },
   {
-    "name": "HSS-G",
+    "name": "HSS-G (2)",
     "tier": 3,
     "mining_speed": 10.0,
     "base_durability": 400000.0,
@@ -8184,7 +8184,7 @@
     }
   },
   {
-    "name": "Vinteum",
+    "name": "Vinteum (2)",
     "tier": 3,
     "mining_speed": 10.0,
     "base_durability": 12800.0,
@@ -8277,7 +8277,7 @@
     }
   },
   {
-    "name": "End Steel",
+    "name": "End Steel (2)",
     "tier": 4,
     "mining_speed": 12.0,
     "base_durability": 200000.0,
@@ -8370,7 +8370,7 @@
     }
   },
   {
-    "name": "Platinum",
+    "name": "Platinum (2)",
     "tier": 4,
     "mining_speed": 12.0,
     "base_durability": 6400.0,
@@ -8463,7 +8463,7 @@
     }
   },
   {
-    "name": "Tungstencarbide",
+    "name": "Tungstencarbide (2)",
     "tier": 4,
     "mining_speed": 14.0,
     "base_durability": 128000.0,
@@ -8556,7 +8556,7 @@
     }
   },
   {
-    "name": "Duralumin",
+    "name": "Duralumin (2)",
     "tier": 3,
     "mining_speed": 16.0,
     "base_durability": 51200.0,
@@ -8649,7 +8649,7 @@
     }
   },
   {
-    "name": "Enderium Base",
+    "name": "Enderium Base (2)",
     "tier": 4,
     "mining_speed": 16.0,
     "base_durability": 76800.0,
@@ -8742,7 +8742,7 @@
     }
   },
   {
-    "name": "TPV-Alloy",
+    "name": "TPV-Alloy (2)",
     "tier": 5,
     "mining_speed": 16.0,
     "base_durability": 400000.0,
@@ -8835,7 +8835,7 @@
     }
   },
   {
-    "name": "Crystalline Alloy",
+    "name": "Crystalline Alloy (2)",
     "tier": 4,
     "mining_speed": 18.0,
     "base_durability": 76800.0,
@@ -8928,7 +8928,7 @@
     }
   },
   {
-    "name": "Desh",
+    "name": "Desh (2)",
     "tier": 4,
     "mining_speed": 20.0,
     "base_durability": 128000.0,
@@ -9021,7 +9021,7 @@
     }
   },
   {
-    "name": "Elven Elementium",
+    "name": "Elven Elementium (3)",
     "tier": 7,
     "mining_speed": 20.0,
     "base_durability": 3276800.0,
@@ -9114,7 +9114,7 @@
     }
   },
   {
-    "name": "Melodic Alloy",
+    "name": "Melodic Alloy (2)",
     "tier": 5,
     "mining_speed": 24.0,
     "base_durability": 102400.0,
@@ -9207,7 +9207,7 @@
     }
   },
   {
-    "name": "Vyroxeres",
+    "name": "Vyroxeres (1)",
     "tier": 1,
     "mining_speed": 32.0,
     "base_durability": 768000.0,
@@ -9300,7 +9300,7 @@
     }
   },
   {
-    "name": "Rubracium",
+    "name": "Rubracium (1)",
     "tier": 1,
     "mining_speed": 1.0,
     "base_durability": 12800.0,
@@ -9393,7 +9393,7 @@
     }
   },
   {
-    "name": "MAR-M200 Steel",
+    "name": "MAR-M200 Steel (2)",
     "tier": 3,
     "mining_speed": 2.6044068,
     "base_durability": 6900.0,
@@ -9486,7 +9486,7 @@
     }
   },
   {
-    "name": "Iridium",
+    "name": "Iridium (2)",
     "tier": 3,
     "mining_speed": 6.0,
     "base_durability": 256000.0,
@@ -9579,7 +9579,7 @@
     }
   },
   {
-    "name": "Plutonium-239",
+    "name": "Plutonium-239 (2)",
     "tier": 3,
     "mining_speed": 6.0,
     "base_durability": 51200.0,
@@ -9672,7 +9672,7 @@
     }
   },
   {
-    "name": "Osmiridium",
+    "name": "Osmiridium (2)",
     "tier": 3,
     "mining_speed": 7.0,
     "base_durability": 160000.0,
@@ -9765,7 +9765,7 @@
     }
   },
   {
-    "name": "Mytryl",
+    "name": "Mytryl (2)",
     "tier": 4,
     "mining_speed": 8.0,
     "base_durability": 51200.0,
@@ -9858,7 +9858,7 @@
     }
   },
   {
-    "name": "Palladium",
+    "name": "Palladium (2)",
     "tier": 4,
     "mining_speed": 8.0,
     "base_durability": 51200.0,
@@ -9951,7 +9951,7 @@
     }
   },
   {
-    "name": "Callisto Ice",
+    "name": "Callisto Ice (2)",
     "tier": 4,
     "mining_speed": 9.0,
     "base_durability": 102400.0,
@@ -10044,7 +10044,7 @@
     }
   },
   {
-    "name": "Infused Gold",
+    "name": "Infused Gold (2)",
     "tier": 3,
     "mining_speed": 12.0,
     "base_durability": 6400.0,
@@ -10137,7 +10137,7 @@
     }
   },
   {
-    "name": "Rhodium-Plated Palladium",
+    "name": "Rhodium-Plated Palladium (2)",
     "tier": 5,
     "mining_speed": 13.2,
     "base_durability": 118100.0,
@@ -10230,7 +10230,7 @@
     }
   },
   {
-    "name": "Ledox",
+    "name": "Ledox (2)",
     "tier": 4,
     "mining_speed": 15.0,
     "base_durability": 102400.0,
@@ -10323,7 +10323,7 @@
     }
   },
   {
-    "name": "Osmium",
+    "name": "Osmium (2)",
     "tier": 4,
     "mining_speed": 16.0,
     "base_durability": 128000.0,
@@ -10416,7 +10416,7 @@
     }
   },
   {
-    "name": "Quantium",
+    "name": "Quantium (2)",
     "tier": 4,
     "mining_speed": 18.0,
     "base_durability": 204800.0,
@@ -10509,7 +10509,7 @@
     }
   },
   {
-    "name": "Ruridit",
+    "name": "Ruridit (3)",
     "tier": 6,
     "mining_speed": 19.36,
     "base_durability": 196500.0,
@@ -10602,7 +10602,7 @@
     }
   },
   {
-    "name": "HSS-E",
+    "name": "HSS-E (3)",
     "tier": 7,
     "mining_speed": 32.0,
     "base_durability": 1024000.0,
@@ -10695,7 +10695,7 @@
     }
   },
   {
-    "name": "HSS-S",
+    "name": "HSS-S (3)",
     "tier": 8,
     "mining_speed": 32.0,
     "base_durability": 1024000.0,
@@ -10788,7 +10788,7 @@
     }
   },
   {
-    "name": "Ichorium",
+    "name": "Ichorium (3)",
     "tier": 12,
     "mining_speed": 32.0,
     "base_durability": 85000000.0,
@@ -10881,7 +10881,7 @@
     }
   },
   {
-    "name": "Orichalcum",
+    "name": "Orichalcum (1)",
     "tier": 1,
     "mining_speed": 32.0,
     "base_durability": 2048000.0,
@@ -10974,7 +10974,7 @@
     }
   },
   {
-    "name": "Oriharukon",
+    "name": "Oriharukon (2)",
     "tier": 5,
     "mining_speed": 32.0,
     "base_durability": 1024000.0,
@@ -11067,7 +11067,7 @@
     }
   },
   {
-    "name": "Deep Iron",
+    "name": "Deep Iron (1)",
     "tier": 2,
     "mining_speed": 6.0,
     "base_durability": 38400.0,
@@ -11160,7 +11160,7 @@
     }
   },
   {
-    "name": "Naquadah",
+    "name": "Naquadah (2)",
     "tier": 4,
     "mining_speed": 6.0,
     "base_durability": 128000.0,
@@ -11253,7 +11253,7 @@
     }
   },
   {
-    "name": "Shadow Steel",
+    "name": "Shadow Steel (2)",
     "tier": 4,
     "mining_speed": 6.0,
     "base_durability": 76800.0,
@@ -11346,7 +11346,7 @@
     }
   },
   {
-    "name": "Mysterious Crystal",
+    "name": "Mysterious Crystal (3)",
     "tier": 6,
     "mining_speed": 8.0,
     "base_durability": 25600.0,
@@ -11439,7 +11439,7 @@
     }
   },
   {
-    "name": "Naquadah Alloy",
+    "name": "Naquadah Alloy (2)",
     "tier": 5,
     "mining_speed": 8.0,
     "base_durability": 512000.0,
@@ -11532,7 +11532,7 @@
     }
   },
   {
-    "name": "Force",
+    "name": "Force (2)",
     "tier": 3,
     "mining_speed": 10.0,
     "base_durability": 12800.0,
@@ -11625,7 +11625,7 @@
     }
   },
   {
-    "name": "Fluxed Electrum",
+    "name": "Fluxed Electrum (2)",
     "tier": 3,
     "mining_speed": 16.0,
     "base_durability": 51200.0,
@@ -11718,7 +11718,7 @@
     }
   },
   {
-    "name": "Draconium",
+    "name": "Draconium (3)",
     "tier": 7,
     "mining_speed": 20.0,
     "base_durability": 3276800.0,
@@ -11811,7 +11811,7 @@
     }
   },
   {
-    "name": "Atomic Separation Catalyst",
+    "name": "Atomic Separation Catalyst (3)",
     "tier": 10,
     "mining_speed": 31.720001,
     "base_durability": 301000.0,
@@ -11904,7 +11904,7 @@
     }
   },
   {
-    "name": "Alduorite",
+    "name": "Alduorite (1)",
     "tier": 1,
     "mining_speed": 32.0,
     "base_durability": 819200.0,
@@ -11997,7 +11997,7 @@
     }
   },
   {
-    "name": "Ceruclase",
+    "name": "Ceruclase (1)",
     "tier": 2,
     "mining_speed": 32.0,
     "base_durability": 128000.0,
@@ -12090,7 +12090,7 @@
     }
   },
   {
-    "name": "Duranium",
+    "name": "Duranium (3)",
     "tier": 11,
     "mining_speed": 32.0,
     "base_durability": 4096000.0,
@@ -12183,7 +12183,7 @@
     }
   },
   {
-    "name": "Gaia Spirit",
+    "name": "Gaia Spirit (3)",
     "tier": 12,
     "mining_speed": 32.0,
     "base_durability": 85000000.0,
@@ -12276,7 +12276,7 @@
     }
   },
   {
-    "name": "High Durability Compound Steel",
+    "name": "High Durability Compound Steel (3)",
     "tier": 13,
     "mining_speed": 32.0,
     "base_durability": 291800.0,
@@ -12369,7 +12369,7 @@
     }
   },
   {
-    "name": "Mithril",
+    "name": "Mithril (1)",
     "tier": 2,
     "mining_speed": 32.0,
     "base_durability": 6400.0,
@@ -12462,7 +12462,7 @@
     }
   },
   {
-    "name": "Shadow Iron",
+    "name": "Shadow Iron (1)",
     "tier": 2,
     "mining_speed": 32.0,
     "base_durability": 1024000.0,
@@ -12555,7 +12555,7 @@
     }
   },
   {
-    "name": "Vulcanite",
+    "name": "Vulcanite (1)",
     "tier": 2,
     "mining_speed": 32.0,
     "base_durability": 2048000.0,
@@ -12648,7 +12648,7 @@
     }
   },
   {
-    "name": "Stellar Alloy",
+    "name": "Stellar Alloy (3)",
     "tier": 7,
     "mining_speed": 96.0,
     "base_durability": 1024000.0,
@@ -12741,7 +12741,7 @@
     }
   },
   {
-    "name": "Trinium",
+    "name": "Trinium (3)",
     "tier": 8,
     "mining_speed": 128.0,
     "base_durability": 5120000.0,
@@ -12834,7 +12834,7 @@
     }
   },
   {
-    "name": "MAR-Ce-M200 Steel",
+    "name": "MAR-Ce-M200 Steel (2)",
     "tier": 4,
     "mining_speed": 150.0,
     "base_durability": 20480000.0,
@@ -12927,7 +12927,7 @@
     }
   },
   {
-    "name": "Naquadria",
+    "name": "Naquadria (2)",
     "tier": 4,
     "mining_speed": 1.0,
     "base_durability": 51200.0,
@@ -13020,7 +13020,7 @@
     }
   },
   {
-    "name": "Enriched Naquadah",
+    "name": "Enriched Naquadah (2)",
     "tier": 4,
     "mining_speed": 6.0,
     "base_durability": 128000.0,
@@ -13113,7 +13113,7 @@
     }
   },
   {
-    "name": "Plutonium-241",
+    "name": "Plutonium-241 (2)",
     "tier": 3,
     "mining_speed": 6.0,
     "base_durability": 51200.0,
@@ -13206,7 +13206,7 @@
     }
   },
   {
-    "name": "Tritanium",
+    "name": "Tritanium (3)",
     "tier": 6,
     "mining_speed": 20.0,
     "base_durability": 143539200.0,
@@ -13299,7 +13299,7 @@
     }
   },
   {
-    "name": "Neutronium",
+    "name": "Neutronium (3)",
     "tier": 6,
     "mining_speed": 24.0,
     "base_durability": 65536000.0,
@@ -13392,7 +13392,7 @@
     }
   },
   {
-    "name": "Adamantium",
+    "name": "Adamantium (3)",
     "tier": 10,
     "mining_speed": 32.0,
     "base_durability": 819200.0,
@@ -13485,7 +13485,7 @@
     }
   },
   {
-    "name": "Chrysotile",
+    "name": "Chrysotile (2)",
     "tier": 3,
     "mining_speed": 32.0,
     "base_durability": 1024000.0,
@@ -13578,7 +13578,7 @@
     }
   },
   {
-    "name": "Black Plutonium",
+    "name": "Black Plutonium (3)",
     "tier": 8,
     "mining_speed": 36.0,
     "base_durability": 819200.0,
@@ -13671,7 +13671,7 @@
     }
   },
   {
-    "name": "Cosmic Neutronium",
+    "name": "Cosmic Neutronium (3)",
     "tier": 12,
     "mining_speed": 96.0,
     "base_durability": 16384000.0,
@@ -13764,7 +13764,7 @@
     }
   },
   {
-    "name": "Extremely Unstable Naquadah",
+    "name": "Extremely Unstable Naquadah (3)",
     "tier": 11,
     "mining_speed": 100.0,
     "base_durability": 18022400.0,
@@ -13857,7 +13857,7 @@
     }
   },
   {
-    "name": "Adamantium Alloy",
+    "name": "Adamantium Alloy (2)",
     "tier": 5,
     "mining_speed": 191.2,
     "base_durability": 10240000.0,
@@ -13950,7 +13950,7 @@
     }
   },
   {
-    "name": "Awakened Draconium",
+    "name": "Awakened Draconium (3)",
     "tier": 9,
     "mining_speed": 40.0,
     "base_durability": 6553600.0,
@@ -14043,7 +14043,7 @@
     }
   },
   {
-    "name": "Infinity Catalyst",
+    "name": "Infinity Catalyst (3)",
     "tier": 10,
     "mining_speed": 64.0,
     "base_durability": 131072000.0,
@@ -14136,7 +14136,7 @@
     }
   },
   {
-    "name": "Precious Metal Alloy",
+    "name": "Precious Metal Alloy (3)",
     "tier": 7,
     "mining_speed": 100.0,
     "base_durability": 245000.0,
@@ -14229,7 +14229,7 @@
     }
   },
   {
-    "name": "Enriched Naquadah Alloy",
+    "name": "Enriched Naquadah Alloy (3)",
     "tier": 6,
     "mining_speed": 180.0,
     "base_durability": 113600.0,
@@ -14322,7 +14322,7 @@
     }
   },
   {
-    "name": "Infinity",
+    "name": "Infinity (3)",
     "tier": 17,
     "mining_speed": 256.0,
     "base_durability": 262144000.0,
@@ -14415,7 +14415,7 @@
     }
   },
   {
-    "name": "Creon",
+    "name": "Creon (3)",
     "tier": 26,
     "mining_speed": 1.0,
     "base_durability": 2097152000.0,
@@ -14508,7 +14508,7 @@
     }
   },
   {
-    "name": "Mellion",
+    "name": "Mellion (3)",
     "tier": 26,
     "mining_speed": 1.0,
     "base_durability": 2097152000.0,
@@ -14601,7 +14601,7 @@
     }
   },
   {
-    "name": "Six-Phased Copper",
+    "name": "Six-Phased Copper (3)",
     "tier": 26,
     "mining_speed": 1.0,
     "base_durability": 2097152000.0,
@@ -14694,7 +14694,7 @@
     }
   },
   {
-    "name": "Deep Dark Iron",
+    "name": "Deep Dark Iron (2)",
     "tier": 3,
     "mining_speed": 7.0,
     "base_durability": 38400.0,
@@ -14787,7 +14787,7 @@
     }
   },
   {
-    "name": "Transcendent Metal",
+    "name": "Transcendent Metal (3)",
     "tier": 22,
     "mining_speed": 290.0,
     "base_durability": 786432000.0,
@@ -14880,7 +14880,7 @@
     }
   },
   {
-    "name": "Spacetime",
+    "name": "Spacetime (3)",
     "tier": 25,
     "mining_speed": 320.0,
     "base_durability": 1048576000.0,
@@ -14973,7 +14973,7 @@
     }
   },
   {
-    "name": "Metastable Oganesson",
+    "name": "Metastable Oganesson (3)",
     "tier": 24,
     "mining_speed": 443.52002,
     "base_durability": 3234000.0,
@@ -15066,7 +15066,7 @@
     }
   },
   {
-    "name": "Shirabon",
+    "name": "Shirabon (3)",
     "tier": 26,
     "mining_speed": 640.0,
     "base_durability": 1572864000.0,
@@ -15159,7 +15159,7 @@
     }
   },
   {
-    "name": "Eternity",
+    "name": "Eternity (3)",
     "tier": 26,
     "mining_speed": 1.0,
     "base_durability": 2097152000.0,
@@ -15252,7 +15252,7 @@
     }
   },
   {
-    "name": "Magmatter",
+    "name": "Magmatter (3)",
     "tier": 26,
     "mining_speed": 1.0,
     "base_durability": 16777216000.0,
@@ -15345,7 +15345,7 @@
     }
   },
   {
-    "name": "Universium",
+    "name": "Universium (3)",
     "tier": 25,
     "mining_speed": 1.0,
     "base_durability": 1048576000.0,
