@@ -72,7 +72,7 @@
 }
 
 /* Select / dropdown */
-select {
+select, input[list] {
   background: #1f2937;
   color: var(--cyan);
   border: 1px solid #374151;
@@ -85,7 +85,7 @@ select {
   max-width: 240px;
 }
 
-select:focus { border-color: #4b5563; }
+select:focus, input[list]:focus { border-color: #4b5563; }
 
 /* Text input */
 input[type="number"], input[type="text"] {
