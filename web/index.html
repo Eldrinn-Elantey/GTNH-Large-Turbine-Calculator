@@ -9,7 +9,8 @@
 </head>
 <body>
   <div class="layout">
-    <nav class="sidebar">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <nav class="sidebar" id="sidebar">
       <div class="sidebar-logo">
         GTNH<br><span>Turbines</span>
         <select id="version-select" class="version-select"></select>
@@ -24,6 +25,7 @@
       </ul>
     </nav>
     <main class="main-content">
+      <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
       <div id="section-calculator" class="section"></div>
       <div id="section-ehe"        class="section hidden"></div>
       <div id="section-steam-gen"  class="section hidden"></div>
