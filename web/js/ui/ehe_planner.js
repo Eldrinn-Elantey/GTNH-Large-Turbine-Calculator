@@ -67,7 +67,7 @@ export async function initEhePlanner(el) {
   const plasmaCol = el.querySelector("#plasma-ehe-col");
   plasmaCol.innerHTML = `
     <div class="card">
-      <h3 style="color:#c084fc;font-size:14px;margin-bottom:14px;">Plasma EHE</h3>
+      <h3 style="color:#c084fc;font-size:1.08rem;margin-bottom:14px;">Plasma EHE</h3>
       <div class="setting-row"><span class="setting-label">${t("label_plasma_type")}</span>
         <select id="p-plasma-type" style="max-width:200px;"></select></div>
       <div class="setting-row"><span class="setting-label">${t("label_recipe_out")}</span>
@@ -128,7 +128,7 @@ export async function initEhePlanner(el) {
   const hotFluids = ["Lava", "IC2 Hot Coolant", "Solar Salt (Hot)"];
   nonxlCol.innerHTML = `
     <div class="card">
-      <h3 style="color:#60a5fa;font-size:14px;margin-bottom:14px;">Non-XL EHE</h3>
+      <h3 style="color:#60a5fa;font-size:1.08rem;margin-bottom:14px;">Non-XL EHE</h3>
       <div class="setting-row"><span class="setting-label">${t("label_hot_fluid")}</span>
         <select id="n-fluid"></select></div>
       <div class="setting-row"><span class="setting-label">${t("label_flow")}</span>
