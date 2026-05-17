@@ -1,5 +1,6 @@
 import { SortableTable } from "../table.js";
 import { getVersion } from "../version.js";
+import { t } from "../i18n.js";
 
 let _data = null;
 
@@ -14,7 +15,7 @@ async function loadData() {
 
 export async function initFuels(el) {
   el.innerHTML = `
-    <h2 class="section-title">⛽ Fuels</h2>
+    <h2 class="section-title">${t("title_fuels")}</h2>
     <div class="sub-tabs">
       <div class="sub-tab active" data-tab="steam">💧 Steam</div>
       <div class="sub-tab" data-tab="gas">🔥 Gas</div>
