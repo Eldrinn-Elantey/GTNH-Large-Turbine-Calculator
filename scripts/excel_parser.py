@@ -64,7 +64,7 @@ def extract_rotors(wb) -> list:
     return rotors
 
 
-def extract_fuels(wb, existing: dict | None = None) -> dict:
+def extract_fuels(wb) -> dict:
     ws = wb["Fuels"]
     steam, gas, plasma, ehe = [], [], [], []
 
