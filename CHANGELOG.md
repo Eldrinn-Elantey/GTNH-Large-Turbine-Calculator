@@ -16,7 +16,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 - Settings section: font size (Small / Medium / Large) and EN/RU localization
-- Version selector (GTNH 2.7 / 2.9 data sets)
+- Version selector (GTNH 2.7.0–2.8.4 / 2.9 data sets)
 
 ## [0.2.0] - 2026-05-17
 
