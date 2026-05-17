@@ -1,13 +1,17 @@
 import { calcPlasmaEhe, calcNonxlEhe } from "../ehe.js";
 import { formatNumber, populateSelect } from "../utils.js";
+import { getVersion } from "../version.js";
 
 let _data = null;
 
+export function clearCache() { _data = null; }
+
 async function loadData() {
   if (_data) return _data;
+  const v = getVersion();
   const [rotors, fuels] = await Promise.all([
-    fetch("data/rotors.json").then(r => r.json()),
-    fetch("data/fuels.json").then(r => r.json()),
+    fetch(`data/${v}/rotors.json`).then(r => r.json()),
+    fetch(`data/${v}/fuels.json`).then(r => r.json()),
   ]);
   // Convert ehe array to object keyed by name
   const eheMap = {};

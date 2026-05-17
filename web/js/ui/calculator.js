@@ -1,14 +1,18 @@
 import { calcRegularTurbine, calcXlTurbine } from "../calc.js";
 import { formatNumber, formatDynamo, populateSelect, DYNAMO_TIERS } from "../utils.js";
 import { SortableTable } from "../table.js";
+import { getVersion } from "../version.js";
 
 let _data = null;
 
+export function clearCache() { _data = null; }
+
 async function loadData() {
   if (_data) return _data;
+  const v = getVersion();
   const [rotors, fuels] = await Promise.all([
-    fetch("data/rotors.json").then(r => r.json()),
-    fetch("data/fuels.json").then(r => r.json()),
+    fetch(`data/${v}/rotors.json`).then(r => r.json()),
+    fetch(`data/${v}/fuels.json`).then(r => r.json()),
   ]);
   _data = { rotors, fuels };
   return _data;

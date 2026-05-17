@@ -1,8 +1,8 @@
-import { initCalculator } from "./ui/calculator.js";
-import { initEhePlanner } from "./ui/ehe_planner.js";
-import { initSteamGen, clearCache as clearSteamGen } from "./ui/steam_gen.js";
-import { initFuels, clearCache as clearFuels }       from "./ui/fuels.js";
-import { initRotors, clearCache as clearRotors }     from "./ui/rotors.js";
+import { initCalculator, clearCache as clearCalculator } from "./ui/calculator.js";
+import { initEhePlanner, clearCache as clearEhe }        from "./ui/ehe_planner.js";
+import { initSteamGen, clearCache as clearSteamGen }     from "./ui/steam_gen.js";
+import { initFuels, clearCache as clearFuels }           from "./ui/fuels.js";
+import { initRotors, clearCache as clearRotors }         from "./ui/rotors.js";
 import { loadVersions, resolveVersion, setVersion }  from "./version.js";
 
 const SECTIONS = {
@@ -59,9 +59,11 @@ async function initVersionSelect() {
 
   select.addEventListener("change", () => {
     setVersion(select.value);
-    clearRotors();
-    clearFuels();
+    clearCalculator();
+    clearEhe();
     clearSteamGen();
+    clearFuels();
+    clearRotors();
     reloadActiveSection();
   });
 }
