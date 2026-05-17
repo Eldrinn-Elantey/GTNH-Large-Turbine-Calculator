@@ -14,6 +14,48 @@ _WERKSTOFF_LOADER = os.path.join(
 )
 
 
+_NAME_ALIASES: dict[str, str] = {
+    # HSS variants
+    "HSLA":               "HSLA Steel",
+    "HSSE":               "HSS-E",
+    "HSSG":               "HSS-G",
+    "HSSS":               "HSS-S",
+    # Magnetic prefix (Java: NounAdjective, Excel: AdjectiveNoun)
+    "Iron Magnetic":      "Magnetic Iron",
+    "Neodymium Magnetic": "Magnetic Neodymium",
+    "Steel Magnetic":     "Magnetic Steel",
+    # Adjective order
+    "Draconium Awakened": "Awakened Draconium",
+    "Naquadah Enriched":  "Enriched Naquadah",
+    "Electrum Flux":      "Fluxed Electrum",
+    # Compound words
+    "Space Time":         "Spacetime",
+    "Iron Wood":          "Ironwood",
+    # Missing suffix/word
+    "Shadow":             "Shadow Metal",
+    "Hee Endium":         "Endium",
+    # Punctuation
+    "TPVAlloy":           "TPV-Alloy",
+    # Capitalisation
+    "Gaia Spirit":        "Gaia spirit",
+    # Isotope numbering
+    "Uranium":            "Uranium 238",
+    "Uranium235":         "Uranium 235",
+    "Plutonium":          "Plutonium 239",
+    "Plutonium241":       "Plutonium 241",
+    # Old Excel concatenated names
+    "Tungsten Carbide":   "Tungstencarbide",
+    "Tungsten Steel":     "Tungstensteel",
+    "Vanadium Steel":     "Vanadiumsteel",
+}
+
+
+def _camel_to_display(name: str) -> str:
+    """Convert PascalCase/camelCase to space-separated words, preserving all-caps runs."""
+    name = re.sub(r'(?<=[a-z0-9])(?=[A-Z])', ' ', name)
+    return _NAME_ALIASES.get(name, name)
+
+
 def _float_arg(arg) -> float | None:
     if arg is None:
         return None
@@ -51,6 +93,8 @@ def parse_gt_materials(gt5_src_root: str) -> dict:
         tool_dur = tool_qual = tool_speed = None
         steam_mult = gas_mult = plasma_mult = 1.0
         subtags = []
+        has_tool_head = False
+        remove_turbine = False
 
         for _, child in method.filter(javalang.tree.MethodInvocation):
             m = child.member
@@ -59,7 +103,7 @@ def parse_gt_materials(gt5_src_root: str) -> dict:
             if m == "setName" and args:
                 v = getattr(args[0], "value", None)
                 if v:
-                    mat_name = v.strip('"')
+                    mat_name = _camel_to_display(v.strip('"'))
 
             elif m == "setTool" and len(args) >= 3:
                 tool_dur   = _float_arg(args[0])
@@ -76,7 +120,19 @@ def parse_gt_materials(gt5_src_root: str) -> dict:
                 if ref:
                     subtags.append(ref)
 
+            elif m == "addToolHeadItems":
+                has_tool_head = True
+
+            elif m == "removeOrePrefix" and args:
+                ref = getattr(args[0], "member", None)
+                if ref == "turbineBlade":
+                    remove_turbine = True
+
         if mat_name is None or tool_dur is None:
+            continue
+        if not has_tool_head:
+            continue
+        if remove_turbine:
             continue
         if "NO_SMASHING" in subtags or "BOUNCY" in subtags:
             continue
@@ -114,7 +170,7 @@ def parse_werkstoff_materials(gt5_src_root: str) -> dict:
             name_match = re.search(r'"([\w][^"]{0,60})"', chunk)
             if not name_match:
                 continue
-            name = name_match.group(1).strip()
+            name = _camel_to_display(name_match.group(1).strip())
 
             speed_m   = re.search(r'setSpeedOverride\(\s*([\d.]+)F?\s*\)', chunk)
             dur_m     = re.search(r'setDurOverride\(\s*(\d+)\s*\)', chunk)
