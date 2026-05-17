@@ -91,8 +91,6 @@ async function initVersionSelect() {
   });
 }
 
-<<<<<<< Updated upstream
-=======
 const sidebar = document.getElementById("sidebar");
 const overlay = document.getElementById("sidebar-overlay");
 const hamburger = document.getElementById("hamburger");
@@ -111,8 +109,6 @@ function closeSidebar() {
 
 hamburger.addEventListener("click", openSidebar);
 overlay.addEventListener("click", closeSidebar);
-
->>>>>>> Stashed changes
 document.querySelectorAll(".nav-item").forEach(item => {
   item.addEventListener("click", () => showSection(item.dataset.section));
 });
