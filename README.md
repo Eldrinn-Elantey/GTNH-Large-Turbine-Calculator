@@ -2,7 +2,7 @@
 
 Web calculator for Large and XL Turbo turbines from **GregTech: New Horizons** (GT5-Unofficial).
 
-![GTNH](https://img.shields.io/badge/GTNH-2.7_/_2.9-orange)
+![GTNH](https://img.shields.io/badge/GTNH-2.7–2.8.4_/_2.9-orange)
 
 ## Usage
 
@@ -44,4 +44,4 @@ Side-by-side sortable comparison of all rotors for a chosen fuel and mode.
 
 ## Data sources
 
-Rotor stats and turbine formulas verified against GT5-Unofficial source and cross-checked with community Excel sheets. Supports GTNH 2.7 and 2.9 data sets.
+Rotor stats and turbine formulas verified against GT5-Unofficial source and cross-checked with community Excel sheets. Two data sets: 2.7.0–2.8.4 and 2.9.
