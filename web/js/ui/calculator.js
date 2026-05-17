@@ -136,13 +136,14 @@ function buildTurbineCard(fuelMap, calcFn, sharedState) {
 
     // Results
     const rows = {
-      optFlow:   makeResultRow(t("result_opt_flow"), "cyan"),
-      optOutput: makeResultRow(t("result_output"), "green"),
-      effFlow:   makeResultRow(t("result_eff_flow"), "cyan"),
-      effOutput: makeResultRow(t("result_eff_output"), "green"),
-      dynamo:    makeResultRow(t("result_dynamo_hatches"), "purple"),
-      rotorEff:  makeResultRow(t("result_rotor_eff"), "muted"),
-      lifetime:  makeResultRow(t("result_lifetime"), "yellow"),
+      optFlow:    makeResultRow(t("result_opt_flow"), "cyan"),
+      optOutput:  makeResultRow(t("result_output"), "green"),
+      effFlow:    makeResultRow(t("result_eff_flow"), "cyan"),
+      effOutput:  makeResultRow(t("result_eff_output"), "green"),
+      dynamo:     makeResultRow(t("result_dynamo_hatches"), "purple"),
+      rotorEff:   makeResultRow(t("result_rotor_eff"), "muted"),
+      durability: makeResultRow(t("result_durability"), "muted"),
+      lifetime:   makeResultRow(t("result_lifetime"), "yellow"),
     };
 
     // Lifetime unit toggle — default days
@@ -211,6 +212,7 @@ function buildTurbineCard(fuelMap, calcFn, sharedState) {
     rows.effFlow.setValue(`${formatNumber(r.effFlow)} ${flowUnit}`);
     rows.effOutput.setValue(`${formatNumber(r.effOutput)} EU/t`);
     rows.rotorEff.setValue(`${(r.rotorEff * 100).toFixed(1)}%`);
+    rows.durability.setValue(formatNumber(r.durability));
     rows.lifetime.setValue(formatLifetime(r.lifetime, getLifetimeUnit()));
   }
 
