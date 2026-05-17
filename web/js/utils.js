@@ -150,7 +150,7 @@ export function makeCombobox(items, onSelect, { width = "220px" } = {}) {
     }
   }
 
-  input.addEventListener("focus", openDropdown);
+  input.addEventListener("focus", () => { renderDropdown(allItems); dropdown.classList.add("open"); });
   input.addEventListener("input", openDropdown);
 
   input.addEventListener("blur", () => {
