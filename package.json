@@ -1,9 +1,0 @@
-{
-  "name": "gtnh-large-turbine-calculator",
-  "version": "0.3.0",
-  "description": "GTNH Large Turbine Calculator",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Eldrinn-Elantey/GTNH-Large-Turbine-Calculator.git"
-  }
-}

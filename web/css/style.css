@@ -91,26 +91,6 @@ body {
   padding-left: 13px;
 }
 
-.sidebar-footer {
-  margin-top: auto;
-  padding: 12px 16px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.sidebar-footer-version,
-.sidebar-footer-issues {
-  color: var(--muted);
-  font-size: 0.8rem;
-  text-decoration: none;
-  transition: color 0.1s;
-}
-
-.sidebar-footer-version:hover,
-.sidebar-footer-issues:hover { color: var(--text); }
-
 /* Main content */
 .main-content {
   flex: 1;
