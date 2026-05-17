@@ -240,27 +240,39 @@ function buildSharedSettings(rotors, onChange) {
   tierRow.appendChild(tierSel);
   div.appendChild(tierRow);
 
-  // Rotor select
+  // Rotor select (searchable)
   const rotorRow = document.createElement("div");
   rotorRow.className = "setting-row";
   rotorRow.innerHTML = `<span class="setting-label">Rotor:</span>`;
-  const rotorSel = document.createElement("select");
-  rotorSel.style.width = "220px";
-  rotorRow.appendChild(rotorSel);
+  const rotorListId = `rotor-list-${Math.random().toString(36).slice(2)}`;
+  const rotorInput = document.createElement("input");
+  rotorInput.setAttribute("list", rotorListId);
+  rotorInput.style.width = "220px";
+  rotorInput.autocomplete = "off";
+  const rotorDatalist = document.createElement("datalist");
+  rotorDatalist.id = rotorListId;
+  rotorRow.appendChild(rotorInput);
+  rotorRow.appendChild(rotorDatalist);
   div.appendChild(rotorRow);
 
   function refreshRotors(notify = true) {
     const tier = tierSel.value;
     filteredRotors = tier === "All" ? rotors : rotors.filter(r => String(r.tier) === tier);
-    populateSelect(rotorSel, filteredRotors.map(r => r.name), filteredRotors[0]?.name);
+    rotorDatalist.innerHTML = "";
+    filteredRotors.forEach(r => {
+      const opt = document.createElement("option");
+      opt.value = r.name;
+      rotorDatalist.appendChild(opt);
+    });
+    rotorInput.value = filteredRotors[0]?.name ?? "";
     state.rotor = filteredRotors[0] ?? null;
     if (notify) onChange(state);
   }
 
   tierSel.addEventListener("change", refreshRotors);
-  rotorSel.addEventListener("change", () => {
-    state.rotor = filteredRotors.find(r => r.name === rotorSel.value) ?? null;
-    onChange(state);
+  rotorInput.addEventListener("change", () => {
+    const found = filteredRotors.find(r => r.name === rotorInput.value);
+    if (found) { state.rotor = found; onChange(state); }
   });
 
   // Size toggle — default Normal
