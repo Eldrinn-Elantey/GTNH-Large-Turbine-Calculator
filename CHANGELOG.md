@@ -5,6 +5,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+- Mobile layout: hamburger menu, slide-in sidebar with overlay, proper scrolling on small screens
+
 ### Fixed
 - Font size setting now actually scales the UI (was overridden by hardcoded px values)
 - Dynamo hatch row now recalculates from effective output in Manual mode
