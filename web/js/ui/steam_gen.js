@@ -1,10 +1,13 @@
 import { formatNumber } from "../utils.js";
+import { getVersion } from "../version.js";
 
 let _data = null;
 
+export function clearCache() { _data = null; }
+
 async function loadData() {
   if (_data) return _data;
-  const res = await fetch("data/steam_gen.json");
+  const res = await fetch(`data/${getVersion()}/steam_gen.json`);
   _data = await res.json();
   return _data;
 }
