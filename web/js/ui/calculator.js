@@ -1,14 +1,18 @@
 import { calcRegularTurbine, calcXlTurbine } from "../calc.js";
-import { formatNumber, formatDynamo, populateSelect, DYNAMO_TIERS } from "../utils.js";
+import { formatNumber, formatDynamo, populateSelect, makeCombobox, DYNAMO_TIERS } from "../utils.js";
 import { SortableTable } from "../table.js";
+import { getVersion } from "../version.js";
 
 let _data = null;
 
+export function clearCache() { _data = null; }
+
 async function loadData() {
   if (_data) return _data;
+  const v = getVersion();
   const [rotors, fuels] = await Promise.all([
-    fetch("data/rotors.json").then(r => r.json()),
-    fetch("data/fuels.json").then(r => r.json()),
+    fetch(`data/${v}/rotors.json`).then(r => r.json()),
+    fetch(`data/${v}/fuels.json`).then(r => r.json()),
   ]);
   _data = { rotors, fuels };
   return _data;
@@ -236,28 +240,26 @@ function buildSharedSettings(rotors, onChange) {
   tierRow.appendChild(tierSel);
   div.appendChild(tierRow);
 
-  // Rotor select
+  // Rotor select (searchable combobox)
   const rotorRow = document.createElement("div");
   rotorRow.className = "setting-row";
   rotorRow.innerHTML = `<span class="setting-label">Rotor:</span>`;
-  const rotorSel = document.createElement("select");
-  rotorSel.style.width = "220px";
-  rotorRow.appendChild(rotorSel);
+  const rotorCombo = makeCombobox(rotors.map(r => r.name), value => {
+    state.rotor = filteredRotors.find(r => r.name === value) ?? rotors.find(r => r.name === value) ?? null;
+    onChange(state);
+  });
+  rotorRow.appendChild(rotorCombo.el);
   div.appendChild(rotorRow);
 
   function refreshRotors(notify = true) {
     const tier = tierSel.value;
     filteredRotors = tier === "All" ? rotors : rotors.filter(r => String(r.tier) === tier);
-    populateSelect(rotorSel, filteredRotors.map(r => r.name), filteredRotors[0]?.name);
+    rotorCombo.setItems(filteredRotors.map(r => r.name));
     state.rotor = filteredRotors[0] ?? null;
     if (notify) onChange(state);
   }
 
   tierSel.addEventListener("change", refreshRotors);
-  rotorSel.addEventListener("change", () => {
-    state.rotor = filteredRotors.find(r => r.name === rotorSel.value) ?? null;
-    onChange(state);
-  });
 
   // Size toggle — default Normal
   const sizeRow = document.createElement("div");

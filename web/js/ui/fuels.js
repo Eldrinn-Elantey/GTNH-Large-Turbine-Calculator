@@ -1,10 +1,13 @@
 import { SortableTable } from "../table.js";
+import { getVersion } from "../version.js";
 
 let _data = null;
 
+export function clearCache() { _data = null; }
+
 async function loadData() {
   if (_data) return _data;
-  const res = await fetch("data/fuels.json");
+  const res = await fetch(`data/${getVersion()}/fuels.json`);
   _data = await res.json();
   return _data;
 }

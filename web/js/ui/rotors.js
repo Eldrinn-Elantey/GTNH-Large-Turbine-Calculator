@@ -1,14 +1,17 @@
 import { SortableTable } from "../table.js";
 import { formatNumber } from "../utils.js";
+import { getVersion } from "../version.js";
 
 const TURBINE_TO_ROTOR_SIZE = { Small: "Small", Normal: "Small", Large: "Normal", Huge: "Large" };
 const TURBINE_TO_DUR_SIZE   = { Small: "Normal", Normal: "Large", Large: "Large", Huge: "Huge" };
 
 let _rotors = null;
 
+export function clearCache() { _rotors = null; }
+
 async function loadData() {
   if (_rotors) return _rotors;
-  const res = await fetch("data/rotors.json");
+  const res = await fetch(`data/${getVersion()}/rotors.json`);
   _rotors = await res.json();
   return _rotors;
 }
