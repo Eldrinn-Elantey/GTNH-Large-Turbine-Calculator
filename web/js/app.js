@@ -126,7 +126,19 @@ document.addEventListener("gtnh:lang-change", () => {
   }
 });
 
+async function initAppVersion() {
+  try {
+    const pkg = await fetch("data/app.json").then(r => r.json());
+    const version = pkg.version;
+    const el = document.getElementById("app-version");
+    el.textContent = `v${version}`;
+    el.href = `https://github.com/Eldrinn-Elantey/GTNH-Large-Turbine-Calculator/blob/main/CHANGELOG.md#${version.replace(/\./g, "")}`;
+  } catch {
+    // ignore if package.json unavailable
+  }
+}
+
 applyFontSize();
 applyNavTranslations();
-await initVersionSelect();
+await Promise.all([initVersionSelect(), initAppVersion()]);
 showSection("calculator");
