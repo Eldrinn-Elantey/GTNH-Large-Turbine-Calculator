@@ -39,8 +39,9 @@ def test_extract_rotors_matches_existing_json():
     new_map = {r["name"]: r for r in rotors}
     common = set(existing_map) & set(new_map)
     assert len(common) > 100
-    for name in list(common)[:10]:  # spot-check 10
+    for name in sorted(common)[:10]:  # spot-check 10
         e = existing_map[name]
         n = new_map[name]
         assert e["tier"] == n["tier"], f"{name}: tier mismatch"
         assert abs(e["sizes"]["Small"]["steam_tight_eff"] - n["sizes"]["Small"]["steam_tight_eff"]) < 1e-3, f"{name}: steam_tight_eff Small mismatch"
+        assert abs(e["sizes"]["Small"]["gas_tight_eff"] - n["sizes"]["Small"]["gas_tight_eff"]) < 1e-3, f"{name}: gas_tight_eff Small mismatch"

@@ -44,12 +44,19 @@ def extract_rotors(wb) -> list:
             sd["dur_mult"] = _SIZE_DUR_MULTS[size]
             sizes_data[size] = sd
 
+        try:
+            tier_int = int(tier)
+            base_dur = int(row[11]) if row[11] is not None else None
+            overflow = int(row[12]) if row[12] is not None else None
+        except (ValueError, TypeError) as e:
+            raise ValueError(f"Bad numeric value in Rotors row for '{display_name}': {e}") from e
+
         rotors.append({
             "name": display_name,
-            "tier": int(tier),
-            "mining_speed": row[10],
-            "base_durability": int(row[11]) if row[11] is not None else None,
-            "overflow_tier": int(row[12]) if row[12] is not None else None,
+            "tier": tier_int,
+            "mining_speed": round(row[10], 6) if isinstance(row[10], float) else row[10],
+            "base_durability": base_dur,
+            "overflow_tier": overflow,
             "sizes": sizes_data,
         })
 
