@@ -1,5 +1,6 @@
 import { formatNumber } from "../utils.js";
 import { getVersion } from "../version.js";
+import { t } from "../i18n.js";
 
 let _data = null;
 
@@ -59,7 +60,7 @@ function renderTable(title, rows) {
 
 export async function initSteamGen(el) {
   const data = await loadData();
-  el.innerHTML = `<h2 class="section-title">💧 Steam Gen</h2>`;
+  el.innerHTML = `<h2 class="section-title">${t("title_steam_gen")}</h2>`;
   el.appendChild(renderTable("Large Heat Exchanger", data.lhe));
   el.appendChild(renderTable("Thermal Boiler", data.thermal_boiler));
   el.appendChild(renderTable("Whakawhiti Wera XL", data.wwxl));
