@@ -291,20 +291,43 @@ function buildSharedSettings(rotors, onChange) {
   return { el: div, state };
 }
 
-async function buildTurbineTab(el, data, calcFn) {
-  const fuelMap = {
-    steam:  data.fuels.steam,
-    gas:    data.fuels.gas,
-    plasma: data.fuels.plasma,
-  };
+function buildSlot(slotsEl, data, calcFn, removable) {
+  const fuelMap = { steam: data.fuels.steam, gas: data.fuels.gas, plasma: data.fuels.plasma };
+
+  const slot = document.createElement("div");
+  slot.className = "calc-slot";
+
+  // Remove button
+  if (removable) {
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "slot-remove-btn";
+    removeBtn.textContent = "×";
+    removeBtn.title = "Remove";
+    removeBtn.addEventListener("click", () => slot.remove());
+    slot.appendChild(removeBtn);
+  }
 
   const { el: settingsEl, state } = buildSharedSettings(data.rotors, () => turbineCard.recalc());
-
   const turbineCard = buildTurbineCard(fuelMap, calcFn, state);
 
-  el.appendChild(settingsEl);
-  el.appendChild(turbineCard);
+  slot.appendChild(settingsEl);
+  slot.appendChild(turbineCard);
+  slotsEl.appendChild(slot);
   turbineCard.recalc();
+}
+
+async function buildTurbineTab(el, data, calcFn) {
+  const slotsEl = document.createElement("div");
+  slotsEl.className = "calc-slots";
+  el.appendChild(slotsEl);
+
+  buildSlot(slotsEl, data, calcFn, false);
+
+  const addBtn = document.createElement("button");
+  addBtn.className = "slot-add-btn";
+  addBtn.textContent = "+ Add card";
+  addBtn.addEventListener("click", () => buildSlot(slotsEl, data, calcFn, true));
+  el.appendChild(addBtn);
 }
 
 function buildCompareTab(el, data) {
