@@ -315,3 +315,36 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
   transition: color 0.1s, border-color 0.1s;
 }
 .slot-add-btn:hover { color: var(--text); border-color: #4b5563; }
+
+/* Small red uppercase label used as a card heading */
+.card-title {
+  color: #f87171;
+  font-size: 0.78rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* Inner sub-tabs (e.g. Single Turbine / Steam Cascade inside XL section) */
+.xl-inner-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.xl-inner-tab {
+  padding: 5px 16px;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.9rem;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  user-select: none;
+  transition: color 0.1s;
+}
+
+.xl-inner-tab:hover { color: var(--text); }
+.xl-inner-tab.active { color: #93c5fd; border-bottom-color: #3b82f6; }

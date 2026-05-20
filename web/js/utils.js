@@ -1,3 +1,21 @@
+export function makeToggle(options, onChange) {
+  const group = document.createElement("div");
+  group.className = "toggle-group";
+  options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "toggle-btn" + (i === 0 ? " active" : "");
+    btn.textContent = opt;
+    btn.addEventListener("click", () => {
+      group.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      onChange(opt);
+    });
+    group.appendChild(btn);
+  });
+  group.getValue = () => group.querySelector(".toggle-btn.active").textContent;
+  return group;
+}
+
 export const DYNAMO_TIERS = [
   ["LV",       32],
   ["MV",       128],

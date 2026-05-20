@@ -1,12 +1,13 @@
 import { calcRegularTurbine, calcXlTurbine } from "../calc.js";
-import { formatNumber, formatDynamo, populateSelect, makeCombobox, DYNAMO_TIERS } from "../utils.js";
+import { formatNumber, formatDynamo, populateSelect, makeCombobox, makeToggle, DYNAMO_TIERS } from "../utils.js";
 import { SortableTable } from "../table.js";
 import { getVersion } from "../version.js";
 import { t } from "../i18n.js";
+import { initXlCascade, clearCache as clearXlCascade } from "./xl_cascade.js";
 
 let _data = null;
 
-export function clearCache() { _data = null; }
+export function clearCache() { _data = null; clearXlCascade(); }
 
 async function loadData() {
   if (_data) return _data;
@@ -17,24 +18,6 @@ async function loadData() {
   ]);
   _data = { rotors, fuels };
   return _data;
-}
-
-function makeToggle(options, onChange) {
-  const group = document.createElement("div");
-  group.className = "toggle-group";
-  options.forEach((opt, i) => {
-    const btn = document.createElement("button");
-    btn.className = "toggle-btn" + (i === 0 ? " active" : "");
-    btn.textContent = opt;
-    btn.addEventListener("click", () => {
-      group.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      onChange(opt);
-    });
-    group.appendChild(btn);
-  });
-  group.getValue = () => group.querySelector(".toggle-btn.active").textContent;
-  return group;
 }
 
 function makeResultRow(label, colorClass = "green") {
@@ -526,7 +509,53 @@ export async function initCalculator(el) {
         largeEl.classList.remove("hidden");
       } else if (tab.dataset.tab === "xl") {
         xlEl.classList.remove("hidden");
-        if (!xlBuilt) { await buildTurbineTab(xlEl, data, xlCalc); xlBuilt = true; }
+        if (!xlBuilt) {
+          // Inner sub-tabs: Single Turbine | Steam Cascade
+          const innerTabsBar = document.createElement("div");
+          innerTabsBar.className = "xl-inner-tabs";
+
+          const singleTab  = document.createElement("div");
+          singleTab.className = "xl-inner-tab active";
+          singleTab.textContent = t("tab_xl_single");
+
+          const cascadeTab = document.createElement("div");
+          cascadeTab.className = "xl-inner-tab";
+          cascadeTab.textContent = t("tab_xl_cascade");
+
+          innerTabsBar.appendChild(singleTab);
+          innerTabsBar.appendChild(cascadeTab);
+          xlEl.appendChild(innerTabsBar);
+
+          const xlSingleEl  = document.createElement("div");
+          const xlCascadeEl = document.createElement("div");
+          xlCascadeEl.classList.add("hidden");
+          xlEl.appendChild(xlSingleEl);
+          xlEl.appendChild(xlCascadeEl);
+
+          await buildTurbineTab(xlSingleEl, data, xlCalc);
+
+          let cascadeBuilt = false;
+
+          singleTab.addEventListener("click", () => {
+            singleTab.classList.add("active");
+            cascadeTab.classList.remove("active");
+            xlSingleEl.classList.remove("hidden");
+            xlCascadeEl.classList.add("hidden");
+          });
+
+          cascadeTab.addEventListener("click", async () => {
+            cascadeTab.classList.add("active");
+            singleTab.classList.remove("active");
+            xlCascadeEl.classList.remove("hidden");
+            xlSingleEl.classList.add("hidden");
+            if (!cascadeBuilt) {
+              await initXlCascade(xlCascadeEl);
+              cascadeBuilt = true;
+            }
+          });
+
+          xlBuilt = true;
+        }
       } else {
         compareEl.classList.remove("hidden");
         if (!compareBuilt) { buildCompareTab(compareEl, data); compareBuilt = true; }
