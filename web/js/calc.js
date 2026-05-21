@@ -30,19 +30,21 @@ function rotorDurability(rotor, size) {
   return rotor.base_durability * rotor.sizes[key].dur_mult;
 }
 
-function lifetimeRegular(durability, output, steamFuelType, mode) {
+function lifetimeRegular(durability, output, turbineType, steamFuelType, mode) {
   if (output <= 0) return 0;
   const damage = Math.min(output / 5, Math.pow(output, 0.6));
-  const base = 2 * Math.ceil(durability / damage * 50);
+  const base = Math.ceil(durability / damage * 50);
+  // Plasma: base (no ×2). Gas: 2*base. Steam: 2*base*mult.
+  // Multipliers verified against Google Sheets formula (H25 cell).
+  if (turbineType === "plasma") return base;
+  if (turbineType === "gas")    return 2 * base;
   let mult;
   if (steamFuelType === "SC Steam") {
-    mult = mode === "Tight" ? 1.0 : 4.0;
-  } else if (steamFuelType === "Steam" || steamFuelType === "SH Steam") {
-    mult = mode === "Tight" ? 2.0 : 8 / 3;
-  } else {
-    mult = 1.0;
+    mult = mode === "Tight" ? 0.5 : 2.0;
+  } else { // Steam or SH Steam
+    mult = mode === "Tight" ? 1.0 : 4 / 3;
   }
-  return base * mult;
+  return 2 * base * mult;
 }
 
 function lifetimeXl(durability, output, turbineType, mode) {
@@ -110,7 +112,7 @@ export function calcRegularTurbine(turbineType, rotor, size, mode, fuelType, fue
     effFlow = manualFlow !== null ? Math.min(maxFlow, manualFlow) : optFlow;
     const fe = flowEffSteam(effFlow, optFlow, overflowTier, fuelType);
     effOutput = Math.max(1, Math.floor(effFlow * fe * rotor_eff * fuelValue));
-    lifetime  = lifetimeRegular(durability, effOutput, fuelType, mode);
+    lifetime  = lifetimeRegular(durability, effOutput, "steam", fuelType, mode);
 
   } else if (turbineType === "gas") {
     rotor_eff    = mode === "Tight" ? sd.gas_tight_eff : sd.gas_loose_eff;
@@ -122,7 +124,7 @@ export function calcRegularTurbine(turbineType, rotor, size, mode, fuelType, fue
     effFlow  = manualFlow !== null ? Math.min(maxFlow, manualFlow) : optFlow;
     const fe  = flowEffGas(effFlow, optFlow, overflowTier);
     effOutput = Math.floor(effFlow * fe * rotor_eff * fuelValue);
-    lifetime  = lifetimeRegular(durability, effOutput, null, mode);
+    lifetime  = lifetimeRegular(durability, effOutput, "gas", null, mode);
 
   } else { // plasma
     rotor_eff    = mode === "Tight" ? sd.plasma_tight_eff : sd.plasma_loose_eff;
@@ -134,7 +136,7 @@ export function calcRegularTurbine(turbineType, rotor, size, mode, fuelType, fue
     effFlow  = manualFlow !== null ? Math.min(maxFlow, manualFlow) : optFlow;
     const fe  = flowEffPlasma(effFlow, optFlow, overflowTier);
     effOutput = Math.max(1, Math.floor(effFlow * fe * rotor_eff * fuelValue / 20));
-    lifetime  = lifetimeRegular(durability, effOutput, null, mode);
+    lifetime  = lifetimeRegular(durability, effOutput, "plasma", null, mode);
   }
 
   return {
