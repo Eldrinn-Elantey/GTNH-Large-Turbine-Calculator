@@ -1,63 +1,78 @@
-/* Sub-tabs (Large / XL Turbo inside Calculator, etc.) */
+/* Sub-tabs */
 .sub-tabs {
   display: flex;
   gap: 0;
-  border-bottom: 2px solid var(--border);
-  margin-bottom: 20px;
+  border-bottom: 3px solid var(--mc-dark);
+  margin-bottom: 16px;
 }
 
 .sub-tab {
-  padding: 6px 18px;
+  padding: 6px 14px;
   cursor: pointer;
-  color: var(--muted);
-  font-size: 1rem;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
+  color: var(--mc-muted);
+  font-size: 0.8rem;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
   user-select: none;
-  transition: color 0.1s;
+  text-shadow: 1px 1px #000;
 }
 
-.sub-tab:hover { color: var(--text); }
-.sub-tab.active { color: var(--text); border-bottom-color: var(--red); }
+.sub-tab:hover { color: var(--mc-text-bg); }
+.sub-tab.active {
+  color: var(--mc-text-bg);
+  border-bottom-color: var(--mc-dark);
+  background: var(--mc-panel);
+  border-top: 2px solid var(--mc-light);
+  border-left: 2px solid var(--mc-light);
+  border-right: 2px solid var(--mc-dark);
+}
 
 /* Toggle button group */
 .toggle-group {
   display: inline-flex;
-  background: #1f2937;
-  border-radius: 6px;
+  background: var(--mc-dark);
   padding: 2px;
   gap: 2px;
+  border-top: 2px solid #222;
+  border-left: 2px solid #222;
+  border-right: 2px solid #999;
+  border-bottom: 2px solid #999;
 }
 
 .toggle-btn {
-  padding: 4px 12px;
+  padding: 4px 10px;
   border: none;
   background: transparent;
-  color: var(--muted);
-  font-size: 0.92rem;
-  border-radius: 4px;
+  color: var(--mc-muted);
+  font-size: 0.8rem;
   cursor: pointer;
   font-family: var(--font);
-  transition: background 0.1s, color 0.1s;
+  text-shadow: 1px 1px #000;
 }
 
-.toggle-btn:hover { background: #374151; color: var(--text); }
-.toggle-btn.active { background: #1e40af; color: #93c5fd; }
+.toggle-btn:hover { background: #555; color: var(--mc-text); }
+.toggle-btn.active {
+  background: var(--mc-panel);
+  color: var(--mc-text);
+  border-top: 2px solid var(--mc-light);
+  border-left: 2px solid var(--mc-light);
+  border-right: 2px solid var(--mc-dark);
+  border-bottom: 2px solid var(--mc-dark);
+}
 
 /* Card */
 .card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 16px;
+  background: var(--mc-panel);
+  border-top: 3px solid var(--mc-light);
+  border-left: 3px solid var(--mc-light);
+  border-right: 3px solid var(--mc-dark);
+  border-bottom: 3px solid var(--mc-dark);
+  padding: 12px;
 }
 
-/* Narrow card for calculator/planner — prevents result rows from stretching full width */
-.card-narrow {
-  max-width: 520px;
-}
+.card-narrow { max-width: 520px; }
 
-/* Settings row (label + control) */
+/* Settings row */
 .setting-row {
   display: flex;
   align-items: center;
@@ -66,26 +81,27 @@
 }
 
 .setting-label {
-  color: var(--muted);
-  font-size: 0.92rem;
+  color: var(--mc-muted);
+  font-size: 0.8rem;
   min-width: 90px;
+  text-shadow: 1px 1px #000;
 }
 
 /* Select / dropdown */
 select {
-  background: #1f2937;
-  color: var(--cyan);
-  border: 1px solid #374151;
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 0.92rem;
+  background: var(--mc-dark);
+  color: var(--mc-text);
   font-family: var(--font);
+  font-size: 0.8rem;
+  padding: 4px 6px;
+  border-top: 2px solid #222;
+  border-left: 2px solid #222;
+  border-right: 2px solid #999;
+  border-bottom: 2px solid #999;
   cursor: pointer;
   outline: none;
   max-width: 240px;
 }
-
-select:focus { border-color: #4b5563; }
 
 /* Custom combobox */
 .combobox {
@@ -95,18 +111,18 @@ select:focus { border-color: #4b5563; }
 
 .combobox-input {
   width: 100%;
-  background: #1f2937;
-  color: var(--cyan);
-  border: 1px solid #374151;
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 0.92rem;
+  background: var(--mc-dark);
+  color: var(--mc-text);
+  border-top: 2px solid #222;
+  border-left: 2px solid #222;
+  border-right: 2px solid #999;
+  border-bottom: 2px solid #999;
+  padding: 4px 6px;
+  font-size: 0.8rem;
   font-family: var(--font);
   outline: none;
   box-sizing: border-box;
 }
-
-.combobox-input:focus { border-color: #4b5563; }
 
 .combobox-dropdown {
   display: none;
@@ -114,10 +130,9 @@ select:focus { border-color: #4b5563; }
   top: 100%;
   left: 0;
   right: 0;
-  background: #1f2937;
-  border: 1px solid #374151;
+  background: var(--mc-dark);
+  border: 2px solid #222;
   border-top: none;
-  border-radius: 0 0 4px 4px;
   max-height: 220px;
   overflow-y: auto;
   z-index: 100;
@@ -127,8 +142,9 @@ select:focus { border-color: #4b5563; }
 
 .combobox-option {
   padding: 5px 8px;
-  font-size: 0.92rem;
-  color: var(--text);
+  font-size: 0.8rem;
+  font-family: var(--font);
+  color: var(--mc-text);
   cursor: pointer;
   white-space: nowrap;
   overflow: hidden;
@@ -136,22 +152,22 @@ select:focus { border-color: #4b5563; }
 }
 
 .combobox-option:hover,
-.combobox-option.active { background: #374151; color: var(--cyan); }
+.combobox-option.active { background: #555; color: var(--mc-text); }
 
 /* Text input */
 input[type="number"], input[type="text"] {
-  background: #1f2937;
-  color: var(--text);
-  border: 1px solid #374151;
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 0.92rem;
+  background: var(--mc-dark);
+  color: var(--mc-text);
+  border-top: 2px solid #222;
+  border-left: 2px solid #222;
+  border-right: 2px solid #999;
+  border-bottom: 2px solid #999;
+  padding: 4px 6px;
+  font-size: 0.8rem;
   font-family: var(--font);
   outline: none;
   width: 100px;
 }
-
-input[type="number"]:focus, input[type="text"]:focus { border-color: #4b5563; }
 
 /* Remove number input arrows */
 input[type="number"]::-webkit-inner-spin-button,
