@@ -5,6 +5,17 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-05-20
+
+### Added
+- Steam Cascade planner inside XL Turbo Turbines tab (new inner sub-tab alongside Single Turbine)
+- EHE source block: plasma type, recipe output/time, EU/t per recipe, parallel count; calculates plasma output, EHE count, Dense SC Steam total, and reactor consumption
+- Per-stage cards (SC / HP / Reg) with independent rotor and mode; shows full cascade blocks and partial cascade block with EU/t output per block
+- Summary block: total turbines, gross power, reactor consumption, net power after reactor costs, dynamo hatches, minimum rotor lifetime
+
+### Changed
+- `makeToggle` extracted from calculator.js to utils.js (was duplicated in calculator.js and ehe_planner.js)
+
 ## [0.4.0] - 2026-05-17
 
 ### Added
