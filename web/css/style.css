@@ -1,19 +1,19 @@
 :root {
-  --bg:        #0d1117;
-  --card:      #111827;
-  --border:    #1f2937;
-  --text:      #d1d5db;
-  --muted:     #6b7280;
-  --green:     #4ade80;
-  --red:       #e94560;
-  --yellow:    #facc15;
-  --cyan:      #00d4ff;
-  --purple:    #c084fc;
-  --orange:    #fb923c;
-  --blue:      #60a5fa;
-  --sidebar-w: 160px;
-  --font:      system-ui, -apple-system, sans-serif;
-  --font-size: 13px;
+  --mc-bg:      #c6c6c6;
+  --mc-panel:   #8b8b8b;
+  --mc-sidebar: #555555;
+  --mc-dark:    #373737;
+  --mc-light:   #ffffff;
+  --mc-text:    #ffffff;
+  --mc-text-bg: #1a1a1a;
+  --mc-green:   #7ec850;
+  --mc-yellow:  #f6c90e;
+  --mc-red:     #e05c5c;
+  --mc-cyan:    #7ec8c8;
+  --mc-muted:   #aaaaaa;
+  --sidebar-w:  150px;
+  --font:       'Press Start 2P', monospace;
+  --font-size:  10px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
