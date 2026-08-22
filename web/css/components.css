@@ -315,3 +315,12 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
   transition: color 0.1s, border-color 0.1s;
 }
 .slot-add-btn:hover { color: var(--text); border-color: #4b5563; }
+
+/* Tight/Loose mode explanation under the mode toggle */
+.mode-hint {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  max-width: 520px;
+  margin: -4px 0 12px;
+}

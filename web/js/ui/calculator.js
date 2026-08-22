@@ -4,6 +4,20 @@ import { SortableTable } from "../table.js";
 import { getVersion } from "../version.js";
 import { t } from "../i18n.js";
 
+const WIKI_URL = "https://wiki.gtnewhorizons.com/wiki/Large_Gas_Turbine";
+
+/** Explanation of the Tight/Loose fit difference, shown under the mode toggle. */
+function makeModeHint() {
+  const hint = document.createElement("div");
+  hint.className = "mode-hint";
+  hint.innerHTML =
+    `<div>${t("mode_hint_tight")}</div>` +
+    `<div>${t("mode_hint_loose")}</div>` +
+    `<div>${t("mode_hint_toggle")}</div>` +
+    `<a href="${WIKI_URL}" target="_blank" rel="noopener">${t("mode_hint_wiki")}</a>`;
+  return hint;
+}
+
 let _data = null;
 
 export function clearCache() { _data = null; }
@@ -99,6 +113,7 @@ function buildTurbineCard(fuelMap, calcFn, sharedState) {
     });
     modeRow.appendChild(modeToggle);
     panel.appendChild(modeRow);
+    panel.appendChild(makeModeHint());
 
     // Fuel
     const fuelRow = document.createElement("div");
@@ -403,6 +418,7 @@ function buildCompareTab(el, data) {
   const modeToggle = makeToggle(["Tight", "Loose"], val => { state.mode = val; rebuild(); });
   modeRow.appendChild(modeToggle);
   settings.appendChild(modeRow);
+  settings.appendChild(makeModeHint());
 
   // Blade size
   const sizeRow = row(t("label_blade_size"));
