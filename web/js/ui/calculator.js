@@ -11,13 +11,23 @@ function makeModeHint() {
   const hint = document.createElement("span");
   hint.className = "mode-hint";
   hint.innerHTML =
-    `<span class="mode-hint-icon" tabindex="0">?</span>` +
+    `<button type="button" class="mode-hint-icon" aria-label="?">?</button>` +
     `<span class="mode-hint-popup">` +
       `<span>${t("mode_hint_tight")}</span>` +
       `<span>${t("mode_hint_loose")}</span>` +
       `<span>${t("mode_hint_toggle")}</span>` +
       `<a href="${WIKI_URL}" target="_blank" rel="noopener">${t("mode_hint_wiki")}</a>` +
     `</span>`;
+  const popup = hint.querySelector(".mode-hint-popup");
+  hint.querySelector(".mode-hint-icon").addEventListener("click", () => {
+    hint.classList.toggle("open");
+    if (!hint.classList.contains("open")) return;
+    // Shift left so the popup stays inside the viewport on narrow screens
+    popup.style.left = "0px";
+    const r = popup.getBoundingClientRect();
+    const shift = Math.min(Math.max(0, r.right - (document.documentElement.clientWidth - 8)), Math.max(0, r.left - 8));
+    if (shift) popup.style.left = `${-shift}px`;
+  });
   return hint;
 }
 

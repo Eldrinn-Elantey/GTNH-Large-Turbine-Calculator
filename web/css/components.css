@@ -324,6 +324,8 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
 .mode-hint-icon {
   display: inline-flex;
+  padding: 0;
+  background: none;
   align-items: center;
   justify-content: center;
   width: 16px;
@@ -342,6 +344,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
   left: 0;
   z-index: 10;
   width: 300px;
+  max-width: calc(100vw - 32px);
   padding: 8px 10px;
   background: #1f2937;
   border: 1px solid #374151;
@@ -357,6 +360,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 }
 
 .mode-hint:hover .mode-hint-popup,
-.mode-hint:focus-within .mode-hint-popup {
+.mode-hint:focus-within .mode-hint-popup,
+.mode-hint.open .mode-hint-popup {
   display: block;
 }
