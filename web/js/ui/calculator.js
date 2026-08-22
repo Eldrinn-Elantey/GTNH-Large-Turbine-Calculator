@@ -4,6 +4,33 @@ import { SortableTable } from "../table.js";
 import { getVersion } from "../version.js";
 import { t } from "../i18n.js";
 
+const WIKI_URL = "https://wiki.gtnewhorizons.com/wiki/Large_Gas_Turbine";
+
+/** Explanation of the Tight/Loose fit difference, shown as a tooltip next to the mode toggle. */
+function makeModeHint() {
+  const hint = document.createElement("span");
+  hint.className = "mode-hint";
+  hint.innerHTML =
+    `<button type="button" class="mode-hint-icon" aria-label="?">?</button>` +
+    `<span class="mode-hint-popup">` +
+      `<span>${t("mode_hint_tight")}</span>` +
+      `<span>${t("mode_hint_loose")}</span>` +
+      `<span>${t("mode_hint_toggle")}</span>` +
+      `<a href="${WIKI_URL}" target="_blank" rel="noopener">${t("mode_hint_wiki")}</a>` +
+    `</span>`;
+  const popup = hint.querySelector(".mode-hint-popup");
+  hint.querySelector(".mode-hint-icon").addEventListener("click", () => {
+    hint.classList.toggle("open");
+    if (!hint.classList.contains("open")) return;
+    // Shift left so the popup stays inside the viewport on narrow screens
+    popup.style.left = "0px";
+    const r = popup.getBoundingClientRect();
+    const shift = Math.min(Math.max(0, r.right - (document.documentElement.clientWidth - 8)), Math.max(0, r.left - 8));
+    if (shift) popup.style.left = `${-shift}px`;
+  });
+  return hint;
+}
+
 let _data = null;
 
 export function clearCache() { _data = null; }
@@ -98,6 +125,7 @@ function buildTurbineCard(fuelMap, calcFn, sharedState) {
       recalc(key);
     });
     modeRow.appendChild(modeToggle);
+    modeRow.appendChild(makeModeHint());
     panel.appendChild(modeRow);
 
     // Fuel
@@ -402,6 +430,7 @@ function buildCompareTab(el, data) {
   const modeRow = row(t("label_mode"));
   const modeToggle = makeToggle(["Tight", "Loose"], val => { state.mode = val; rebuild(); });
   modeRow.appendChild(modeToggle);
+  modeRow.appendChild(makeModeHint());
   settings.appendChild(modeRow);
 
   // Blade size

@@ -315,3 +315,52 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
   transition: color 0.1s, border-color 0.1s;
 }
 .slot-add-btn:hover { color: var(--text); border-color: #4b5563; }
+
+/* Tight/Loose mode explanation, tooltip next to the mode toggle */
+.mode-hint {
+  position: relative;
+  display: inline-flex;
+}
+
+.mode-hint-icon {
+  display: inline-flex;
+  padding: 0;
+  background: none;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #374151;
+  border-radius: 50%;
+  color: var(--muted);
+  font-size: 0.72rem;
+  cursor: help;
+}
+
+.mode-hint-popup {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  width: 300px;
+  max-width: calc(100vw - 32px);
+  padding: 8px 10px;
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 4px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.mode-hint-popup > * {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.mode-hint:hover .mode-hint-popup,
+.mode-hint:focus-within .mode-hint-popup,
+.mode-hint.open .mode-hint-popup {
+  display: block;
+}
