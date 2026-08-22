@@ -5,6 +5,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.5.2] - 2026-08-23
+
+### Fixed
+- 2.9.X rotor stats were stored with float32 artifacts (3.799999952 instead of 3.8), which truncated outputs by 1 EU/t
+
 ## [0.5.1] - 2026-08-23
 
 ### Fixed
