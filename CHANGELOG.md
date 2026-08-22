@@ -5,6 +5,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-08-23
+
+### Added
+- Tight/Loose mode explanation as a tooltip next to the mode toggle, with a link to the GTNH wiki (EN/RU)
+- GoatCounter analytics beacon on the web page
+
+### Changed
+- README: three data sets instead of two, Settings section documented, rotor and fuel counts no longer hardcoded to one data set
+
 ## [0.4.0] - 2026-05-17
 
 ### Added

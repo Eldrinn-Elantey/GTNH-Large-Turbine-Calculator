@@ -2,7 +2,7 @@
 
 Web calculator for Large and XL Turbo turbines from **GregTech: New Horizons** (GT5-Unofficial).
 
-![GTNH](https://img.shields.io/badge/GTNH-2.7–2.8.4_/_2.9-orange)
+![GTNH](https://img.shields.io/badge/GTNH-2.7–2.8.4_/_2.8–2.9_/_2.9.X-orange)
 
 ## Usage
 
@@ -15,7 +15,7 @@ Open in browser — no install required:
 
 Two sub-tabs — **Large Turbines** and **XL Turbo Turbines** — each with:
 
-- Shared settings: rotor tier filter, material (136 rotors), blade size (Small / Normal / Large / Huge), dynamo hatch tier
+- Shared settings: rotor tier filter, material, blade size (Small / Normal / Large / Huge), dynamo hatch tier
 - Three cards side by side: **Steam**, **Gas**, **Plasma**
 - Per-card: Tight/Loose mode, fuel selector, Optimal/Manual flow
 - Results: optimal flow, output EU/t, dynamo hatch count, effective flow/output, rotor lifetime
@@ -32,16 +32,20 @@ Reference table for Large Heat Exchanger, Whakawhiti Wera XL, and Thermal Boiler
 
 ### Fuels
 
-Searchable reference tables: Steam, Gas (28 fuels), Plasma (128 fuels).
+Searchable reference tables: Steam, Gas and Plasma fuels.
 
 ### Rotors
 
-136 rotors — filterable by blade size, sortable by any column.
+All rotors of the selected data set — filterable by blade size, sortable by any column.
 
 ### Compare Rotors
 
 Side-by-side sortable comparison of all rotors for a chosen fuel and mode.
 
+### Settings
+
+Data set selector (GTNH version), UI font size, and EN/RU interface language.
+
 ## Data sources
 
-Rotor stats and turbine formulas verified against GT5-Unofficial source and cross-checked with community Excel sheets. Two data sets: 2.7.0–2.8.4 and 2.9.
+Rotor stats and turbine formulas verified against GT5-Unofficial source and cross-checked with community Excel sheets. Three data sets: 2.7.0–2.8.4, 2.8–2.9 and 2.9.X, switchable in Settings.
