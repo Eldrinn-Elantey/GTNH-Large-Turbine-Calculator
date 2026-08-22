@@ -5,6 +5,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-08-23
+
+### Fixed
+- 2.9.X steam fuel values were divided by 1000 along with gas and plasma, so steam turbines reported 0 EU/t and an absurd rotor lifetime
+- EHE Planner had no data on the 2.9.X set: the ehe section was missing from its fuels.json
+
 ## [0.5.0] - 2026-08-23
 
 ### Added
