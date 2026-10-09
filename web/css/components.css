@@ -9,17 +9,17 @@
 .sub-tab {
   padding: 6px 14px;
   cursor: pointer;
-  color: var(--mc-muted);
+  color: #555;
   font-size: 0.8rem;
   border-bottom: 3px solid transparent;
   margin-bottom: -3px;
   user-select: none;
-  text-shadow: 1px 1px #000;
 }
 
 .sub-tab:hover { color: var(--mc-text-bg); }
 .sub-tab.active {
-  color: var(--mc-text-bg);
+  color: var(--mc-text);
+  text-shadow: 1px 1px #000;
   border-bottom-color: var(--mc-dark);
   background: var(--mc-panel);
   border-top: 2px solid var(--mc-light);
@@ -285,7 +285,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 }
 
 /* Grid helpers */
-.row { display: flex; gap: 16px; }
+.row { display: flex; flex-wrap: wrap; gap: 16px; }
 .col { flex: 1; }
 
 /* Multi-card calculator slots */
