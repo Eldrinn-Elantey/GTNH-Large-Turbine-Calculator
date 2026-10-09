@@ -5,6 +5,26 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.5.2] - 2026-08-23
+
+### Fixed
+- 2.9.X rotor stats were stored with float32 artifacts (3.799999952 instead of 3.8), which truncated outputs by 1 EU/t
+
+## [0.5.1] - 2026-08-23
+
+### Fixed
+- 2.9.X steam fuel values were divided by 1000 along with gas and plasma, so steam turbines reported 0 EU/t and an absurd rotor lifetime
+- EHE Planner had no data on the 2.9.X set: the ehe section was missing from its fuels.json
+
+## [0.5.0] - 2026-08-23
+
+### Added
+- Tight/Loose mode explanation as a tooltip next to the mode toggle, with a link to the GTNH wiki (EN/RU)
+- GoatCounter analytics beacon on the web page
+
+### Changed
+- README: three data sets instead of two, Settings section documented, rotor and fuel counts no longer hardcoded to one data set
+
 ## [0.4.0] - 2026-05-17
 
 ### Added

@@ -77,6 +77,11 @@ const TRANSLATIONS = {
     settings_large:     "Large",
     settings_en:        "English",
     settings_ru:        "Русский",
+
+    mode_hint_tight:    "Tight: lower flow, higher efficiency — more EU per unit of fuel.",
+    mode_hint_loose:    "Loose: higher flow, lower efficiency — more EU/t, but more fuel burned.",
+    mode_hint_toggle:   "Fit is switched in-game with a screwdriver on the turbine controller.",
+    mode_hint_wiki:     "GTNH Wiki: Large Gas Turbine",
   },
   ru: {
     nav_calculator:     "⚡ Калькулятор",
@@ -156,6 +161,11 @@ const TRANSLATIONS = {
     settings_large:     "Большой",
     settings_en:        "English",
     settings_ru:        "Русский",
+
+    mode_hint_tight:    "Tight: меньший расход, выше КПД — больше EU с единицы топлива.",
+    mode_hint_loose:    "Loose: больший расход, ниже КПД — больше EU/t, но топлива тратится больше.",
+    mode_hint_toggle:   "Режим переключается в игре отвёрткой по контроллеру турбины.",
+    mode_hint_wiki:     "GTNH Wiki: Large Gas Turbine",
   },
 };
 
