@@ -5,6 +5,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-09
+
+### Changed
+- Minecraft GUI look: grey inventory palette, Press Start 2P pixel font, raised and sunken borders instead of rounded ones
+
 ## [0.5.2] - 2026-08-23
 
 ### Fixed
